@@ -26,7 +26,7 @@ const HeroSaaS: React.FC = () => {
       <div className="container mx-auto px-6 max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* LEFT COLUMN: Typography & Action */}
-        <div className="relative z-20 order-2 lg:order-1 flex flex-col items-start text-left">
+        <div className="relative z-20 flex flex-col items-start text-left">
           
           {/* Decorative Dash */}
           <div className="flex items-center gap-4 mb-8">
@@ -74,7 +74,7 @@ const HeroSaaS: React.FC = () => {
         </div>
 
         {/* RIGHT COLUMN: Visuals / Card Cluster */}
-        <div className="relative z-10 order-1 lg:order-2 h-[500px] md:h-[600px] w-full flex items-center justify-center">
+        <div className="relative z-10 h-[500px] md:h-[600px] w-full flex items-center justify-center">
            
            {/* The Gradient Blob Anchor */}
            <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 via-slate-200 to-stone-200 blur-[80px] opacity-80 rounded-full scale-75 animate-drift-slow"></div>
