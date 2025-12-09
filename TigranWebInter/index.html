@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoMate | The Choice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+              serif: ['Cormorant Garamond', 'serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              'alabaster': '#F5F5F0',
+              'alabaster-dark': '#EBEBE6',
+              'ink-950': '#0A0A0A',
+              'ink-800': '#171717',
+              'ink-400': '#737373',
+              'ink-200': '#e5e5e5',
+            },
+            backgroundImage: {
+              'noise': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E\")",
+              'paper': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFilter)' opacity='1'/%3E%3C/svg%3E\")",
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'float-delayed': 'float 6s ease-in-out 3s infinite',
+              'drift-slow': 'drift 15s ease-in-out infinite alternate',
+              'drift-medium': 'drift 10s ease-in-out infinite alternate-reverse',
+              'spin-slow': 'spin 20s linear infinite',
+              'blob': 'blob 7s infinite',
+            },
+            keyframes: {
+              float: {
+                "0%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-20px)" },
+                "100%": { transform: "translateY(0px)" }
+              },
+              drift: {
+                "0%": { transform: "translate(0, 0)" },
+                "100%": { transform: "translate(30px, 40px)" }
+              },
+              blob: {
+                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                "100%": { transform: "translate(0px, 0px) scale(1)" }
+              },
+              converge: {
+                "0%": { opacity: "0", transform: "translate(0, 0)" },
+                "10%": { opacity: "1" },
+                "90%": { opacity: "1" },
+                "100%": { opacity: "0", transform: "translate(var(--tx), var(--ty))" }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background: #F5F5F0;
+        color: #0A0A0A;
+        overflow-x: hidden;
+      }
+      /* Architectural Grid Pattern - Enhanced */
+      .bg-grid {
+        background-size: 3rem 3rem;
+        background-image: 
+          linear-gradient(to right, rgba(10, 10, 10, 0.07) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(10, 10, 10, 0.07) 1px, transparent 1px);
+        mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      }
+      
+      /* Major Grid Lines (Larger squares) */
+      .bg-grid-major {
+        background-size: 12rem 12rem;
+        background-image: 
+          linear-gradient(to right, rgba(10, 10, 10, 0.1) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(10, 10, 10, 0.1) 1px, transparent 1px);
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #F5F5F0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #0A0A0A;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #262626;
+      }
+      
+      /* 3D Transform Utilities */
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .transform-style-3d {
+        transform-style: preserve-3d;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
