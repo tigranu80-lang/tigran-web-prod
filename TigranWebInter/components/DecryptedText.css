@@ -1,0 +1,46 @@
+.decode-text {
+  display: inline-block;
+}
+
+.decode-space {
+  display: inline-block;
+  width: 0.3em;
+}
+
+.text-animation {
+  display: inline-block;
+  position: relative;
+  color: transparent;
+  text-transform: uppercase;
+}
+
+.text-animation::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: currentColor;
+  width: 0;
+  height: 1.2em;
+  transform: translate(-50%, -55%);
+  transition: width 0.05s ease-out;
+}
+
+/* State 1: Thin vertical line */
+.text-animation.state-1::before {
+  width: 1px;
+}
+
+/* State 2: Block expands */
+.text-animation.state-2::before {
+  width: 0.9em;
+}
+
+/* State 3: Letter revealed */
+.text-animation.state-3 {
+  color: inherit;
+}
+
+.text-animation.state-3::before {
+  width: 0;
+}
