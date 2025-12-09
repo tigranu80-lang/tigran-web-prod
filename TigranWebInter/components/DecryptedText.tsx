@@ -6,6 +6,9 @@ interface DecryptedTextProps {
   className?: string;
 }
 
+// Note: Animation timing is fixed (50-2000ms random delay per character)
+// based on the original CodePen implementation
+
 // Utility: Fisher-Yates shuffle
 const shuffle = (array: number[]): number[] => {
   const arr = [...array];

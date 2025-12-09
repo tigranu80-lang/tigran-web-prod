@@ -39,7 +39,7 @@ const Services: React.FC = () => {
                <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">System Capabilities</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium text-ink-950 tracking-tight">
-              <DecryptedText text="Core Functions" speed={40} />
+              <DecryptedText text="Core Functions" />
             </h2>
            </div>
            <div className="hidden md:block font-mono text-[10px] text-right text-ink-400 opacity-60">

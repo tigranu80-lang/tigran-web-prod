@@ -34,7 +34,7 @@ const Pricing: React.FC = () => {
           <div>
              <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Investment Protocols</span>
              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
-               <DecryptedText text="Pricing Models" speed={40} />
+               <DecryptedText text="Pricing Models" />
              </h2>
           </div>
           <div className="flex items-center gap-2">

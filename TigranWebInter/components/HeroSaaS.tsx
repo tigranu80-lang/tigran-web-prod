@@ -37,9 +37,9 @@ const HeroSaaS: React.FC = () => {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-medium text-ink-950 tracking-tight leading-[0.95] mb-8">
-            <DecryptedText text="Agency" speed={40} /><br/>
+            <DecryptedText text="Agency" /><br/>
             <span className="italic relative inline-block z-10">
-              <DecryptedText text="Automation." speed={40} className="italic" />
+              <DecryptedText text="Automation." className="italic" />
               <span className="absolute bottom-2 left-0 w-full h-[6px] bg-ink-200/50 -z-10"></span>
             </span>
           </h1>

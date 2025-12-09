@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+body {
+  background: #F5F5F0;
+  color: #0A0A0A;
+  overflow-x: hidden;
+}
+
+/* Architectural Grid Pattern */
+.bg-grid {
+  background-size: 3rem 3rem;
+  background-image: 
+    linear-gradient(to right, rgba(10, 10, 10, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.07) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* Major Grid Lines */
+.bg-grid-major {
+  background-size: 12rem 12rem;
+  background-image: 
+    linear-gradient(to right, rgba(10, 10, 10, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.1) 1px, transparent 1px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #262626;
+}
+
+/* 3D Transform Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
