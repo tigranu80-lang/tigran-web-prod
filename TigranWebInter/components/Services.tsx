@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ArrowRight } from 'lucide-react';
 import DecryptedText from './DecryptedText';
 
@@ -168,17 +169,17 @@ const Services: React.FC = () => {
 
       </div>
 
-      {/* Modal */}
-      {selectedService && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+      {/* Modal - rendered via Portal to body */}
+      {selectedService && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8">
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-ink-950/30 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm"
             onClick={closeModal}
           />
           
           {/* Modal Content */}
-          <div className="relative bg-alabaster border border-ink-950 w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-[fadeIn_0.2s_ease-out]">
+          <div className="relative bg-alabaster border border-ink-950 w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-[fadeIn_0.2s_ease-out]">
             
             {/* Modal Header */}
             <div className="p-6 md:p-8 border-b border-ink-950/10 flex justify-between items-start shrink-0">
@@ -273,7 +274,8 @@ const Services: React.FC = () => {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </section>
