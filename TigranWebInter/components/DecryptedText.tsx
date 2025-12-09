@@ -96,7 +96,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
       onMouseEnter={handleMouseEnter}
     >
       {displayText.map((char, index) => (
-        <span key={index} className="inline-block min-w-[0.5em] text-center">
+        <span key={index} className="inline-block w-[0.6em] text-center">
           {char}
         </span>
       ))}
