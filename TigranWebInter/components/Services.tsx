@@ -31,7 +31,7 @@ const Services: React.FC = () => {
         
         {/* Header Section styled as a technical block */}
         <div className="flex flex-col md:flex-row justify-between items-end border-b border-ink-950/10 p-8 md:p-24 pb-12">
-           <div className="max-w-xl">
+           <div className="max-w-xl w-full">
             <div className="flex items-center gap-4 mb-6">
                <div className="w-4 h-4 border border-ink-950 rounded-full flex items-center justify-center">
                  <div className="w-1 h-1 bg-ink-950 rounded-full"></div>
