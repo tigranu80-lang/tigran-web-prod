@@ -1,7 +1,9 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
 // Initialize the client. API_KEY is injected by the environment.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Fallback to a dummy key if env var is missing to prevent initial crash
+const apiKey = process.env.API_KEY || 'dummy_key_for_build';
+const ai = new GoogleGenAI({ apiKey });
 
 const SYSTEM_INSTRUCTION = `
 You are the "AutoBot", a helpful, retro-futuristic AI assistant for an Automation Agency founded by two experts.
