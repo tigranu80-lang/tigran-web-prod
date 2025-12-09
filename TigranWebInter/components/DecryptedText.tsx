@@ -1,24 +1,68 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface DecryptedTextProps {
   text: string;
+  speed?: number; // Скорость смены состояний (мс)
   className?: string;
-  speed?: number; // Скорость расшифровки
-  maxIterations?: number; // Сколько раз менять буквы перед финалом
-  sequential?: boolean; // Открывать слева направо или всё сразу
+  animateOnHover?: boolean;
 }
 
+// Символы для "зашифрованного" состояния
 const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?';
 
 const DecryptedText: React.FC<DecryptedTextProps> = ({ 
   text, 
-  className = '', 
-  speed = 30,
-  sequential = true
+  speed = 50, 
+  className = '',
+  animateOnHover = false 
 }) => {
-  const [displayText, setDisplayText] = useState(text);
+  const [displayText, setDisplayText] = useState<string[]>([]);
+  const [isHovered, setIsHovered] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const elementRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const animationRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Инициализация массива букв
+  useEffect(() => {
+    setDisplayText(new Array(text.length).fill('')); // Сначала пусто
+  }, [text]);
+
+  const startAnimation = () => {
+    // 3 состояния для каждой буквы: 
+    // 0 = невидимо/случайный символ
+    // 1 = случайный символ
+    // 2 = финальная буква
+    
+    let iterations = 0;
+    const maxIterations = 20; // Длина анимации
+    
+    if (animationRef.current) clearInterval(animationRef.current);
+
+    animationRef.current = setInterval(() => {
+      setDisplayText(current => {
+        return text.split('').map((char, index) => {
+          if (char === ' ') return ' '; // Пробелы всегда пробелы
+          
+          // Простая логика: чем больше итераций, тем больше шанс, что буква станет "нормальной"
+          // Идем слева направо
+          if (iterations > index + 5) {
+             return char;
+          }
+          
+          // Иначе показываем случайный мусор
+          return CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+        });
+      });
+
+      iterations += 1; // Ускоряем шаг
+      
+      // Заканчиваем, когда прошли достаточно итераций
+      if (iterations > text.length + 15) {
+        if (animationRef.current) clearInterval(animationRef.current);
+        setDisplayText(text.split('')); // Финальная фиксация
+      }
+    }, speed);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,53 +72,34 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
           setHasAnimated(true);
         }
       },
-      { threshold: 0.1 } // Срабатывает, когда 10% элемента видно
+      { threshold: 0.1 }
     );
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
     }
 
     return () => observer.disconnect();
-  }, [hasAnimated]);
+  }, [hasAnimated, text, speed]);
 
-  const startAnimation = () => {
-    let iteration = 0;
-    
-    const interval = setInterval(() => {
-      setDisplayText(prev => 
-        text
-          .split('')
-          .map((letter, index) => {
-            // Если буква пробел - оставляем пробел
-            if (letter === ' ') return ' ';
-            
-            // Если мы уже прошли эту букву в итерации - показываем оригинал
-            if (index < iteration) {
-              return text[index];
-            }
-            
-            // Иначе показываем случайный символ
-            return CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
-          })
-          .join('')
-      );
-
-      if (iteration >= text.length) {
-        clearInterval(interval);
-        setDisplayText(text); // Убеждаемся, что в конце текст верный
-      }
-
-      // Увеличиваем итерацию. 1/3 означает, что каждые 3 кадра открывается 1 буква
-      // Чем меньше число, тем дольше "бегают" цифры
-      iteration += 1 / 3; 
-    }, speed);
+  // Перезапуск при наведении (опционально)
+  const handleMouseEnter = () => {
+    if (animateOnHover) {
+      startAnimation();
+    }
   };
 
-  // При первом рендере показываем заглушку, чтобы не было прыжков высоты, но сохраняем ширину символов
   return (
-    <span ref={elementRef} className={className}>
-      {displayText}
+    <span 
+      ref={containerRef} 
+      className={`inline-block whitespace-nowrap ${className}`}
+      onMouseEnter={handleMouseEnter}
+    >
+      {displayText.map((char, index) => (
+        <span key={index} className="inline-block min-w-[0.5em] text-center">
+          {char}
+        </span>
+      ))}
     </span>
   );
 };
