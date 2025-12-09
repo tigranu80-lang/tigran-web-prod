@@ -33,7 +33,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
     const shuffledIndices = [...indices].sort(() => Math.random() - 0.5);
     
     let frame = 0;
-    const totalFrames = 60; // Увеличил количество кадров для более медленной анимации
+    const totalFrames = 35; // Баланс между быстро и медленно
     
     if (animationRef.current) clearInterval(animationRef.current);
 
@@ -49,7 +49,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
           const revealThreshold = (revealOrder / text.length) * totalFrames;
           
           // Если мы прошли порог этой буквы + небольшой запас, показываем её
-          if (frame > revealThreshold + 15) {
+          if (frame > revealThreshold + 10) {
              return char;
           }
           
@@ -61,7 +61,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
       frame += 1;
       
       // Заканчиваем анимацию
-      if (frame > totalFrames + 20) {
+      if (frame > totalFrames + 15) {
         if (animationRef.current) clearInterval(animationRef.current);
         setDisplayText(text.split('')); // Финальная фиксация
       }
