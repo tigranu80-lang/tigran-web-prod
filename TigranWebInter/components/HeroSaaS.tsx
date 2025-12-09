@@ -8,7 +8,7 @@ const HeroSaaS: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen w-full flex items-center pt-20 overflow-hidden border-b border-ink-950/5">
+    <section className="relative w-full flex items-center pt-32 pb-16 lg:pt-20 lg:pb-0 lg:min-h-screen overflow-hidden border-b border-ink-950/5">
       
       {/* Micro-Graphics / Architectural Marks */}
       <div className="absolute top-24 left-6 md:left-12 opacity-30 text-ink-950 pointer-events-none">

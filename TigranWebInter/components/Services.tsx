@@ -58,7 +58,7 @@ const Services: React.FC = () => {
 
               <div>
                 <h3 className="text-4xl font-serif font-medium text-ink-950 mb-6 group-hover:translate-x-2 transition-transform duration-500">{service.title}</h3>
-                <p className="text-ink-500 font-mono text-xs leading-relaxed max-w-xs uppercase tracking-wide border-l border-ink-950/20 pl-4">
+                <p className="text-ink-500 font-mono text-xs leading-relaxed max-w-xs uppercase tracking-wide">
                   {service.description}
                 </p>
               </div>
