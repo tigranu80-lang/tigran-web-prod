@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FadeIn from './FadeIn';
 
 const About: React.FC = () => {
   const [names, setNames] = useState(['Tigran', 'Dima']);
@@ -19,6 +20,7 @@ const About: React.FC = () => {
           
           {/* Left Column: Content */}
           <div className="p-12 md:p-24 flex flex-col justify-between min-h-[600px]">
+            <FadeIn direction="left">
             <div>
               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">The Architects</span>
               <h2 className="text-6xl md:text-8xl font-serif font-medium mt-8 text-ink-950 tracking-tight leading-[0.9]">
@@ -29,6 +31,7 @@ const About: React.FC = () => {
                 We are a two-person unit obsessed with efficiency. Founded in 2025, AutoMate was built on a simple premise: human potential is wasted on repetitive tasks.
               </p>
             </div>
+            </FadeIn>
             
             <div className="mt-16 pt-8 border-t border-ink-950/10 grid grid-cols-2 gap-8">
               {/* Dynamic rendering for the footer names too, to match the order */}
@@ -44,7 +47,8 @@ const About: React.FC = () => {
           </div>
 
           {/* Right Column: Image */}
-          <div className="relative group overflow-hidden bg-ink-950/5">
+          <FadeIn direction="right" delay={200}>
+          <div className="relative group overflow-hidden bg-ink-950/5 min-h-[400px] md:min-h-[600px]">
              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1000&auto=format&fit=crop" alt="Working" className="w-full h-full object-cover grayscale contrast-125 opacity-80 group-hover:opacity-100 transition-opacity duration-700 mix-blend-multiply" />
              
              {/* Overlay Grid */}
@@ -55,6 +59,7 @@ const About: React.FC = () => {
                <span className="font-mono text-[10px] uppercase tracking-widest text-ink-950">Fig 2.1 — The Lab</span>
              </div>
           </div>
+          </FadeIn>
 
         </div>
       </div>

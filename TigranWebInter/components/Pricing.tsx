@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, Plus } from 'lucide-react';
 import DecryptedText from './DecryptedText';
+import FadeIn from './FadeIn';
 
 const plans = [
   {
@@ -48,7 +49,8 @@ const Pricing: React.FC = () => {
         {/* Strict Grid Table - No Gaps */}
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-950/10 border-b border-ink-950/10">
           {plans.map((plan, index) => (
-            <div key={index} className={`relative p-12 flex flex-col min-h-[600px] transition-colors duration-500 group ${plan.highlight ? 'bg-ink-950/5' : 'hover:bg-white/40'}`}>
+            <FadeIn key={index} delay={index * 150} direction="up">
+            <div className={`relative p-12 flex flex-col min-h-[600px] transition-colors duration-500 group ${plan.highlight ? 'bg-ink-950/5' : 'hover:bg-white/40'}`}>
               
               {/* Technical Crosshair */}
               <div className="absolute top-4 right-4 text-ink-950/20">
@@ -88,6 +90,7 @@ const Pricing: React.FC = () => {
                 Initialize {plan.name}
               </button>
             </div>
+            </FadeIn>
           ))}
         </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ArrowRight } from 'lucide-react';
 import DecryptedText from './DecryptedText';
+import FadeIn from './FadeIn';
 
 interface ServiceDetail {
   id: string;
@@ -122,9 +123,9 @@ const Services: React.FC = () => {
 
         {/* Grid Layout - No Gaps, just borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-950/10 border-b border-ink-950/10">
-          {services.map((service) => (
+          {services.map((service, index) => (
+            <FadeIn key={service.id} delay={index * 150} direction="up">
             <div 
-              key={service.id} 
               onClick={() => openModal(service)}
               className="group cursor-pointer p-8 md:p-12 hover:bg-white/40 transition-colors duration-500 relative flex flex-col justify-between min-h-[300px] md:min-h-[400px]"
             >
@@ -158,6 +159,7 @@ const Services: React.FC = () => {
                 {service.icon}
               </div>
             </div>
+            </FadeIn>
           ))}
         </div>
         
