@@ -1,4 +1,5 @@
 import React from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import Services from './components/Services';
 import About from './components/Team'; 
@@ -31,6 +32,7 @@ function App() {
 
       <Footer />
       <AIConsultant />
+      <Analytics />
     </div>
   );
 }
