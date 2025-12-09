@@ -48,7 +48,7 @@ const Services: React.FC = () => {
         {/* Grid Layout - No Gaps, just borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-950/10 border-b border-ink-950/10">
           {services.map((service) => (
-            <div key={service.id} className="group cursor-default p-12 hover:bg-white/40 transition-colors duration-500 relative flex flex-col justify-between min-h-[400px] text-left">
+            <div key={service.id} className="group cursor-default p-12 hover:bg-white/40 transition-colors duration-500 relative flex flex-col justify-between min-h-[400px]">
               
               {/* Top marking */}
               <div className="w-full flex justify-between items-start mb-12 opacity-30">
@@ -56,16 +56,19 @@ const Services: React.FC = () => {
                 <span className="text-xl">+</span>
               </div>
 
+              {/* Centered Content Container */}
               <div className="flex flex-col items-center w-full">
-                <h3 className="text-4xl font-serif font-medium text-ink-950 mb-6 group-hover:-translate-y-2 transition-transform duration-500 w-full text-center md:text-left md:pl-[calc(50%-6rem)]">{service.title}</h3>
-                <div className="w-full flex justify-center md:justify-start md:pl-[calc(50%-6rem)]">
-                   <p className="text-ink-500 font-mono text-xs leading-relaxed max-w-xs uppercase tracking-wide text-left">
-                     {service.description}
-                   </p>
+                <div className="w-full max-w-[240px]"> {/* Container specifically sized to center visually */}
+                  <h3 className="text-4xl font-serif font-medium text-ink-950 mb-6 group-hover:-translate-y-2 transition-transform duration-500 text-left">
+                    {service.title}
+                  </h3>
+                  <p className="text-ink-500 font-mono text-xs leading-relaxed uppercase tracking-wide text-left">
+                    {service.description}
+                  </p>
                 </div>
               </div>
               
-              {/* Bottom marking - positioned relative to content or kept absolute but centered horizontally if desired, but keeping original style for corners */}
+              {/* Bottom marking */}
               <div className="mt-12 font-mono text-6xl text-ink-950/5 font-bold absolute bottom-6 right-6 select-none">
                 {service.icon}
               </div>
