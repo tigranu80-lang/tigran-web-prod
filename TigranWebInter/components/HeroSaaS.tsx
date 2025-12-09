@@ -83,7 +83,7 @@ const HeroSaaS: React.FC = () => {
            <div className="relative w-full h-full perspective-1000 scale-75 md:scale-100 origin-center">
              
              {/* CARD 1: Main Dashboard (Center) */}
-             <div className="absolute top-[20%] left-[10%] md:left-[20%] right-[10%] md:right-[20%] bg-white rounded-none p-6 shadow-2xl shadow-ink-950/5 border border-ink-950/5 animate-float z-20">
+             <div className="absolute top-[10%] left-[5%] right-[5%] bg-white rounded-none p-6 shadow-2xl shadow-ink-950/5 border border-ink-950/5 animate-float z-20 md:top-[20%] md:left-[20%] md:right-[20%]">
                 <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-ink-950 text-white flex items-center justify-center">
@@ -110,7 +110,7 @@ const HeroSaaS: React.FC = () => {
              </div>
 
              {/* CARD 2: Active Agent (Left Floating) */}
-             <div className="absolute top-[50%] -left-4 md:left-[5%] w-48 bg-white rounded-none p-4 shadow-xl shadow-ink-950/5 border border-ink-950/5 animate-float-delayed z-30">
+             <div className="absolute top-[50%] -left-4 md:left-[5%] w-48 bg-white rounded-none p-4 shadow-xl shadow-ink-950/5 border border-ink-950/5 animate-float-delayed z-30 hidden xs:block">
                 <div className="flex items-center gap-3 mb-4">
                    <div className="w-8 h-8 bg-gray-100 flex items-center justify-center text-ink-950">
                      <User size={14} />
@@ -124,7 +124,7 @@ const HeroSaaS: React.FC = () => {
              </div>
 
              {/* CARD 3: Notification (Right Bottom) */}
-             <div className="absolute bottom-[10%] -right-4 md:right-[5%] w-64 bg-white/90 backdrop-blur-md rounded-none p-5 shadow-xl shadow-ink-950/5 border-l-2 border-ink-950 animate-float z-10">
+             <div className="absolute bottom-[10%] -right-4 md:right-[5%] w-64 bg-white/90 backdrop-blur-md rounded-none p-5 shadow-xl shadow-ink-950/5 border-l-2 border-ink-950 animate-float z-10 hidden xs:block">
                <div className="flex items-start gap-3">
                  <div className="w-6 h-6 rounded-full bg-ink-950 flex items-center justify-center text-white shrink-0 mt-1">
                    <Bell size={12} />
