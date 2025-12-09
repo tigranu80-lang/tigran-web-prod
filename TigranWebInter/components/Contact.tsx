@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, X, CheckCircle, ArrowRight } from 'lucide-react';
+import DecryptedText from './DecryptedText';
 
 const Contact: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -22,7 +23,8 @@ const Contact: React.FC = () => {
             <div>
               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Initiate Protocol</span>
               <h2 className="text-6xl md:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
-                Get In<br/>Touch.
+                <DecryptedText text="Get In" speed={40} /><br/>
+                <DecryptedText text="Touch." speed={40} />
               </h2>
             </div>
             <div className="mt-12 lg:mt-0">

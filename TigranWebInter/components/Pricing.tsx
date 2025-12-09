@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Plus } from 'lucide-react';
+import DecryptedText from './DecryptedText';
 
 const plans = [
   {
@@ -32,7 +33,9 @@ const Pricing: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-end p-12 md:p-24 border-b border-ink-950/10">
           <div>
              <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Investment Protocols</span>
-             <h2 className="text-6xl md:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">Pricing Models</h2>
+             <h2 className="text-6xl md:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
+               <DecryptedText text="Pricing Models" speed={40} />
+             </h2>
           </div>
           <div className="flex items-center gap-2">
              <div className="h-[1px] w-12 bg-ink-950"></div>
