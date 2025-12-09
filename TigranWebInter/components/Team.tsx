@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const About: React.FC = () => {
+  const [names, setNames] = useState(['Tigran', 'Dima']);
+
+  useEffect(() => {
+    // Randomize names on mount to solve the "who goes first" dilemma
+    if (Math.random() > 0.5) {
+      setNames(['Dima', 'Tigran']);
+    }
+  }, []);
+
   return (
     <section id="about" className="border-t border-ink-950/10 bg-alabaster-dark/30 backdrop-blur-sm">
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10">
@@ -13,7 +22,7 @@ const About: React.FC = () => {
             <div>
               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">The Architects</span>
               <h2 className="text-6xl md:text-8xl font-serif font-medium mt-8 text-ink-950 tracking-tight leading-[0.9]">
-                Alex &<br/> <span className="italic text-ink-400">Sarah.</span>
+                {names[0]} &<br/> <span className="italic text-ink-400">{names[1]}.</span>
               </h2>
               
               <p className="mt-12 text-ink-600 text-lg leading-relaxed font-sans font-light max-w-md">
@@ -22,13 +31,14 @@ const About: React.FC = () => {
             </div>
             
             <div className="mt-16 pt-8 border-t border-ink-950/10 grid grid-cols-2 gap-8">
+              {/* Dynamic rendering for the footer names too, to match the order */}
               <div>
-                <p className="text-ink-950 font-serif text-xl font-bold">Alex Chen</p>
-                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Engineering Lead</p>
+                <p className="text-ink-950 font-serif text-xl font-bold">{names[0] === 'Tigran' ? 'Tigran' : 'Dima'}</p>
+                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Co-Founder</p>
               </div>
               <div>
-                <p className="text-ink-950 font-serif text-xl font-bold">Sarah Jones</p>
-                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Operations Lead</p>
+                <p className="text-ink-950 font-serif text-xl font-bold">{names[1] === 'Tigran' ? 'Tigran' : 'Dima'}</p>
+                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Co-Founder</p>
               </div>
             </div>
           </div>
