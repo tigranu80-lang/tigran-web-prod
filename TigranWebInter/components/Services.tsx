@@ -56,9 +56,9 @@ const Services: React.FC = () => {
                 <span className="text-xl">+</span>
               </div>
 
-              <div className="flex flex-col items-start w-full">
-                <h3 className="text-4xl font-serif font-medium text-ink-950 mb-6 group-hover:-translate-y-2 transition-transform duration-500 w-full text-center">{service.title}</h3>
-                <div className="w-full flex justify-center">
+              <div className="flex flex-col items-center w-full">
+                <h3 className="text-4xl font-serif font-medium text-ink-950 mb-6 group-hover:-translate-y-2 transition-transform duration-500 w-full text-center md:text-left md:pl-[calc(50%-6rem)]">{service.title}</h3>
+                <div className="w-full flex justify-center md:justify-start md:pl-[calc(50%-6rem)]">
                    <p className="text-ink-500 font-mono text-xs leading-relaxed max-w-xs uppercase tracking-wide text-left">
                      {service.description}
                    </p>
