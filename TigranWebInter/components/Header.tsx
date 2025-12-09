@@ -7,14 +7,15 @@ const Header: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-alabaster/80 backdrop-blur-md border-b border-ink-950/5">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
         
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
           <div className="w-8 h-8 bg-ink-950 rounded-lg flex items-center justify-center text-white font-bold font-display">
             A
           </div>
-          <span className="font-display font-bold text-ink-950 tracking-tight text-xl">AutoMate</span>
+          <span className="font-display font-bold text-ink-950 tracking-tight text-xl hidden sm:inline">AutoMate</span>
+          <span className="font-display font-bold text-ink-950 tracking-tight text-xl sm:hidden">AM</span>
         </div>
 
         {/* Center Navigation */}

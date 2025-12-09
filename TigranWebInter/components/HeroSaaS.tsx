@@ -79,8 +79,8 @@ const HeroSaaS: React.FC = () => {
            {/* The Gradient Blob Anchor */}
            <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 via-slate-200 to-stone-200 blur-[80px] opacity-80 rounded-full scale-75 animate-drift-slow"></div>
 
-           {/* Floating Card Cluster Container */}
-           <div className="relative w-full h-full perspective-1000">
+             {/* Floating Card Cluster Container */}
+           <div className="relative w-full h-full perspective-1000 scale-75 md:scale-100 origin-center">
              
              {/* CARD 1: Main Dashboard (Center) */}
              <div className="absolute top-[20%] left-[10%] md:left-[20%] right-[10%] md:right-[20%] bg-white rounded-none p-6 shadow-2xl shadow-ink-950/5 border border-ink-950/5 animate-float z-20">
