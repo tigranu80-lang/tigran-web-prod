@@ -2,70 +2,94 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface DecryptedTextProps {
   text: string;
-  speed?: number; // Скорость смены состояний (мс)
   className?: string;
-  animateOnHover?: boolean;
 }
 
-// Символы для "зашифрованного" состояния
-const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+// Utility: Fisher-Yates shuffle
+const shuffle = (array: number[]): number[] => {
+  const arr = [...array];
+  let currentIndex = arr.length;
+  
+  while (currentIndex !== 0) {
+    const randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    
+    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+  }
+  
+  return arr;
+};
 
-const DecryptedText: React.FC<DecryptedTextProps> = ({ 
-  text, 
-  speed = 50, 
-  className = '',
-  animateOnHover = false 
-}) => {
-  const [displayText, setDisplayText] = useState<string[]>([]);
-  const [isHovered, setIsHovered] = useState(false);
+const DecryptedText: React.FC<DecryptedTextProps> = ({ text, className = '' }) => {
+  const [states, setStates] = useState<number[]>([]);
   const [hasAnimated, setHasAnimated] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
-  const animationRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Инициализация массива букв
+  // Initialize states
   useEffect(() => {
-    setDisplayText(new Array(text.length).fill('')); // Сначала пусто
+    setStates(new Array(text.length).fill(0));
   }, [text]);
 
+  // Clear timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    };
+  }, []);
+
   const startAnimation = () => {
-    // Создаем массив с перемешанными индексами для хаотичного появления
+    // Clear any existing timeouts
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current = [];
+
+    // Reset all states
+    setStates(new Array(text.length).fill(0));
+
+    // Create shuffled indices for random reveal order
     const indices = text.split('').map((_, i) => i);
-    const shuffledIndices = [...indices].sort(() => Math.random() - 0.5);
-    
-    let frame = 0;
-    const totalFrames = 35; // Баланс между быстро и медленно
-    
-    if (animationRef.current) clearInterval(animationRef.current);
+    const shuffledIndices = shuffle(indices);
 
-    animationRef.current = setInterval(() => {
-      setDisplayText(current => {
-        return text.split('').map((char, index) => {
-          if (char === ' ') return ' '; // Пробелы всегда пробелы
-          
-          // Находим позицию этого индекса в перемешанном массиве
-          const revealOrder = shuffledIndices.indexOf(index);
-          
-          // Чем раньше индекс в перемешанном массиве, тем раньше буква проявится
-          const revealThreshold = (revealOrder / text.length) * totalFrames;
-          
-          // Если мы прошли порог этой буквы + небольшой запас, показываем её
-          if (frame > revealThreshold + 10) {
-             return char;
-          }
-          
-          // Иначе показываем случайный мусор
-          return CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    // Animate each character
+    shuffledIndices.forEach((charIndex, _) => {
+      if (text[charIndex] === ' ') return; // Skip spaces
+
+      // Random initial delay for each character
+      const initialDelay = Math.round(Math.random() * (1000 - 100)) + 50;
+
+      // State 1: Line appears
+      const timeout1 = setTimeout(() => {
+        setStates(prev => {
+          const newStates = [...prev];
+          newStates[charIndex] = 1;
+          return newStates;
         });
-      });
 
-      frame += 1;
-      
-      // Заканчиваем анимацию
-      if (frame > totalFrames + 15) {
-        if (animationRef.current) clearInterval(animationRef.current);
-        setDisplayText(text.split('')); // Финальная фиксация
-      }
-    }, speed);
+        // State 2: Block appears
+        const timeout2 = setTimeout(() => {
+          setStates(prev => {
+            const newStates = [...prev];
+            newStates[charIndex] = 2;
+            return newStates;
+          });
+
+          // State 3: Final letter revealed
+          const timeout3 = setTimeout(() => {
+            setStates(prev => {
+              const newStates = [...prev];
+              newStates[charIndex] = 3;
+              return newStates;
+            });
+          }, 100);
+
+          timeoutsRef.current.push(timeout3);
+        }, 100);
+
+        timeoutsRef.current.push(timeout2);
+      }, initialDelay);
+
+      timeoutsRef.current.push(timeout1);
+    });
   };
 
   useEffect(() => {
@@ -84,26 +108,36 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
     }
 
     return () => observer.disconnect();
-  }, [hasAnimated, text, speed]);
-
-  // Перезапуск при наведении (опционально)
-  const handleMouseEnter = () => {
-    if (animateOnHover) {
-      startAnimation();
-    }
-  };
+  }, [hasAnimated, text]);
 
   return (
-    <span 
-      ref={containerRef} 
-      className={`inline-block whitespace-pre-wrap ${className}`}
-      onMouseEnter={handleMouseEnter}
-    >
-      {displayText.map((char, index) => (
-        <span key={index} className="inline-block">
-          {char}
-        </span>
-      ))}
+    <span ref={containerRef} className={`inline-block ${className}`}>
+      {text.split('').map((char, index) => {
+        if (char === ' ') {
+          return <span key={index} className="inline-block w-[10px]"></span>;
+        }
+
+        const state = states[index] || 0;
+
+        return (
+          <span
+            key={index}
+            className={`inline-block relative uppercase`}
+            style={{
+              color: state === 3 ? 'inherit' : 'transparent',
+            }}
+          >
+            {char}
+            <span
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] bg-current transition-all duration-100"
+              style={{
+                width: state === 0 ? '0' : state === 1 ? '1px' : state === 2 ? '0.9em' : '0',
+                height: '1.2em',
+              }}
+            />
+          </span>
+        );
+      })}
     </span>
   );
 };
