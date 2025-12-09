@@ -30,10 +30,10 @@ const Pricing: React.FC = () => {
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end p-12 md:p-24 border-b border-ink-950/10">
+        <div className="flex flex-col md:flex-row justify-between items-end p-6 md:p-12 lg:p-24 border-b border-ink-950/10">
           <div>
              <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Investment Protocols</span>
-             <h2 className="text-6xl md:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
+             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
                <DecryptedText text="Pricing Models" speed={40} />
              </h2>
           </div>

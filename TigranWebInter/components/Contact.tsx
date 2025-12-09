@@ -19,10 +19,10 @@ const Contact: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-ink-950/10">
           
           {/* Left: Heading */}
-          <div className="p-12 md:p-24 flex flex-col justify-between">
+          <div className="p-6 md:p-12 lg:p-24 flex flex-col justify-between">
             <div>
               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Initiate Protocol</span>
-              <h2 className="text-6xl md:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
                 <DecryptedText text="Get In" speed={40} /><br/>
                 <DecryptedText text="Touch." speed={40} />
               </h2>

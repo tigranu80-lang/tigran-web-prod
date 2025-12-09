@@ -30,7 +30,7 @@ const Services: React.FC = () => {
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10 min-h-0 md:min-h-screen flex flex-col justify-center py-12 md:py-0">
         
         {/* Header Section styled as a technical block */}
-        <div className="flex flex-col md:flex-row justify-between items-end border-b border-ink-950/10 p-8 md:p-24 pb-12">
+        <div className="flex flex-col md:flex-row justify-between items-end border-b border-ink-950/10 p-6 md:p-12 lg:p-24 pb-8 md:pb-12">
            <div className="max-w-xl w-full">
             <div className="flex items-center gap-4 mb-6">
                <div className="w-4 h-4 border border-ink-950 rounded-full flex items-center justify-center">
@@ -38,7 +38,7 @@ const Services: React.FC = () => {
                </div>
                <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">System Capabilities</span>
             </div>
-            <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-medium text-ink-950 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium text-ink-950 tracking-tight">
               <DecryptedText text="Core Functions" speed={40} />
             </h2>
            </div>
