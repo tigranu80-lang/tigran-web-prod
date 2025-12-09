@@ -28,13 +28,12 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
   }, [text]);
 
   const startAnimation = () => {
-    // 3 состояния для каждой буквы: 
-    // 0 = невидимо/случайный символ
-    // 1 = случайный символ
-    // 2 = финальная буква
+    // Создаем массив с перемешанными индексами для хаотичного появления
+    const indices = text.split('').map((_, i) => i);
+    const shuffledIndices = [...indices].sort(() => Math.random() - 0.5);
     
-    let iterations = 0;
-    const maxIterations = 20; // Длина анимации
+    let frame = 0;
+    const totalFrames = 60; // Увеличил количество кадров для более медленной анимации
     
     if (animationRef.current) clearInterval(animationRef.current);
 
@@ -43,9 +42,14 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
         return text.split('').map((char, index) => {
           if (char === ' ') return ' '; // Пробелы всегда пробелы
           
-          // Простая логика: чем больше итераций, тем больше шанс, что буква станет "нормальной"
-          // Идем слева направо
-          if (iterations > index + 5) {
+          // Находим позицию этого индекса в перемешанном массиве
+          const revealOrder = shuffledIndices.indexOf(index);
+          
+          // Чем раньше индекс в перемешанном массиве, тем раньше буква проявится
+          const revealThreshold = (revealOrder / text.length) * totalFrames;
+          
+          // Если мы прошли порог этой буквы + небольшой запас, показываем её
+          if (frame > revealThreshold + 15) {
              return char;
           }
           
@@ -54,10 +58,10 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
         });
       });
 
-      iterations += 1; // Ускоряем шаг
+      frame += 1;
       
-      // Заканчиваем, когда прошли достаточно итераций
-      if (iterations > text.length + 15) {
+      // Заканчиваем анимацию
+      if (frame > totalFrames + 20) {
         if (animationRef.current) clearInterval(animationRef.current);
         setDisplayText(text.split('')); // Финальная фиксация
       }
@@ -92,7 +96,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
   return (
     <span 
       ref={containerRef} 
-      className={`inline-block ${className}`}
+      className={`inline-block whitespace-pre-wrap ${className}`}
       onMouseEnter={handleMouseEnter}
     >
       {displayText.map((char, index) => (
