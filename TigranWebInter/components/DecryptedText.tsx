@@ -92,11 +92,11 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
   return (
     <span 
       ref={containerRef} 
-      className={`inline-block whitespace-nowrap ${className}`}
+      className={`inline-block ${className}`}
       onMouseEnter={handleMouseEnter}
     >
       {displayText.map((char, index) => (
-        <span key={index} className="inline-block min-w-[0.6em]">
+        <span key={index} className="inline-block">
           {char}
         </span>
       ))}
