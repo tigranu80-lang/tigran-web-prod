@@ -1,5 +1,6 @@
 import React from 'react';
 import { Service } from '../types';
+import DecryptedText from './DecryptedText';
 
 const services: Service[] = [
   {
@@ -37,7 +38,9 @@ const Services: React.FC = () => {
                </div>
                <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">System Capabilities</span>
             </div>
-            <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-medium text-ink-950 tracking-tight">Core Functions</h2>
+            <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-medium text-ink-950 tracking-tight">
+              <DecryptedText text="Core Functions" speed={40} />
+            </h2>
            </div>
            <div className="hidden md:block font-mono text-[10px] text-right text-ink-400 opacity-60">
              SECTOR: A-1<br/>
@@ -60,10 +63,10 @@ const Services: React.FC = () => {
               <div className="flex flex-col items-center w-full">
                 <div className="w-full max-w-full md:max-w-[240px]"> {/* Container specifically sized to center visually */}
                   <h3 className="text-3xl md:text-4xl font-serif font-medium text-ink-950 mb-4 md:mb-6 group-hover:-translate-y-2 transition-transform duration-500 text-left">
-                    {service.title}
+                    <DecryptedText text={service.title} speed={30} />
                   </h3>
                   <p className="text-ink-500 font-mono text-xs leading-relaxed uppercase tracking-wide text-left max-w-xs md:max-w-none">
-                    {service.description}
+                    <DecryptedText text={service.description} speed={10} />
                   </p>
                 </div>
               </div>
