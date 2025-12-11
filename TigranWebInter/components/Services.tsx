@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
-import { X, ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import DecryptedText from './DecryptedText';
 import FadeIn from './FadeIn';
+import ArchitectureDemo from './ArchitectureDemo';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ServiceDetail {
   id: string;
   title: string;
   description: string;
   icon: string;
-  // Extended details for modal
   fullDescription: string;
   features: string[];
   useCases: string[];
@@ -85,201 +85,133 @@ const services: ServiceDetail[] = [
 ];
 
 const Services: React.FC = () => {
-  const [selectedService, setSelectedService] = useState<ServiceDetail | null>(null);
-
-  const openModal = (service: ServiceDetail) => {
-    setSelectedService(service);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setSelectedService(null);
-    document.body.style.overflow = 'auto';
-  };
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('1');
+  
+  const activeService = services.find(s => s.id === selectedServiceId) || services[0];
 
   return (
-    <section id="services" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm relative">
+    <section id="services" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm relative py-12 md:py-24">
       
-      <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10 min-h-0 md:min-h-screen flex flex-col justify-center py-12 md:py-0">
+      <div className="container mx-auto px-6 max-w-7xl">
         
-        {/* Header Section styled as a technical block */}
-        <div className="flex flex-col md:flex-row justify-between items-end border-b border-ink-950/10 p-6 md:p-12 lg:p-24 pb-8 md:pb-12">
-           <div className="max-w-xl w-full">
-            <div className="flex items-center gap-4 mb-6">
-               <div className="w-4 h-4 border border-ink-950 rounded-full flex items-center justify-center">
-                 <div className="w-1 h-1 bg-ink-950 rounded-full"></div>
-               </div>
-               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">System Capabilities</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium text-ink-950 tracking-tight">
-              <DecryptedText text="Core Functions" />
-            </h2>
+        {/* Header Section */}
+        <div className="flex flex-col items-center text-center mb-12 md:mb-20">
+           <div className="flex items-center gap-4 mb-6">
+              <div className="w-4 h-4 border border-ink-950 rounded-full flex items-center justify-center">
+                <div className="w-1 h-1 bg-ink-950 rounded-full"></div>
+              </div>
+              <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">System Capabilities</span>
            </div>
-           <div className="hidden md:block font-mono text-[10px] text-right text-ink-400 opacity-60">
-             SECTOR: A-1<br/>
-             STATUS: ONLINE
-           </div>
+           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-ink-950 tracking-tight">
+             <DecryptedText text="Core Functions" />
+           </h2>
         </div>
 
-        {/* Grid Layout - No Gaps, just borders */}
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-950/10 border-b border-ink-950/10">
-          {services.map((service, index) => (
-            <FadeIn key={service.id} delay={index * 150} direction="up">
-            <div 
-              onClick={() => openModal(service)}
-              className="group cursor-pointer p-8 md:p-12 hover:bg-white/40 transition-colors duration-500 relative flex flex-col justify-between min-h-[300px] md:min-h-[400px]"
-            >
-              
-              {/* Top marking */}
-              <div className="w-full flex justify-between items-start mb-6 md:mb-12 opacity-30">
-                <span className="font-mono text-xs">Fig.{service.icon}</span>
-                <span className="text-xl group-hover:rotate-45 transition-transform duration-300">+</span>
-              </div>
-
-              {/* Centered Content Container */}
-              <div className="flex flex-col items-center w-full">
-                <div className="w-full max-w-full md:max-w-[240px]">
-                  <h3 className="text-3xl md:text-4xl font-serif font-medium text-ink-950 mb-4 md:mb-6 group-hover:-translate-y-2 transition-transform duration-500 text-left">
-                    {service.title}
-                  </h3>
-                  <p className="text-ink-500 font-mono text-xs leading-relaxed uppercase tracking-wide text-left max-w-xs md:max-w-none">
-                    {service.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Click hint */}
-              <div className="mt-8 flex items-center gap-2 text-ink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="font-mono text-[10px] uppercase tracking-widest">Learn More</span>
-                <ArrowRight size={12} />
-              </div>
-              
-              {/* Bottom marking */}
-              <div className="font-mono text-6xl text-ink-950/5 font-bold absolute bottom-6 right-6 select-none">
-                {service.icon}
-              </div>
+        {/* Tabs Navigation */}
+        <div className="flex justify-center mb-8">
+            <div className="bg-neutral-100 p-1.5 rounded-full flex gap-1 overflow-x-auto max-w-full">
+                {services.map((service) => (
+                    <button
+                        key={service.id}
+                        onClick={() => setSelectedServiceId(service.id)}
+                        className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap z-10 ${
+                            selectedServiceId === service.id 
+                            ? 'text-neutral-900' 
+                            : 'text-neutral-500 hover:text-neutral-700'
+                        }`}
+                    >
+                        {selectedServiceId === service.id && (
+                            <motion.div
+                                layoutId="activeTab"
+                                className="absolute inset-0 bg-white rounded-full shadow-sm z-[-1]"
+                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            />
+                        )}
+                        <span className="flex items-center gap-2">
+                             {/* Small dot for active state */}
+                             {selectedServiceId === service.id && <span className="w-1.5 h-1.5 bg-neutral-900 rounded-full"></span>}
+                             {service.title}
+                        </span>
+                    </button>
+                ))}
             </div>
-            </FadeIn>
-          ))}
+        </div>
+
+        {/* Main Content Area: Diagram + Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            
+            {/* Left: Diagram (Spans 2 columns on large screens) */}
+            <div className="lg:col-span-2">
+                 <FadeIn key={selectedServiceId} duration={0.4}>
+                    <ArchitectureDemo activeTab={selectedServiceId} />
+                 </FadeIn>
+            </div>
+
+            {/* Right: Details Panel */}
+            <div className="lg:col-span-1 bg-white/50 border border-ink-950/5 rounded-2xl p-8 min-h-[500px] flex flex-col justify-between">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={selectedServiceId}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div className="mb-6">
+                            <span className="font-mono text-xs text-ink-400 uppercase tracking-[0.2em] block mb-2">
+                                Module {activeService.icon}
+                            </span>
+                            <h3 className="text-3xl font-serif font-medium text-ink-950 mb-4">
+                                {activeService.title}
+                            </h3>
+                            <p className="text-ink-600 text-sm leading-relaxed font-sans font-light">
+                                {activeService.fullDescription}
+                            </p>
+                        </div>
+
+                        <div className="mb-6">
+                            <h4 className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] mb-3">
+                                Capabilities
+                            </h4>
+                            <ul className="space-y-2">
+                                {activeService.features.slice(0, 4).map((feature, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-ink-950 text-xs">
+                                        <Check size={12} className="mt-0.5 text-neutral-400" />
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2 mb-8">
+                             {activeService.techStack?.map((tech, i) => (
+                                 <span key={i} className="px-2 py-1 bg-neutral-100 text-neutral-600 text-[10px] uppercase tracking-wider rounded">
+                                     {tech}
+                                 </span>
+                             ))}
+                        </div>
+
+                    </motion.div>
+                </AnimatePresence>
+
+                <button 
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="w-full py-3 bg-ink-950 text-alabaster font-mono text-xs uppercase tracking-[0.2em] hover:bg-ink-800 transition-colors flex items-center justify-center gap-3 rounded-lg"
+                >
+                  Configure System
+                  <ArrowRight size={14} />
+                </button>
+            </div>
+
         </div>
         
-        {/* Bottom Technical Footer for Section */}
-        <div className="p-6 flex justify-between items-center text-[10px] font-mono uppercase text-ink-300">
-           <span>Grid System V2</span>
+        {/* Footer Technical Marker */}
+        <div className="mt-12 pt-6 border-t border-ink-950/10 flex justify-between items-center text-[10px] font-mono uppercase text-ink-300">
+           <span>Interactive System View</span>
            <span>/// End Section</span>
         </div>
 
       </div>
-
-      {/* Modal - rendered via Portal to body */}
-      {selectedService && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8">
-          {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm"
-            onClick={closeModal}
-          />
-          
-          {/* Modal Content */}
-          <div className="relative bg-alabaster border border-ink-950 w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-[fadeIn_0.2s_ease-out]">
-            
-            {/* Modal Header */}
-            <div className="p-6 md:p-8 border-b border-ink-950/10 flex justify-between items-start shrink-0">
-              <div>
-                <span className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] block mb-2">
-                  Module {selectedService.icon}
-                </span>
-                <h3 className="text-3xl md:text-4xl font-serif font-medium text-ink-950">
-                  {selectedService.title}
-                </h3>
-              </div>
-              <button 
-                onClick={closeModal}
-                className="text-ink-400 hover:text-ink-950 transition-colors p-2 -m-2"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Modal Body - Scrollable */}
-            <div className="p-6 md:p-8 overflow-y-auto flex-1">
-              
-              {/* Description */}
-              <p className="text-ink-600 text-lg leading-relaxed font-sans font-light mb-8">
-                {selectedService.fullDescription}
-              </p>
-
-              {/* Features */}
-              <div className="mb-8">
-                <h4 className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] mb-4">
-                  Capabilities
-                </h4>
-                <ul className="space-y-3">
-                  {selectedService.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3 text-ink-950">
-                      <span className="w-4 h-4 border border-ink-950/20 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="w-1 h-1 bg-ink-950 rounded-full"></span>
-                      </span>
-                      <span className="font-mono text-sm uppercase tracking-wide">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Use Cases */}
-              <div className="mb-8">
-                <h4 className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] mb-4">
-                  Use Cases
-                </h4>
-                <div className="space-y-2">
-                  {selectedService.useCases.map((useCase, index) => (
-                    <div key={index} className="p-3 bg-white/50 border border-ink-950/5">
-                      <span className="font-mono text-xs text-ink-600">{useCase}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tech Stack */}
-              {selectedService.techStack && (
-                <div>
-                  <h4 className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] mb-4">
-                    Tech Stack
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedService.techStack.map((tech, index) => (
-                      <span 
-                        key={index} 
-                        className="px-3 py-1 bg-ink-950 text-alabaster font-mono text-[10px] uppercase tracking-wider"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-6 md:p-8 border-t border-ink-950/10 shrink-0">
-              <button 
-                onClick={() => {
-                  closeModal();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="w-full py-4 bg-ink-950 text-alabaster font-mono text-xs uppercase tracking-[0.2em] hover:bg-ink-800 transition-colors flex items-center justify-center gap-3"
-              >
-                Discuss {selectedService.title}
-                <ArrowRight size={14} />
-              </button>
-            </div>
-
-          </div>
-        </div>,
-        document.body
-      )}
-
     </section>
   );
 };
