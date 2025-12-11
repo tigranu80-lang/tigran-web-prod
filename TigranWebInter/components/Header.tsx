@@ -6,16 +6,16 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-alabaster/80 backdrop-blur-md border-b border-ink-950/5">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-900/85 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
         
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
-          <div className="w-8 h-8 bg-ink-950 rounded-lg flex items-center justify-center text-white font-bold font-display">
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-neutral-900 font-bold font-display">
             A
           </div>
-          <span className="font-display font-bold text-ink-950 tracking-tight text-xl hidden sm:inline">AutoMate</span>
-          <span className="font-display font-bold text-ink-950 tracking-tight text-xl sm:hidden">AM</span>
+          <span className="font-display font-bold text-white tracking-tight text-xl hidden sm:inline">AutoMate</span>
+          <span className="font-display font-bold text-white tracking-tight text-xl sm:hidden">AM</span>
         </div>
 
         {/* Center Navigation */}
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
             <button 
               key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
-              className="text-sm font-medium text-ink-400 hover:text-ink-950 transition-colors"
+              className="text-sm font-medium text-neutral-400 hover:text-white transition-colors"
             >
               {item}
             </button>
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
         {/* Right CTA */}
         <button 
           onClick={() => scrollToSection('contact')}
-          className="px-5 py-2.5 bg-ink-950 text-white rounded-full text-sm font-medium hover:bg-ink-800 transition-colors"
+          className="px-5 py-2.5 bg-white text-neutral-900 rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors"
         >
           Get Started
         </button>
