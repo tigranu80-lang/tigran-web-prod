@@ -2,12 +2,13 @@ import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import Services from './components/Services';
-import About from './components/Team'; 
+import About from './components/Team';
 import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 import AIConsultant from './components/AIConsultant';
 import HeroSaaS from './components/HeroSaaS';
 import Contact from './components/Contact';
+import GlobeSection from './components/GlobeSection';
 import Background from './components/Background';
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
       <Background />
 
       <Header />
-      
+
       <main className="relative z-10">
         {/* New SaaS Style Hero Section */}
         <HeroSaaS />
@@ -25,6 +26,7 @@ function App() {
         {/* Content Sections */}
         <Services />
         <About />
+        <GlobeSection />
         <Pricing />
         <Contact />
 
