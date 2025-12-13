@@ -43,87 +43,100 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm relative">
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10">
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-ink-950/10">
-          
+
           {/* Left: Heading */}
           <div className="p-6 md:p-12 lg:p-24 flex flex-col justify-between">
             <div>
               <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Initiate Protocol</span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
-                <DecryptedText text="Get In" /><br/>
+                <DecryptedText text="Get In" /><br />
                 <DecryptedText text="Touch." />
               </h2>
             </div>
             <div className="mt-12 lg:mt-0">
-               <p className="text-lg text-ink-500 font-sans font-light max-w-sm mb-8">
-                 Ready to replace manual labor with intelligent systems? Send us a signal.
-               </p>
-               <div className="flex items-center gap-4 text-ink-950">
-                 <div className="h-[1px] w-12 bg-ink-950"></div>
-                 <span className="font-mono text-xs uppercase tracking-widest">Awaiting Input</span>
-               </div>
+              <p className="text-lg text-ink-500 font-sans font-light max-w-sm mb-8">
+                Ready to replace manual labor with intelligent systems? Send us a signal.
+              </p>
+              <div className="flex items-center gap-4 text-ink-950">
+                <div className="h-[1px] w-12 bg-ink-950"></div>
+                <span className="font-mono text-xs uppercase tracking-widest">Awaiting Input</span>
+              </div>
             </div>
           </div>
 
           {/* Right: The "Form" Grid */}
-          <div className="bg-white/40">
-            <form className="flex flex-col h-full" onSubmit={handleSubmit}>
-              
+          <div className="relative">
+            {/* Technical Frame around form */}
+            <div className="absolute -inset-4 border border-dashed border-ink-950/10 pointer-events-none hidden md:block"></div>
+            {/* Corner Ticks */}
+            <div className="absolute -top-4 -left-4 w-4 h-4 border-t border-l border-ink-950/30 hidden md:block"></div>
+            <div className="absolute -top-4 -right-4 w-4 h-4 border-t border-r border-ink-950/30 hidden md:block"></div>
+            <div className="absolute -bottom-4 -left-4 w-4 h-4 border-b border-l border-ink-950/30 hidden md:block"></div>
+            <div className="absolute -bottom-4 -right-4 w-4 h-4 border-b border-r border-ink-950/30 hidden md:block"></div>
+
+            <form className="flex flex-col h-full bg-white/20 backdrop-blur-sm border border-ink-950/5" onSubmit={handleSubmit}>
+
               {/* Row 1 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/10 border-b border-ink-950/10">
-                <div className="p-8">
-                  <label htmlFor="name" className="block text-[10px] font-mono uppercase text-ink-400 font-bold tracking-[0.1em] mb-4">Identity / Name</label>
-                  <input 
-                    type="text" 
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
+                <div className="p-8 group focus-within:bg-white/40 transition-colors">
+                  <label htmlFor="name" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Identity_Name</label>
+                  <input
+                    type="text"
                     id="name"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="ENTER NAME"
-                    className="w-full bg-transparent border-b border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-ink-950 transition-colors placeholder:text-ink-200 font-mono text-sm"
+                    placeholder="ENTER DESIGNATION"
+                    className="w-full bg-transparent border-b border-dashed border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-orange-500 transition-colors placeholder:text-ink-300 font-mono text-xs"
                   />
                 </div>
-                <div className="p-8">
-                  <label htmlFor="email" className="block text-[10px] font-mono uppercase text-ink-400 font-bold tracking-[0.1em] mb-4">Contact / Email</label>
-                  <input 
-                    type="email" 
+                <div className="p-8 group focus-within:bg-white/40 transition-colors">
+                  <label htmlFor="email" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Contact_Relay</label>
+                  <input
+                    type="email"
                     id="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="ENTER EMAIL"
-                    className="w-full bg-transparent border-b border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-ink-950 transition-colors placeholder:text-ink-200 font-mono text-sm"
+                    placeholder="ENTER SIGNAL ADDRESS"
+                    className="w-full bg-transparent border-b border-dashed border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-orange-500 transition-colors placeholder:text-ink-300 font-mono text-xs"
                   />
                 </div>
               </div>
 
               {/* Row 2: Message */}
-              <div className="p-8 flex-1 border-b border-ink-950/10 min-h-[200px]">
-                <label htmlFor="message" className="block text-[10px] font-mono uppercase text-ink-400 font-bold tracking-[0.1em] mb-4">Parameters / Details</label>
-                <textarea 
+              <div className="p-8 flex-1 border-b border-ink-950/5 min-h-[200px] group focus-within:bg-white/40 transition-colors">
+                <label htmlFor="message" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Transmission_Content</label>
+                <textarea
                   id="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="DESCRIBE YOUR MANUAL PROCESSES..."
-                  className="w-full h-full bg-transparent resize-none text-ink-950 focus:outline-none placeholder:text-ink-200 font-mono text-sm leading-relaxed"
+                  placeholder="INPUT PARAMETERS..."
+                  className="w-full h-full bg-transparent resize-none text-ink-950 focus:outline-none placeholder:text-ink-300 font-mono text-xs leading-relaxed border-l-2 border-transparent focus:border-orange-500 pl-0 focus:pl-4 transition-all duration-300"
                 ></textarea>
               </div>
 
               {/* Submit Button Area */}
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={status === 'loading'}
-                className="group w-full p-8 text-left hover:bg-ink-950 transition-colors flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group w-full p-6 text-left hover:bg-ink-950 transition-colors flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed border-t border-ink-950/5"
               >
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-ink-950 group-hover:text-alabaster transition-colors">
-                  {status === 'loading' ? 'Transmitting...' : 'Transmit Signal'}
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-950 group-hover:text-alabaster transition-colors">
+                    {status === 'loading' ? 'Transmitting...' : 'Initiate Sequence'}
+                  </span>
+                  <span className="text-[9px] font-mono text-ink-400 group-hover:text-ink-500 mt-1">
+                    SECURE_CHANNEL_READY
+                  </span>
+                </div>
                 {status === 'loading' ? (
-                  <Loader2 className="text-ink-950 group-hover:text-alabaster transition-colors animate-spin" size={20} />
+                  <Loader2 className="text-orange-600 animate-spin" size={20} />
                 ) : (
-                  <ArrowRight className="text-ink-950 group-hover:text-alabaster transition-colors" size={20} />
+                  <ArrowRight className="text-orange-600 group-hover:translate-x-1 transition-transform" size={20} />
                 )}
               </button>
             </form>
@@ -138,13 +151,13 @@ const Contact: React.FC = () => {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm" onClick={closeModal}></div>
           <div className="relative bg-alabaster shadow-2xl border border-ink-950 p-12 max-w-md w-full animate-[fadeIn_0.3s_ease-out]">
-            <button 
+            <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-ink-400 hover:text-ink-950 transition-colors"
             >
               <X size={20} />
             </button>
-            
+
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 border border-ink-950 rounded-full flex items-center justify-center text-ink-950 mb-6">
                 <CheckCircle size={24} strokeWidth={1} />
@@ -153,7 +166,7 @@ const Contact: React.FC = () => {
               <p className="text-ink-500 font-mono text-xs uppercase tracking-wide leading-relaxed">
                 Transmission logged. Our agents will process your request shortly.
               </p>
-              <button 
+              <button
                 onClick={closeModal}
                 className="mt-8 px-8 py-3 bg-ink-950 text-white font-mono uppercase tracking-widest text-[10px] hover:bg-ink-800 transition-colors"
               >
@@ -170,13 +183,13 @@ const Contact: React.FC = () => {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm" onClick={closeModal}></div>
           <div className="relative bg-alabaster shadow-2xl border border-red-500 p-12 max-w-md w-full animate-[fadeIn_0.3s_ease-out]">
-            <button 
+            <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-ink-400 hover:text-ink-950 transition-colors"
             >
               <X size={20} />
             </button>
-            
+
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 border border-red-500 rounded-full flex items-center justify-center text-red-500 mb-6">
                 <AlertCircle size={24} strokeWidth={1} />
@@ -185,7 +198,7 @@ const Contact: React.FC = () => {
               <p className="text-ink-500 font-mono text-xs uppercase tracking-wide leading-relaxed">
                 {errorMessage || 'An error occurred. Please try again.'}
               </p>
-              <button 
+              <button
                 onClick={closeModal}
                 className="mt-8 px-8 py-3 bg-ink-950 text-white font-mono uppercase tracking-widest text-[10px] hover:bg-ink-800 transition-colors"
               >

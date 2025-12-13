@@ -738,6 +738,7 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [isLive, setIsLive] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [rfInstance, setRfInstance] = useState<any>(null); // Use any to avoid type complexity with ReactFlowInstance imports if not available
 
   // Function to calculate and apply center offset
   const calculateAndCenterNodes = useCallback(() => {
@@ -773,36 +774,69 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
             nodeHeight = 100; // icon box (64px) + label (~35px)
           }
 
+          // --- VISUAL BUFFERS FOR CENTERING ---
+          // The math centers the "Bounding Box". 
+          // If the visual center is off, we pad the box to "push" the center in the opposite direction.
+          // To move content LEFT -> Increase Right Buffer (maxX)
+          // To move content UP   -> Increase Bottom Buffer (maxY)
+
+          let VISUAL_BUFFER_X = 200; // Large buffer to fix "Right Shift" (Labels on right)
+          let VISUAL_BUFFER_BOTTOM = 80; // Buffer to fix "Bottom Shift" (Labels below nodes)
+
+          if (node.type === 'group') {
+            VISUAL_BUFFER_X += 20;
+          }
+
           minX = Math.min(minX, node.position.x);
           minY = Math.min(minY, node.position.y);
-          maxX = Math.max(maxX, node.position.x + nodeWidth);
-          maxY = Math.max(maxY, node.position.y + nodeHeight);
+
+          maxX = Math.max(maxX, node.position.x + nodeWidth + VISUAL_BUFFER_X);
+          maxY = Math.max(maxY, node.position.y + nodeHeight + VISUAL_BUFFER_BOTTOM);
         }
       });
 
       // If we have valid bounds, calculate center offset
       if (minX !== Infinity && minY !== Infinity) {
-        // Get viewport scale (default is 0.85 from defaultViewport)
-        const viewport = document.querySelector('.react-flow-container .react-flow__viewport') as HTMLElement;
-        let scale = 0.85; // default
-        if (viewport) {
-          const transform = viewport.style.transform || '';
-          const scaleMatch = transform.match(/scale\(([^)]+)\)/);
-          if (scaleMatch) {
-            scale = parseFloat(scaleMatch[1]);
-          }
-        }
-
         // Calculate diagram bounds (actual size in ReactFlow coordinates)
         const diagramWidth = maxX - minX;
         const diagramHeight = maxY - minY;
 
-        // Calculate what the user sees (scaled size)
-        const scaledWidth = diagramWidth * scale;
-        const scaledHeight = diagramHeight * scale;
+        // --- DYNAMIC SCALING LOGIC ---
+        // Determine if we are on mobile
+        const isMobile = containerWidth < 768;
+        let scale = 0.85; // Default desktop scale
 
-        // Center the scaled diagram in the container
-        // The offset needs to account for: (container - scaled_diagram) / 2, then convert back to ReactFlow coordinates
+        if (isMobile && diagramWidth > 0) {
+          const padding = 20; // Padding on sides for mobile
+          const availableWidth = containerWidth - (padding * 2);
+          // Calculate scale to fit width
+          const fitScale = availableWidth / diagramWidth;
+
+          // Cap the scale to sensible limits for readability
+          scale = Math.min(0.65, Math.max(0.35, fitScale));
+        }
+
+        // Apply scale if we have the instance
+        if (rfInstance) {
+          // On mobile/Desktop we force the scale
+          rfInstance.setViewport({ x: 0, y: 0, zoom: scale });
+        }
+
+        // Center the scaled diagram in the container based on the CHOSEN scale
+        // The offset needs to account for: (container - scaled_diagram) / 2
+        // Then we subtract (minX * scale) to bring the top-left corner to 0-reference before centering?
+        // Actually: We want the CENTER of the diagram to be at the CENTER of the container.
+
+        // Diagram Center X (relative to minX) = diagramWidth / 2
+        // Diagram Center X (absolute) = minX + diagramWidth / 2
+
+        // Target Visual Center X = containerWidth / 2
+
+        // We need to shift nodes by (TargetVisualCenter - DiagramCenter * scale) / scale?
+        // No, we are shifting the NODES, so the viewport is fixed at 0,0 (or expected to be).
+        // If viewport is scaled, the effective coordinate space is scaled.
+
+        // Let's stick to the previous logic that worked but corrected for width:
         const centerOffsetX = (containerWidth / scale - diagramWidth) / 2 - minX;
         const centerOffsetY = (containerHeight / scale - diagramHeight) / 2 - minY;
 
@@ -828,7 +862,7 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
     }
 
     setEdges(config.edges);
-  }, [activeTab, setNodes, setEdges]);
+  }, [activeTab, setNodes, setEdges, rfInstance]);
 
   useEffect(() => {
     // Wait for viewport to be ready before centering
@@ -1012,15 +1046,7 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
           elementsSelectable={true}
           defaultViewport={{ x: 0, y: 0, zoom: 0.85 }}
           onInit={(instance) => {
-            // Force viewport to 0,0 on initialization
-            instance.setViewport({ x: 0, y: 0, zoom: 0.85 });
-            // Also force DOM element directly
-            setTimeout(() => {
-              const viewportEl = document.querySelector('.react-flow-container .react-flow__viewport') as HTMLElement;
-              if (viewportEl) {
-                viewportEl.style.setProperty('transform', 'translate(0px, 0px) scale(0.85)', 'important');
-              }
-            }, 0);
+            setRfInstance(instance);
           }}
           style={{ width: '100%', height: '100%' }}
         >
