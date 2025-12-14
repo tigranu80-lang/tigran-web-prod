@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { sendMessageToGemini } from '../services/geminiService';
-import { ChatMessage, BotStatus } from '../types';
+import { sendMessageToGemini } from '../../services/geminiService';
+import { ChatMessage, BotStatus } from '../../types';
 import { MessageSquare, Send, Minus } from 'lucide-react';
 
 const AIConsultant: React.FC = () => {
@@ -77,7 +77,7 @@ const AIConsultant: React.FC = () => {
           {/* Header */}
           <div className="p-4 border-b border-ink-950 flex justify-between items-center bg-alabaster">
             <span className="font-mono text-xs uppercase tracking-widest text-ink-950">Construct V1</span>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="text-ink-400 hover:text-ink-950 transition-colors"
             >
@@ -88,18 +88,17 @@ const AIConsultant: React.FC = () => {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white/50">
             {messages.map((msg) => (
-              <div 
-                key={msg.id} 
+              <div
+                key={msg.id}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div 
-                  className={`max-w-[85%] p-3 text-sm font-mono ${
-                    msg.role === 'user' 
-                      ? 'bg-ink-950 text-alabaster' 
-                      : 'text-ink-950 border border-ink-950/10 bg-alabaster'
-                  }`}
+                <div
+                  className={`max-w-[85%] p-3 text-sm font-mono ${msg.role === 'user'
+                    ? 'bg-ink-950 text-alabaster'
+                    : 'text-ink-950 border border-ink-950/10 bg-alabaster'
+                    }`}
                 >
-                  <span className="block text-[10px] opacity-50 mb-1 uppercase">
+                  <span className="block text-xs opacity-50 mb-1 uppercase">
                     {msg.role === 'user' ? 'YOU' : 'SYS'}
                   </span>
                   {msg.text}
@@ -108,7 +107,7 @@ const AIConsultant: React.FC = () => {
             ))}
             {status === BotStatus.THINKING && (
               <div className="flex justify-start">
-                 <div className="text-ink-400 text-xs font-mono animate-pulse">DECODING...</div>
+                <div className="text-ink-400 text-xs font-mono animate-pulse">DECODING...</div>
               </div>
             )}
             <div ref={messagesEndRef} />

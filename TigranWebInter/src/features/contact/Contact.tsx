@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { X, CheckCircle, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
-import DecryptedText from './DecryptedText';
+import DecryptedText from '../ui/DecryptedText';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 const Contact: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,8 +28,7 @@ const Contact: React.FC = () => {
         throw new Error('Failed to send message');
       }
 
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      navigate('/thank-you');
     } catch (error) {
       console.error('Contact form error:', error);
       setStatus('error');
@@ -126,7 +127,7 @@ const Contact: React.FC = () => {
                 className="group w-full p-6 text-left hover:bg-ink-950 transition-colors flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed border-t border-ink-950/5"
               >
                 <div className="flex flex-col">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-950 group-hover:text-alabaster transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-[0.2em] text-ink-950 group-hover:text-alabaster transition-colors">
                     {status === 'loading' ? 'Transmitting...' : 'Initiate Sequence'}
                   </span>
                   <span className="text-[9px] font-mono text-ink-400 group-hover:text-ink-500 mt-1">
@@ -146,37 +147,6 @@ const Contact: React.FC = () => {
 
       </div>
 
-      {/* Success Modal */}
-      {status === 'success' && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-ink-950/40 backdrop-blur-sm" onClick={closeModal}></div>
-          <div className="relative bg-alabaster shadow-2xl border border-ink-950 p-12 max-w-md w-full animate-[fadeIn_0.3s_ease-out]">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-ink-400 hover:text-ink-950 transition-colors"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 border border-ink-950 rounded-full flex items-center justify-center text-ink-950 mb-6">
-                <CheckCircle size={24} strokeWidth={1} />
-              </div>
-              <h3 className="text-3xl font-serif font-medium text-ink-950 mb-2">Signal Received</h3>
-              <p className="text-ink-500 font-mono text-xs uppercase tracking-wide leading-relaxed">
-                Transmission logged. Our agents will process your request shortly.
-              </p>
-              <button
-                onClick={closeModal}
-                className="mt-8 px-8 py-3 bg-ink-950 text-white font-mono uppercase tracking-widest text-[10px] hover:bg-ink-800 transition-colors"
-              >
-                Acknowledge
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
 
       {/* Error Modal */}
       {status === 'error' && createPortal(
@@ -200,7 +170,7 @@ const Contact: React.FC = () => {
               </p>
               <button
                 onClick={closeModal}
-                className="mt-8 px-8 py-3 bg-ink-950 text-white font-mono uppercase tracking-widest text-[10px] hover:bg-ink-800 transition-colors"
+                className="mt-8 px-8 py-3 bg-ink-950 text-white font-mono uppercase tracking-widest text-xs hover:bg-ink-800 transition-colors"
               >
                 Try Again
               </button>

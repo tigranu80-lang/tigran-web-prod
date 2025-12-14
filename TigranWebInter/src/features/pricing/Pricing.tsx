@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, Plus } from 'lucide-react';
-import DecryptedText from './DecryptedText';
-import FadeIn from './FadeIn';
+import DecryptedText from '../ui/DecryptedText';
+import FadeIn from '../ui/FadeIn';
 
 const plans = [
   {
@@ -66,7 +66,7 @@ const Pricing: React.FC = () => {
                 </div>
 
                 <div className="mb-16">
-                  <h3 className="font-mono text-[10px] uppercase tracking-[0.2em] mb-4 text-ink-400 flex items-center gap-2">
+                  <h3 className="font-mono text-xs uppercase tracking-[0.2em] mb-4 text-ink-400 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-ink-300 group-hover:bg-orange-500/50 transition-colors"></span>
                     0{index + 1} — {plan.name}
                   </h3>
@@ -92,7 +92,7 @@ const Pricing: React.FC = () => {
                   </ul>
                 </div>
 
-                <button className="w-full mt-12 py-4 text-[10px] font-mono uppercase tracking-[0.2em] border transition-all relative overflow-hidden group/btn bg-transparent text-ink-950 border-ink-950/20 hover:border-orange-500 hover:text-orange-600">
+                <button className="w-full mt-12 py-4 text-xs font-mono uppercase tracking-[0.2em] border transition-all relative overflow-hidden group/btn bg-transparent text-ink-950 border-ink-950/20 hover:border-orange-500 hover:text-orange-600">
                   <span className="relative z-10">Initialize {plan.name}</span>
                 </button>
               </div>

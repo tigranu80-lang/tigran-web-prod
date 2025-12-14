@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Check, Plus } from 'lucide-react';
-import DecryptedText from './DecryptedText';
-import FadeIn from './FadeIn';
+import DecryptedText from '../ui/DecryptedText';
+import FadeIn from '../ui/FadeIn';
 import ArchitectureDemo from './ArchitectureDemo';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -95,11 +95,11 @@ const Services: React.FC = () => {
       {/* Micro-Graphics / Architectural Marks */}
       <div className="absolute top-6 left-6 md:left-12 opacity-30 text-ink-950 pointer-events-none">
         <Plus size={16} strokeWidth={1} />
-        <span className="text-[10px] font-mono mt-1 block tracking-widest">SYS.01</span>
+        <span className="text-xs font-mono mt-1 block tracking-widest">SYS.01</span>
       </div>
       <div className="absolute top-6 right-6 md:right-12 opacity-30 text-ink-950 pointer-events-none">
         <Plus size={16} strokeWidth={1} />
-        <span className="text-[10px] font-mono mt-1 block tracking-widest text-right">GRID.VIEW</span>
+        <span className="text-xs font-mono mt-1 block tracking-widest text-right">GRID.VIEW</span>
       </div>
       <div className="absolute bottom-12 left-6 md:left-12 opacity-30 text-ink-950 pointer-events-none">
         <div className="h-12 w-[1px] bg-ink-950"></div>
@@ -149,76 +149,90 @@ const Services: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content Area: Diagram + Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-
-          {/* Left: Diagram (Spans 2 columns on large screens) */}
-          <div className="lg:col-span-2">
-            <FadeIn key={selectedServiceId} duration={0.4}>
-              <ArchitectureDemo activeTab={selectedServiceId} />
-            </FadeIn>
+        {/* Main Canvas: Unified Container with Diagram + Details */}
+        <div className="relative bg-white border border-ink-950/10 rounded-2xl overflow-hidden">
+          {/* Technical Frame */}
+          <div className="absolute top-4 left-4 font-mono text-[10px] text-ink-400 uppercase tracking-widest">
+            /// SYSTEM_VIEW_V1
+          </div>
+          <div className="absolute top-4 right-4 font-mono text-[10px] text-ink-400 uppercase tracking-widest">
+            2/3
           </div>
 
-          {/* Right: Details Panel */}
-          <div className="lg:col-span-1 bg-white border border-ink-950/5 rounded-2xl p-8 min-h-[500px] flex flex-col justify-between">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedServiceId}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="mb-6">
-                  <span className="font-mono text-xs text-ink-400 uppercase tracking-[0.2em] block mb-2">
-                    Module {activeService.icon}
-                  </span>
-                  <h3 className="text-3xl font-serif font-medium text-ink-950 mb-4">
-                    {activeService.title}
-                  </h3>
-                  <p className="text-ink-600 text-sm leading-relaxed font-sans font-light">
-                    {activeService.fullDescription}
-                  </p>
-                </div>
+          {/* Content Grid inside canvas */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 min-h-[500px]">
 
-                <div className="mb-6">
-                  <h4 className="font-mono text-[10px] text-ink-400 uppercase tracking-[0.2em] mb-3">
-                    Capabilities
-                  </h4>
-                  <ul className="space-y-2">
-                    {activeService.features.slice(0, 4).map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-ink-950 text-xs">
-                        <Check size={12} className="mt-0.5 text-neutral-400" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            {/* Left: Diagram (Spans 2 columns on large screens) */}
+            <div className="lg:col-span-2 p-4 pt-12">
+              <FadeIn key={selectedServiceId} duration={0.4}>
+                <ArchitectureDemo activeTab={selectedServiceId} />
+              </FadeIn>
+            </div>
 
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {activeService.techStack?.map((tech, i) => (
-                    <span key={i} className="px-2 py-1 bg-neutral-100 text-neutral-600 text-[10px] uppercase tracking-wider rounded">
-                      {tech}
+            {/* Right: Details Panel inside canvas */}
+            <div className="lg:col-span-1 p-8 pt-12 lg:border-l border-t lg:border-t-0 border-ink-950/5 flex flex-col justify-between">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedServiceId}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="mb-6">
+                    <span className="font-mono text-xs text-ink-400 uppercase tracking-[0.2em] block mb-2">
+                      Module {activeService.icon}
                     </span>
-                  ))}
-                </div>
+                    <h3 className="text-3xl font-serif font-medium text-ink-950 mb-4">
+                      {activeService.title}
+                    </h3>
+                    <p className="text-ink-600 text-sm leading-relaxed font-sans font-light">
+                      {activeService.fullDescription}
+                    </p>
+                  </div>
 
-              </motion.div>
-            </AnimatePresence>
+                  <div className="mb-6">
+                    <h4 className="font-mono text-xs text-ink-400 uppercase tracking-[0.2em] mb-3">
+                      Capabilities
+                    </h4>
+                    <ul className="space-y-2">
+                      {activeService.features.slice(0, 4).map((feature, i) => (
+                        <li key={i} className="flex items-start gap-2 text-ink-950 text-xs">
+                          <Check size={12} className="mt-0.5 text-neutral-400" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-            <button
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full py-3 bg-ink-950 text-alabaster font-mono text-xs uppercase tracking-[0.2em] hover:bg-ink-800 transition-colors flex items-center justify-center gap-3 rounded-lg"
-            >
-              Configure System
-              <ArrowRight size={14} />
-            </button>
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="flex flex-wrap gap-2">
+                {activeService.techStack?.map((tech, i) => (
+                  <span key={i} className="px-2 py-1 bg-neutral-100 text-neutral-600 text-xs uppercase tracking-wider rounded">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
           </div>
+        </div>
 
+        {/* Configure System Button - Now Outside and Below Canvas */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-12 py-4 bg-ink-950 text-alabaster font-mono text-xs uppercase tracking-[0.2em] hover:bg-ink-800 transition-colors flex items-center justify-center gap-3 rounded-lg"
+          >
+            Configure System
+            <ArrowRight size={14} />
+          </button>
         </div>
 
         {/* Footer Technical Marker */}
-        <div className="mt-12 pt-6 border-t border-ink-950/10 flex justify-between items-center text-[10px] font-mono uppercase text-ink-300">
+        <div className="mt-12 pt-6 border-t border-ink-950/10 flex justify-between items-center text-xs font-mono uppercase text-ink-300">
           <span>Interactive System View</span>
           <span>/// End Section</span>
         </div>

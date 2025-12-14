@@ -422,7 +422,7 @@ const GroupNode = ({ data }: { data: GroupNodeData }) => {
       />
       {/* Floating Label - positioned at top edge, aligned with container */}
       <div
-        className="group-node-label absolute top-0 px-2 py-0.5 text-[10px] font-mono tracking-[0.15em] uppercase rounded-sm"
+        className="group-node-label absolute top-0 px-2 py-0.5 text-xs font-mono tracking-[0.15em] uppercase rounded-sm"
         data-label="group"
         style={{
           color: color,

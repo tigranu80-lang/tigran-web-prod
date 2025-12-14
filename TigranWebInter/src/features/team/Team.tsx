@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import FadeIn from './FadeIn';
+import FadeIn from '../ui/FadeIn';
 
 const About: React.FC = () => {
   const [names, setNames] = useState(['Tigran', 'Dima']);
@@ -37,11 +37,11 @@ const About: React.FC = () => {
               {/* Dynamic rendering for the footer names too, to match the order */}
               <div>
                 <p className="text-ink-950 font-serif text-xl font-bold">{names[0] === 'Tigran' ? 'Tigran' : 'Dima'}</p>
-                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Co-Founder</p>
+                <p className="text-ink-400 font-mono text-xs tracking-widest uppercase mt-2">Co-Founder</p>
               </div>
               <div>
                 <p className="text-ink-950 font-serif text-xl font-bold">{names[1] === 'Tigran' ? 'Tigran' : 'Dima'}</p>
-                <p className="text-ink-400 font-mono text-[10px] tracking-widest uppercase mt-2">Co-Founder</p>
+                <p className="text-ink-400 font-mono text-xs tracking-widest uppercase mt-2">Co-Founder</p>
               </div>
             </div>
           </div>
