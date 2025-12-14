@@ -11,9 +11,11 @@ import ReactFlow, {
   ConnectionLineType,
   MarkerType,
   useReactFlow,
+  ReactFlowProvider,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import Dagre from 'dagre';
 import {
   Database,
   Zap,
@@ -472,6 +474,76 @@ const nodeTypes = {
   group: GroupNode,
 };
 
+// --- Layout Helper ---
+const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
+  const dagreGraph = new Dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+  // Direction: Left-to-Right, increased ranksep for wider layout
+  dagreGraph.setGraph({ rankdir: 'LR', ranksep: 180, nodesep: 50 });
+
+  // Filter for top-level nodes (groups or independent nodes) to layout
+  const topLevelNodes = nodes.filter(node => !node.parentId);
+
+  topLevelNodes.forEach((node) => {
+    const width = node.width || 150;
+    const height = node.height || 150;
+    dagreGraph.setNode(node.id, { width, height });
+  });
+
+  edges.forEach((edge) => {
+    if (dagreGraph.hasNode(edge.source) && dagreGraph.hasNode(edge.target)) {
+      dagreGraph.setEdge(edge.source, edge.target);
+    }
+  });
+
+  Dagre.layout(dagreGraph);
+
+  // First pass: calculate positions and find bounding box
+  let minX = Infinity, minY = Infinity;
+  let maxX = -Infinity, maxY = -Infinity;
+
+  const tempPositions: Record<string, { x: number; y: number }> = {};
+
+  topLevelNodes.forEach((node) => {
+    if (dagreGraph.hasNode(node.id)) {
+      const nodeWithPosition = dagreGraph.node(node.id);
+      const w = node.width || 150;
+      const h = node.height || 150;
+
+      const x = nodeWithPosition.x - w / 2;
+      const y = nodeWithPosition.y - h / 2;
+
+      tempPositions[node.id] = { x, y };
+
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      if (x + w > maxX) maxX = x + w;
+      if (y + h > maxY) maxY = y + h;
+    }
+  });
+
+  // Calculate center offset to move everything to be centered around (0,0)
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+
+  // Second pass: apply centered positions
+  const layoutedNodes = nodes.map((node) => {
+    if (!node.parentId && tempPositions[node.id]) {
+      return {
+        ...node,
+        position: {
+          x: tempPositions[node.id].x - centerX,
+          y: tempPositions[node.id].y - centerY,
+        },
+      };
+    }
+    return node;
+  });
+
+  return { nodes: layoutedNodes, edges };
+};
+
 // --- Enhanced Data for each tab ---
 // Constants: icon=64px, label=35px, total_node_height=100px, spacing=120px
 // Group padding: top=35px (for label), bottom=15px, sides=23px
@@ -482,76 +554,78 @@ const nodeTypes = {
 // Horizontal spacing: 240px between columns for wider layout
 // Base positions (will be centered dynamically in useEffect)
 const nodesOrchestration: Node[] = [
-  // Groups - base positions
+  // Groups - Auto layout will position these
   {
     id: 'group-trigger',
     type: 'group',
-    position: { x: -23, y: 85 },
+    position: { x: 0, y: 0 }, // Initial
+    width: 110, height: 150,
     data: { label: 'Trigger', width: 110, height: 150, color: COLORS.orange },
     zIndex: -1,
-    draggable: false,
-    selectable: false,
   },
   {
     id: 'group-workflow',
     type: 'group',
-    position: { x: 217, y: 85 },
+    position: { x: 0, y: 0 },
+    width: 110, height: 150,
     data: { label: 'Workflow', width: 110, height: 150, color: COLORS.blue },
     zIndex: -1,
-    draggable: false,
-    selectable: false,
   },
   {
     id: 'group-integrations',
     type: 'group',
-    position: { x: 457, y: -35 },
+    position: { x: 0, y: 0 },
+    width: 110, height: 390,
     data: { label: 'Integrations', width: 110, height: 390, color: COLORS.pink },
     zIndex: -1,
-    draggable: false,
-    selectable: false,
   },
 
-  // Nodes - base positions
+  // Nodes - Relative to Parents
   {
     id: 'node-trigger',
     type: 'product',
-    position: { x: 0, y: 120 },
+    parentId: 'group-trigger',
+    position: { x: 23, y: 35 }, // Centered in 110x150 group (roughly)
+    extent: 'parent',
+    width: 64, height: 64,
     data: { label: 'Trigger', sublabel: 'Webhook', icon: <Globe />, color: COLORS.orange },
-    draggable: false,
-    selectable: true,
   },
   {
     id: 'node-workflow',
     type: 'product',
-    position: { x: 240, y: 120 },
+    parentId: 'group-workflow',
+    position: { x: 23, y: 35 },
+    extent: 'parent',
+    width: 64, height: 64,
     data: { label: 'Workflow', sublabel: 'Orchestrator', icon: <Layers />, color: COLORS.blue },
-    draggable: false,
-    selectable: true,
   },
 
   {
     id: 'node-crm',
     type: 'product',
-    position: { x: 480, y: 0 },
+    parentId: 'group-integrations',
+    position: { x: 23, y: 35 }, // Top
+    extent: 'parent',
+    width: 64, height: 64,
     data: { label: 'CRM', sublabel: 'Salesforce', icon: <Database />, color: COLORS.pink },
-    draggable: false,
-    selectable: true,
   },
   {
     id: 'node-slack',
     type: 'product',
-    position: { x: 480, y: 120 },
+    parentId: 'group-integrations',
+    position: { x: 23, y: 155 }, // Middle
+    extent: 'parent',
+    width: 64, height: 64,
     data: { label: 'Slack', sublabel: 'Alerts', icon: <MessageSquare />, color: COLORS.pink },
-    draggable: false,
-    selectable: true,
   },
   {
     id: 'node-email',
     type: 'product',
-    position: { x: 480, y: 240 },
+    parentId: 'group-integrations',
+    position: { x: 23, y: 275 }, // Bottom
+    extent: 'parent',
+    width: 64, height: 64,
     data: { label: 'Email', sublabel: 'Resend', icon: <Zap />, color: COLORS.pink },
-    draggable: false,
-    selectable: true,
   },
 ];
 
@@ -612,20 +686,21 @@ const edgesOrchestration: Edge[] = [
 // 2. AI Agents - Intelligent processing pipeline  
 // Wider spacing for better distribution
 const nodesAgents: Node[] = [
-  // Groups - 2x2 grid in center, single nodes on sides
-  { id: 'g1', type: 'group', position: { x: -23, y: 25 }, data: { label: 'Input', width: 110, height: 150, color: COLORS.blue }, zIndex: -1 },
-  { id: 'g2', type: 'group', position: { x: 187, y: -35 }, data: { label: 'Compute', width: 240, height: 270, color: COLORS.green }, zIndex: -1 },
-  { id: 'g3', type: 'group', position: { x: 517, y: 25 }, data: { label: 'Action', width: 110, height: 150, color: COLORS.purple }, zIndex: -1 },
+  // Groups
+  { id: 'g1', type: 'group', position: { x: 0, y: 0 }, width: 110, height: 150, data: { label: 'Input', width: 110, height: 150, color: COLORS.blue }, zIndex: -1 },
+  { id: 'g2', type: 'group', position: { x: 0, y: 0 }, width: 240, height: 270, data: { label: 'Compute', width: 240, height: 270, color: COLORS.green }, zIndex: -1 },
+  { id: 'g3', type: 'group', position: { x: 0, y: 0 }, width: 110, height: 150, data: { label: 'Action', width: 110, height: 150, color: COLORS.purple }, zIndex: -1 },
 
-  // Nodes - wider horizontal spacing
-  { id: '1', type: 'product', position: { x: 0, y: 60 }, data: { label: 'User', sublabel: 'Query', icon: <MessageSquare />, color: COLORS.blue } },
+  // Nodes - Relative
+  { id: '1', type: 'product', parentId: 'g1', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'User', sublabel: 'Query', icon: <MessageSquare />, color: COLORS.blue } },
 
-  { id: '2a', type: 'product', position: { x: 210, y: 0 }, data: { label: 'LLM', sublabel: 'GPT-4', icon: <Bot />, color: COLORS.green } },
-  { id: '2b', type: 'product', position: { x: 330, y: 0 }, data: { label: 'RAG', sublabel: 'Vector DB', icon: <Database />, color: COLORS.green } },
-  { id: '2c', type: 'product', position: { x: 210, y: 120 }, data: { label: 'Code', sublabel: 'Executor', icon: <Cpu />, color: COLORS.green } },
-  { id: '2d', type: 'product', position: { x: 330, y: 120 }, data: { label: 'Memory', sublabel: 'Context', icon: <HardDrive />, color: COLORS.green } },
+  // Compute Group Grid (2x2)
+  { id: '2a', type: 'product', parentId: 'g2', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'LLM', sublabel: 'GPT-4', icon: <Bot />, color: COLORS.green } },
+  { id: '2b', type: 'product', parentId: 'g2', position: { x: 143, y: 35 }, width: 64, height: 64, data: { label: 'RAG', sublabel: 'Vector DB', icon: <Database />, color: COLORS.green } },
+  { id: '2c', type: 'product', parentId: 'g2', position: { x: 23, y: 155 }, width: 64, height: 64, data: { label: 'Code', sublabel: 'Executor', icon: <Cpu />, color: COLORS.green } },
+  { id: '2d', type: 'product', parentId: 'g2', position: { x: 143, y: 155 }, width: 64, height: 64, data: { label: 'Memory', sublabel: 'Context', icon: <HardDrive />, color: COLORS.green } },
 
-  { id: '3', type: 'product', position: { x: 540, y: 60 }, data: { label: 'Execute', sublabel: 'Actions', icon: <Sparkles />, color: COLORS.purple } },
+  { id: '3', type: 'product', parentId: 'g3', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'Execute', sublabel: 'Actions', icon: <Sparkles />, color: COLORS.purple } },
 ];
 
 const edgesAgents: Edge[] = [
@@ -658,19 +733,19 @@ const edgesAgents: Edge[] = [
 // 3. Refactoring - Legacy to modern migration
 // Wider spacing: 240px between columns
 const nodesRefactoring: Node[] = [
-  // Groups - 2-node columns on sides, single node in center
-  { id: 'g1', type: 'group', position: { x: -23, y: -35 }, data: { label: 'Legacy', width: 110, height: 270, color: COLORS.red }, zIndex: -1 },
-  { id: 'g2', type: 'group', position: { x: 217, y: 25 }, data: { label: 'Transform', width: 110, height: 150, color: COLORS.orange }, zIndex: -1 },
-  { id: 'g3', type: 'group', position: { x: 457, y: -35 }, data: { label: 'Modern', width: 110, height: 270, color: COLORS.green }, zIndex: -1 },
+  // Groups
+  { id: 'g1', type: 'group', position: { x: 0, y: 0 }, width: 110, height: 270, data: { label: 'Legacy', width: 110, height: 270, color: COLORS.red }, zIndex: -1 },
+  { id: 'g2', type: 'group', position: { x: 0, y: 0 }, width: 110, height: 150, data: { label: 'Transform', width: 110, height: 150, color: COLORS.orange }, zIndex: -1 },
+  { id: 'g3', type: 'group', position: { x: 0, y: 0 }, width: 110, height: 270, data: { label: 'Modern', width: 110, height: 270, color: COLORS.green }, zIndex: -1 },
 
-  // Nodes - 240px horizontal spacing
-  { id: '1', type: 'product', position: { x: 0, y: 0 }, data: { label: 'Sheets', sublabel: 'Excel', icon: <FileSpreadsheet />, color: COLORS.red } },
-  { id: '2', type: 'product', position: { x: 0, y: 120 }, data: { label: 'Manual', sublabel: 'Entry', icon: <MessageSquare />, color: COLORS.red } },
+  // Nodes - Relative
+  { id: '1', type: 'product', parentId: 'g1', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'Sheets', sublabel: 'Excel', icon: <FileSpreadsheet />, color: COLORS.red } },
+  { id: '2', type: 'product', parentId: 'g1', position: { x: 23, y: 155 }, width: 64, height: 64, data: { label: 'Manual', sublabel: 'Entry', icon: <MessageSquare />, color: COLORS.red } },
 
-  { id: 't1', type: 'product', position: { x: 240, y: 60 }, data: { label: 'ETL', sublabel: 'Pipeline', icon: <ArrowRightLeft />, color: COLORS.orange } },
+  { id: 't1', type: 'product', parentId: 'g2', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'ETL', sublabel: 'Pipeline', icon: <ArrowRightLeft />, color: COLORS.orange } },
 
-  { id: '3', type: 'product', position: { x: 480, y: 0 }, data: { label: 'API', sublabel: 'REST', icon: <Box />, color: COLORS.green } },
-  { id: '4', type: 'product', position: { x: 480, y: 120 }, data: { label: 'DB', sublabel: 'Supabase', icon: <Server />, color: COLORS.green } },
+  { id: '3', type: 'product', parentId: 'g3', position: { x: 23, y: 35 }, width: 64, height: 64, data: { label: 'API', sublabel: 'REST', icon: <Box />, color: COLORS.green } },
+  { id: '4', type: 'product', parentId: 'g3', position: { x: 23, y: 155 }, width: 64, height: 64, data: { label: 'DB', sublabel: 'Supabase', icon: <Server />, color: COLORS.green } },
 ];
 
 const edgesRefactoring: Edge[] = [
@@ -737,235 +812,43 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [isLive, setIsLive] = useState(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [rfInstance, setRfInstance] = useState<any>(null); // Use any to avoid type complexity with ReactFlowInstance imports if not available
+  const [rfInstance, setRfInstance] = useState<any>(null);
 
-  // Function to calculate and apply center offset
-  const calculateAndCenterNodes = useCallback(() => {
+  // Load nodes/edges for the tab and trigger centering
+  useEffect(() => {
     const config = tabConfigs[activeTab] || tabConfigs['1'];
 
-    // Calculate center offset based on actual container size
-    if (containerRef.current) {
-      const container = containerRef.current;
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
+    // Calculate layout
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+      config.nodes,
+      config.edges
+    );
 
-      if (!containerWidth || !containerHeight) {
-        setNodes(config.nodes);
-        setEdges(config.edges);
-        return;
-      }
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
 
-      // Calculate actual diagram bounds from all nodes (including groups)
-      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-
-      config.nodes.forEach(node => {
-        if (node.position) {
-          let nodeWidth = 0;
-          let nodeHeight = 0;
-
-          if (node.type === 'group') {
-            // Group nodes have explicit width and height
-            nodeWidth = node.data?.width || 110;
-            nodeHeight = node.data?.height || 150;
-          } else if (node.type === 'product') {
-            // Product nodes: icon box (64px) + label space (~35px) = ~100px total height
-            nodeWidth = 64; // icon box width
-            nodeHeight = 100; // icon box (64px) + label (~35px)
-          }
-
-          // --- VISUAL BUFFERS FOR CENTERING ---
-          // The math centers the "Bounding Box". 
-          // If the visual center is off, we pad the box to "push" the center in the opposite direction.
-          // To move content LEFT -> Increase Right Buffer (maxX)
-          // To move content UP   -> Increase Bottom Buffer (maxY)
-
-          let VISUAL_BUFFER_X = 200; // Large buffer to fix "Right Shift" (Labels on right)
-          let VISUAL_BUFFER_BOTTOM = 80; // Buffer to fix "Bottom Shift" (Labels below nodes)
-
-          if (node.type === 'group') {
-            VISUAL_BUFFER_X += 20;
-          }
-
-          minX = Math.min(minX, node.position.x);
-          minY = Math.min(minY, node.position.y);
-
-          maxX = Math.max(maxX, node.position.x + nodeWidth + VISUAL_BUFFER_X);
-          maxY = Math.max(maxY, node.position.y + nodeHeight + VISUAL_BUFFER_BOTTOM);
-        }
-      });
-
-      // If we have valid bounds, calculate center offset
-      if (minX !== Infinity && minY !== Infinity) {
-        // Calculate diagram bounds (actual size in ReactFlow coordinates)
-        const diagramWidth = maxX - minX;
-        const diagramHeight = maxY - minY;
-
-        // --- DYNAMIC SCALING LOGIC ---
-        // Determine if we are on mobile
-        const isMobile = containerWidth < 768;
-        let scale = 0.85; // Default desktop scale
-
-        if (isMobile && diagramWidth > 0) {
-          const padding = 20; // Padding on sides for mobile
-          const availableWidth = containerWidth - (padding * 2);
-          // Calculate scale to fit width
-          const fitScale = availableWidth / diagramWidth;
-
-          // Cap the scale to sensible limits for readability
-          scale = Math.min(0.65, Math.max(0.35, fitScale));
-        }
-
-        // Apply scale if we have the instance
-        if (rfInstance) {
-          // On mobile/Desktop we force the scale
-          rfInstance.setViewport({ x: 0, y: 0, zoom: scale });
-        }
-
-        // Center the scaled diagram in the container based on the CHOSEN scale
-        // The offset needs to account for: (container - scaled_diagram) / 2
-        // Then we subtract (minX * scale) to bring the top-left corner to 0-reference before centering?
-        // Actually: We want the CENTER of the diagram to be at the CENTER of the container.
-
-        // Diagram Center X (relative to minX) = diagramWidth / 2
-        // Diagram Center X (absolute) = minX + diagramWidth / 2
-
-        // Target Visual Center X = containerWidth / 2
-
-        // We need to shift nodes by (TargetVisualCenter - DiagramCenter * scale) / scale?
-        // No, we are shifting the NODES, so the viewport is fixed at 0,0 (or expected to be).
-        // If viewport is scaled, the effective coordinate space is scaled.
-
-        // Let's stick to the previous logic that worked but corrected for width:
-        const centerOffsetX = (containerWidth / scale - diagramWidth) / 2 - minX;
-        const centerOffsetY = (containerHeight / scale - diagramHeight) / 2 - minY;
-
-        // Apply center offset to all nodes
-        const centeredNodes = config.nodes.map(node => {
-          if (node.position) {
-            return {
-              ...node,
-              position: {
-                x: node.position.x + centerOffsetX,
-                y: node.position.y + centerOffsetY,
-              }
-            };
-          }
-          return node;
+    // Trigger fitView after state update - use requestAnimationFrame for reliable timing
+    if (rfInstance) {
+      // Wait for React to flush state updates, then wait for browser paint
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          rfInstance.fitView({ padding: 0.25, maxZoom: 0.80, duration: 500 });
         });
-        setNodes(centeredNodes);
-      } else {
-        setNodes(config.nodes);
-      }
-    } else {
-      setNodes(config.nodes);
+      });
     }
-
-    setEdges(config.edges);
   }, [activeTab, setNodes, setEdges, rfInstance]);
 
-  useEffect(() => {
-    // Wait for viewport to be ready before centering
-    const timer = setTimeout(() => {
-      calculateAndCenterNodes();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [calculateAndCenterNodes]);
-
-  // Recalculate on window resize and after container is ready
+  // Handle window resize to keep centered
   useEffect(() => {
     const handleResize = () => {
-      calculateAndCenterNodes();
+      if (rfInstance) {
+        rfInstance.fitView({ padding: 0.25, maxZoom: 0.80, duration: 400 });
+      }
     };
 
     window.addEventListener('resize', handleResize);
-    // Recalculate multiple times to ensure container is rendered and measured correctly
-    const timers = [
-      setTimeout(calculateAndCenterNodes, 50),
-      setTimeout(calculateAndCenterNodes, 100),
-      setTimeout(calculateAndCenterNodes, 200),
-      setTimeout(calculateAndCenterNodes, 500),
-    ];
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      timers.forEach(timer => clearTimeout(timer));
-    };
-  }, [calculateAndCenterNodes]);
-
-  // Force pane and viewport positioning after ReactFlow renders - both must be at 0,0
-  useEffect(() => {
-    const fixPositioning = () => {
-      const pane = document.querySelector('.react-flow-container .react-flow__pane') as HTMLElement;
-      const viewport = document.querySelector('.react-flow-container .react-flow__viewport') as HTMLElement;
-
-      if (pane) {
-        // Pane should always be at top-left corner of container - force it
-        const rect = pane.getBoundingClientRect();
-        const containerRect = containerRef.current?.getBoundingClientRect();
-
-        if (containerRect && (rect.top !== containerRect.top || rect.left !== containerRect.left)) {
-          pane.style.setProperty('position', 'absolute', 'important');
-          pane.style.setProperty('top', '0px', 'important');
-          pane.style.setProperty('left', '0px', 'important');
-          pane.style.setProperty('width', '100%', 'important');
-          pane.style.setProperty('height', '100%', 'important');
-          pane.style.setProperty('margin', '0', 'important');
-          pane.style.setProperty('padding', '0', 'important');
-          pane.style.setProperty('transform', 'none', 'important');
-          pane.style.setProperty('inset', '0', 'important');
-        }
-      }
-
-      if (viewport) {
-        // Viewport must be at 0,0 with no transform translation
-        const currentTransform = viewport.style.transform || '';
-        const hasTranslation = currentTransform.includes('translate') &&
-          !currentTransform.match(/translate\(0px,\s*0px\)/);
-
-        if (hasTranslation) {
-          const scaleMatch = currentTransform.match(/scale\(([^)]+)\)/);
-          const scale = scaleMatch ? scaleMatch[1] : '0.85';
-          viewport.style.setProperty('transform', `translate(0px, 0px) scale(${scale})`, 'important');
-        }
-
-        viewport.style.setProperty('position', 'absolute', 'important');
-        viewport.style.setProperty('top', '0px', 'important');
-        viewport.style.setProperty('left', '0px', 'important');
-      }
-    };
-
-    // Run immediately and after delays to catch ReactFlow's updates
-    fixPositioning();
-    const timers = [
-      setTimeout(fixPositioning, 10),
-      setTimeout(fixPositioning, 50),
-      setTimeout(fixPositioning, 100),
-      setTimeout(fixPositioning, 200),
-      setTimeout(fixPositioning, 400),
-      setTimeout(fixPositioning, 600),
-      setTimeout(fixPositioning, 1000),
-    ];
-
-    // Also use MutationObserver to catch any DOM changes
-    const observer = new MutationObserver(() => {
-      fixPositioning();
-    });
-    const container = document.querySelector('.react-flow-container');
-    if (container) {
-      observer.observe(container, {
-        attributes: true,
-        attributeFilter: ['style', 'class'],
-        childList: true,
-        subtree: true
-      });
-    }
-
-    return () => {
-      timers.forEach(timer => clearTimeout(timer));
-      observer.disconnect();
-    };
-  }, [nodes, edges, activeTab]);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [rfInstance]);
 
   // Memoize node types to prevent re-renders
   const memoizedNodeTypes = useMemo(() => nodeTypes, []);
@@ -1007,7 +890,6 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
 
       {/* React Flow Canvas */}
       <div
-        ref={containerRef}
         className="react-flow-container absolute inset-0 z-0"
         data-container="react-flow-wrapper"
         style={{
@@ -1020,44 +902,46 @@ const ArchitectureDemo: React.FC<ArchitectureDemoProps> = ({ activeTab }) => {
           height: '100%'
         }}
       >
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={memoizedNodeTypes}
-          connectionLineType={ConnectionLineType.SmoothStep}
-          fitView={false}
-          fitViewOptions={{
-            padding: 0,
-            minZoom: 0.6,
-            maxZoom: 1.0,
-            includeHiddenNodes: false,
-          }}
-          attributionPosition="bottom-right"
-          zoomOnScroll={false}
-          panOnDrag={true}
-          preventScrolling={false}
-          proOptions={{ hideAttribution: true }}
-          minZoom={0.5}
-          maxZoom={1.5}
-          nodesDraggable={false}
-          nodesConnectable={false}
-          elementsSelectable={true}
-          defaultViewport={{ x: 0, y: 0, zoom: 0.85 }}
-          onInit={(instance) => {
-            setRfInstance(instance);
-          }}
-          style={{ width: '100%', height: '100%' }}
-        >
-          <Background
-            variant={BackgroundVariant.Dots}
-            gap={20}
-            size={1.5}
-            color="#e5e5e5"
-            className="flow-background"
-          />
-        </ReactFlow>
+        <ReactFlowProvider>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            nodeTypes={memoizedNodeTypes}
+            connectionLineType={ConnectionLineType.SmoothStep}
+            fitView={true}
+            fitViewOptions={{
+              padding: 0.25,
+              minZoom: 0.3,
+              maxZoom: 0.80,
+            }}
+            attributionPosition="bottom-right"
+            zoomOnScroll={false}
+            panOnDrag={true}
+            preventScrolling={false}
+            proOptions={{ hideAttribution: true }}
+            minZoom={0.5}
+            maxZoom={1.5}
+            nodesDraggable={false}
+            nodesConnectable={false}
+            elementsSelectable={true}
+            defaultViewport={undefined} // Let fitView handle it
+            onInit={(instance) => {
+              setRfInstance(instance);
+              // Initial fit done in useEffect
+            }}
+            style={{ width: '100%', height: '100%' }}
+          >
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={20}
+              size={1.5}
+              color="#e5e5e5"
+              className="flow-background"
+            />
+          </ReactFlow>
+        </ReactFlowProvider>
       </div>
 
       {/* Subtle gradient overlay for depth */}
