@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
+import { MobileArchitectureDiagram } from "./diagrams/MobileDiagram";
 import { motion, AnimatePresence } from "framer-motion";
 
 const tabs = [
@@ -63,12 +64,12 @@ export function CoreFunctions() {
     return (
         <section
             id="core-functions"
-            className="relative py-24 border-t border-[#0A0A0A] bg-transparent"
+            className="relative py-24 bg-transparent"
         >
             {/* Technical Cut - Section Label */}
             <div className="absolute top-0 w-full z-10 pointer-events-none">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="-translate-y-1/2 bg-[#0A0A0A] text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+                    <div className="-translate-y-1/2 bg-[#0A0A0A] text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto">
                         <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
                         <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
                             SYS.02 /// Core_Functions
@@ -77,16 +78,16 @@ export function CoreFunctions() {
                 </div>
             </div>
 
-            {/* Vertical Structural Guides */}
-            <div className="absolute inset-y-0 left-6 md:left-12 w-[1px] bg-dashed border-l border-[#0A0A0A]/20 pointer-events-none"></div>
+            {/* Vertical Structural Guides - Desktop only */}
+            <div className="hidden lg:block absolute inset-y-0 left-12 w-[1px] bg-dashed border-l border-[#0A0A0A]/20 pointer-events-none"></div>
 
-            <div className="absolute inset-y-0 right-6 md:right-12 w-[1px] bg-dashed border-r border-[#0A0A0A]/20 pointer-events-none"></div>
+            <div className="hidden lg:block absolute inset-y-0 right-12 w-[1px] bg-dashed border-r border-[#0A0A0A]/20 pointer-events-none"></div>
 
-            {/* Corner Details */}
-            <div className="absolute top-0 right-6 md:right-12 w-4 h-4 border-t border-r border-[#0A0A0A] -translate-y-[1px] translate-x-[1px]"></div>
+            {/* Corner Details - Desktop only */}
+            <div className="hidden lg:block absolute top-0 right-12 w-4 h-4 border-t border-r border-[#0A0A0A] -translate-y-[1px] translate-x-[1px]"></div>
 
-            {/* Decorative elements (Grid Refs) */}
-            <div className="absolute top-6 right-8 md:right-16 opacity-40 text-[#0A0A0A] pointer-events-none text-right">
+            {/* Decorative elements (Grid Refs) - Desktop only */}
+            <div className="hidden lg:block absolute top-6 right-16 opacity-40 text-[#0A0A0A] pointer-events-none text-right">
                 <span className="text-[9px] font-mono block tracking-widest mb-1">
                     SECTOR_B
                 </span>
@@ -97,7 +98,7 @@ export function CoreFunctions() {
 
             <div className="container mx-auto px-6 max-w-7xl">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-4 mb-12">
                     <div className="flex items-center gap-4">
                         <div className="w-4 h-4 border border-[#0A0A0A] flex items-center justify-center">
                             <div className="w-1 h-1 bg-[#0A0A0A]"></div>
@@ -108,30 +109,16 @@ export function CoreFunctions() {
                     </div>
 
                     {/* Tabs */}
-                    <div className="bg-neutral-100 p-1.5 flex gap-1 overflow-x-auto max-w-full">
+                    <div className="bg-neutral-100 p-1.5 inline-flex gap-1 overflow-x-auto max-w-full">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`relative px-4 py-2 text-sm transition-all duration-300 whitespace-nowrap z-10 ${activeTab === tab.id
-                                    ? "text-neutral-900"
+                                className={`relative px-4 py-2 text-sm transition-all duration-200 whitespace-nowrap ${activeTab === tab.id
+                                    ? "text-neutral-900 bg-white rounded-sm"
                                     : "text-neutral-500 hover:text-neutral-700"
                                     }`}
                             >
-                                {activeTab === tab.id && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        layout="position"
-                                        initial={false}
-                                        className="absolute inset-0 bg-white shadow-none rounded-sm z-[-1]"
-                                        style={{ willChange: "transform" }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 400,
-                                            damping: 35,
-                                        }}
-                                    />
-                                )}
                                 <span className="flex items-center gap-2">
                                     {activeTab === tab.id && (
                                         <span className="w-1.5 h-1.5 bg-neutral-900"></span>
@@ -144,7 +131,7 @@ export function CoreFunctions() {
                 </div>
 
                 {/* Content Grid */}
-                <div className="relative bg-white border border-[#0A0A0A]/10 overflow-hidden">
+                <div className="relative bg-white border-x border-b lg:border border-[#0A0A0A]/10 overflow-hidden">
                     <div className="absolute top-4 left-4 font-mono text-[10px] text-[#0A0A0A]/40 uppercase tracking-widest">
             /// SYSTEM_VIEW_V1
                     </div>
@@ -155,21 +142,10 @@ export function CoreFunctions() {
 
                     <div
                         key={activeTab}
-                        className="grid grid-cols-1 lg:grid-cols-3 gap-0 min-h-[500px]"
+                        className="grid grid-cols-1 lg:grid-cols-3 gap-0"
                     >
-                        {/* Left column - Diagram */}
-                        <div className="lg:col-span-2 p-8 pt-14 relative flex flex-col justify-between">
-                            <ArchitectureDiagram activeTab={activeTab} />
-                            <div className="mt-8">
-                                <button className="px-8 py-4 bg-white text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-none font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3">
-                                    Configure System
-                                    <ArrowRight className="w-3.5 h-3.5" />
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Right column - Details */}
-                        <div className="lg:col-span-1 p-8 pt-14 lg:border-l border-t lg:border-t-0 border-[#0A0A0A]/5 flex flex-col justify-between bg-neutral-50/50">
+                        {/* Details - First on mobile (order-1), Second on desktop (order-2) */}
+                        <div className="order-1 lg:order-2 lg:col-span-1 p-6 pt-12 lg:p-8 lg:pt-14 lg:border-l border-[#0A0A0A]/5 flex flex-col justify-between bg-neutral-50/50">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeTab}
@@ -226,6 +202,33 @@ export function CoreFunctions() {
                                     </div>
                                 </motion.div>
                             </AnimatePresence>
+                        </div>
+
+                        {/* Diagram - Second on mobile (order-2), First on desktop (order-1) */}
+                        <div className="order-2 lg:order-1 lg:col-span-2 p-6 pt-12 lg:p-8 lg:pt-14 relative flex flex-col justify-between border-t lg:border-t-0 border-[#0A0A0A]/5">
+                            {/* Mobile: Vertical diagram */}
+                            <div className="lg:hidden">
+                                <MobileArchitectureDiagram activeTab={activeTab} />
+                            </div>
+                            
+                            {/* Desktop: Horizontal diagram */}
+                            <div className="hidden lg:flex flex-col justify-between min-h-[500px]">
+                                <ArchitectureDiagram activeTab={activeTab} />
+                                <div className="mt-8">
+                                    <button className="px-8 py-4 bg-white text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-none font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3">
+                                        Configure System
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Mobile CTA */}
+                            <div className="lg:hidden mt-4">
+                                <button className="w-full px-8 py-4 bg-white text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-none font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3">
+                                    Configure System
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

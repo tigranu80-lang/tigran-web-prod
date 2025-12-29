@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const scrollToSection = (id: string) => {
     document
       .getElementById(id)
       ?.scrollIntoView({ behavior: "smooth" });
+    setIsMenuOpen(false);
   };
+
+  const navItems = [
+    { name: "Protocol", id: "protocol" },
+    { name: "Core Functions", id: "core-functions" },
+    { name: "Use Cases", id: "use-cases" },
+    { name: "Blueprints", id: "services" },
+    { name: "About", id: "about" },
+    { name: "Contact", id: "contact" },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-white/10">
-      <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 h-16 lg:h-20 flex items-center justify-between">
         {/* Logo */}
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -26,16 +39,9 @@ export function Header() {
           </span>
         </div>
 
-        {/* Center Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {[
-            { name: "Protocol", id: "build" },
-            { name: "Core Functions", id: "core-functions" },
-            { name: "Use Cases", id: "use-cases" },
-            { name: "Blueprints", id: "services" },
-            { name: "About", id: "about" },
-            { name: "Contact", id: "contact" },
-          ].map((item) => (
+        {/* Center Navigation - Desktop only (lg+) */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+          {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => scrollToSection(item.id)}
@@ -46,14 +52,51 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Right CTA */}
-        <button
-          onClick={() => scrollToSection("contact")}
-          className="px-6 py-3 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
-        >
-          Get Started
-        </button>
+        {/* Right Side */}
+        <div className="flex items-center gap-4">
+          {/* CTA Button - Desktop only */}
+          <button
+            onClick={() => scrollToSection("contact")}
+            className="hidden lg:block px-6 py-3 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
+          >
+            Get Started
+          </button>
+
+          {/* Burger Menu - Mobile & Tablet */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-2 text-white hover:text-neutral-300 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMenuOpen && (
+        <div className="lg:hidden bg-[#0A0A0A] border-t border-white/10">
+          <div className="container mx-auto px-4 py-6">
+            <nav className="flex flex-col gap-4">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-left text-sm font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors py-2"
+                >
+                  {item.name}
+                </button>
+              ))}
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="mt-4 w-full px-6 py-4 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
+              >
+                Get Started
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

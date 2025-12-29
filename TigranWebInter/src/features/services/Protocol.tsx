@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 interface Step {
@@ -144,13 +144,20 @@ export const Protocol: React.FC = () => {
         offset: ["start start", "end end"],
     });
 
+    // Check if section is in viewport (for mobile button)
+    // Button appears when section enters viewport (even partially)
+    const isInView = useInView(sectionRef, {
+        once: false,
+        margin: "0px 0px -50% 0px", // Triggers when section is 50% visible
+    });
+
     // Smooth the progress
     const smoothProgress = useSpring(scrollYProgress, springConfig);
 
     // Progress line height (0% to 100%)
     const progressHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
 
-    // CTA opacity - appears after 80%
+    // CTA opacity - appears after 80% (desktop only)
     const ctaOpacity = useTransform(smoothProgress, [0.7, 0.85], [0, 1]);
     const ctaY = useTransform(smoothProgress, [0.7, 0.85], [20, 0]);
 
@@ -187,10 +194,10 @@ export const Protocol: React.FC = () => {
                                 A universal delivery path to ensure ROI.
                             </p>
 
-                            {/* CTA Button - Appears after 80% scroll */}
+                            {/* CTA Button - Desktop: Appears after 80% scroll */}
                             <motion.div
                                 style={{ opacity: ctaOpacity, y: ctaY }}
-                                className="flex flex-col items-start gap-4"
+                                className="hidden lg:flex flex-col items-start gap-4"
                             >
                                 <button className="group relative px-8 py-4 bg-white text-[#0A0A0A] border-2 border-[#0A0A0A] font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center gap-3">
                                     START WITH AUDIT
@@ -215,6 +222,22 @@ export const Protocol: React.FC = () => {
                             {steps.map((step) => (
                                 <ProtocolStep key={step.id} step={step} />
                             ))}
+                            
+                            {/* Mobile CTA Button - Appears after last step when section is in view */}
+                            <motion.div
+                                initial={{ y: 30, opacity: 0 }}
+                                animate={{
+                                    y: isInView ? 0 : 30,
+                                    opacity: isInView ? 1 : 0,
+                                }}
+                                transition={{ type: "spring", stiffness: 200, damping: 25, delay: 0.2 }}
+                                className="lg:hidden pl-12 md:pl-20 pt-4"
+                            >
+                                <button className="group w-full px-6 py-4 bg-white text-[#0A0A0A] border-2 border-[#0A0A0A] font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3">
+                                    START WITH AUDIT
+                                    <ArrowRight className="w-4 h-4 group-active:translate-x-1 transition-transform" />
+                                </button>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
