@@ -10,18 +10,15 @@
   },
   "dependencies": {
     "@google/genai": "^1.30.0",
-    "@types/dagre": "0.7.53",
     "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
     "cobe": "^0.6.5",
-    "dagre": "0.8.5",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.10.1",
-    "reactflow": "^11.11.4",
     "resend": "^6.6.0",
     "tailwind-merge": "^3.4.0"
   },

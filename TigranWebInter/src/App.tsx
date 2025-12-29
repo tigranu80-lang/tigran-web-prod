@@ -2,10 +2,10 @@ import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import Home from './pages/Home';
-import ThankYou from './pages/ThankYou';
+import { Home } from './pages/Home';
+import { ThankYou } from './pages/ThankYou';
 
-function App() {
+export function App() {
   return (
     <>
       <Helmet>
@@ -22,5 +22,3 @@ function App() {
     </>
   );
 }
-
-export default App;

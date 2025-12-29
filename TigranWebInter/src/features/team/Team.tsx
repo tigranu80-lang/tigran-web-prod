@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import FadeIn from '../ui/FadeIn';
+import { FadeIn } from '../ui/FadeIn';
 
-const About: React.FC = () => {
+export function About() {
   const [names, setNames] = useState(['Tigran', 'Dima']);
 
   useEffect(() => {
@@ -83,6 +83,4 @@ const About: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default About;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, Plus } from 'lucide-react';
-import DecryptedText from '../ui/DecryptedText';
-import FadeIn from '../ui/FadeIn';
+import { DecryptedText } from '../ui/DecryptedText';
+import { FadeIn } from '../ui/FadeIn';
 
 const plans = [
   {
@@ -24,7 +24,7 @@ const plans = [
   }
 ];
 
-const Pricing: React.FC = () => {
+export function Pricing() {
   return (
     <section id="pricing" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm">
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10 pb-6 md:pb-12 lg:pb-24">
@@ -103,6 +103,4 @@ const Pricing: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default Pricing;
+}

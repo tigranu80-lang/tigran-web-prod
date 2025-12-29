@@ -3,7 +3,7 @@ import createGlobe from 'cobe';
 import { motion } from 'framer-motion';
 import { Globe, Zap, Server, Shield } from 'lucide-react';
 
-const GlobeSection: React.FC = () => {
+export function GlobeSection() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -163,6 +163,4 @@ const GlobeSection: React.FC = () => {
             </div>
         </section>
     );
-};
-
-export default GlobeSection;
+}

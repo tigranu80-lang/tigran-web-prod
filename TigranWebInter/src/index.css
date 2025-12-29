@@ -65,87 +65,78 @@ body {
   }
 }
 
-/* React Flow Container Fixes */
-.react-flow-container {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.react-flow-container .react-flow {
-  width: 100% !important;
-  height: 100% !important;
-  position: relative !important;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.react-flow-container .react-flow__renderer {
-  width: 100% !important;
-  height: 100% !important;
-  position: relative !important;
+/* DecryptedText Animation */
+.decode-text {
+  display: inline-block;
 }
 
-/* DON'T OVERRIDE react-flow__pane - it's controlled by ReactFlow */
-/* .react-flow-container .react-flow__pane {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  transform: none !important;
-  inset: 0 !important;
-} */
-
-/* DON'T OVERRIDE react-flow__viewport transform - it's controlled by ReactFlow for panning/zooming/fitView */
-/* .react-flow-container .react-flow__viewport {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  transform: translate(0px, 0px) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-} */
-
-/* Remove black border from ReactFlow group node wrapper - keep only colored dashed container */
-/* Only remove border from the ReactFlow wrapper itself, not from inner elements */
-.react-flow-container .react-flow__node-group {
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  outline: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
+.decode-space {
+  display: inline-block;
+  width: 0.3em;
 }
 
-/* Preserve the dashed border on group-node-container - inline styles will override this */
-.react-flow-container .group-node-container {
-  /* Border is set via inline style in component, so it will be preserved */
+.text-animation {
+  display: inline-block;
+  position: relative;
+  color: transparent;
+  text-transform: uppercase;
 }
 
-/* Ensure handles on group nodes are positioned correctly on edges */
-.react-flow-container .react-flow__node-group .react-flow__handle {
-  position: absolute !important;
+.text-animation::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: currentColor;
+  width: 0;
+  height: 1.2em;
+  transform: translate(-50%, -55%);
+  transition: width 0.05s ease-out;
 }
 
-/* Make sure source handles are on the right edge */
-.react-flow-container .react-flow__node-group .react-flow__handle[data-handlepos="right"] {
-  right: 0 !important;
-  transform: translate(50%, -50%) !important;
+/* State 1: Thin vertical line */
+.text-animation.state-1::before {
+  width: 1px;
 }
 
-/* Make sure target handles are on the left edge or center */
-.react-flow-container .react-flow__node-group .react-flow__handle[data-handlepos="left"] {
-  left: 0 !important;
-  transform: translate(-50%, -50%) !important;
+/* State 2: Block expands */
+.text-animation.state-2::before {
+  width: 0.9em;
+}
+
+/* State 3: Letter revealed */
+.text-animation.state-3 {
+  color: inherit;
+}
+
+.text-animation.state-3::before {
+  width: 0;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

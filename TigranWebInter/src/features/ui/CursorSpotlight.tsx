@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const CursorSpotlight: React.FC = () => {
+export function CursorSpotlight() {
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +24,4 @@ const CursorSpotlight: React.FC = () => {
       }}
     />
   );
-};
-
-export default CursorSpotlight;
+}

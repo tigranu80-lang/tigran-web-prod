@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import './DecryptedText.css';
 
 interface DecryptedTextProps {
   text: string;
@@ -13,18 +12,18 @@ interface DecryptedTextProps {
 const shuffle = (array: number[]): number[] => {
   const arr = [...array];
   let currentIndex = arr.length;
-  
+
   while (currentIndex !== 0) {
     const randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
-    
+
     [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
   }
-  
+
   return arr;
 };
 
-const DecryptedText: React.FC<DecryptedTextProps> = ({ text, className = '' }) => {
+export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
   const hasAnimatedRef = useRef(false);
   const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
@@ -68,7 +67,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({ text, className = '' }) =
     if (!containerRef.current) return;
 
     const children = containerRef.current.children;
-    
+
     // Clear previous timeouts
     timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     timeoutsRef.current = [];
@@ -86,7 +85,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({ text, className = '' }) =
     // Animate each letter
     for (let i = 0; i < shuffled.length; i++) {
       const child = children[shuffled[i]] as HTMLElement;
-      
+
       if (child.classList.contains('text-animation')) {
         // Random delay between 50ms and 2000ms
         const state1Time = Math.round(Math.random() * (2000 - 300)) + 50;
@@ -131,6 +130,4 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({ text, className = '' }) =
       {elements}
     </span>
   );
-};
-
-export default DecryptedText;
+}

@@ -3,7 +3,7 @@ import { sendMessageToGemini } from '../../services/geminiService';
 import { ChatMessage, BotStatus } from '../../types';
 import { MessageSquare, Send, Minus } from 'lucide-react';
 
-const AIConsultant: React.FC = () => {
+export function AIConsultant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -145,6 +145,4 @@ const AIConsultant: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default AIConsultant;
+}

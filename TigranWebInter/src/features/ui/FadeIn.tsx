@@ -9,14 +9,14 @@ interface FadeInProps {
   threshold?: number; // 0-1, how much of element should be visible
 }
 
-const FadeIn: React.FC<FadeInProps> = ({
+export function FadeIn({
   children,
   className = '',
   delay = 0,
   direction = 'up',
   duration = 600,
   threshold = 0.1,
-}) => {
+}: FadeInProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,7 +40,7 @@ const FadeIn: React.FC<FadeInProps> = ({
 
   const getTransform = () => {
     if (isVisible) return 'translate3d(0, 0, 0)';
-    
+
     switch (direction) {
       case 'up': return 'translate3d(0, 40px, 0)';
       case 'down': return 'translate3d(0, -40px, 0)';
@@ -65,16 +65,4 @@ const FadeIn: React.FC<FadeInProps> = ({
       {children}
     </div>
   );
-};
-
-export default FadeIn;
-
-
-
-
-
-
-
-
-
-
+}

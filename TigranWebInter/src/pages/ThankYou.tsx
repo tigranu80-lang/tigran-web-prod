@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-import Background from '../features/layout/Background';
+import { Background } from '../features/layout/Background';
 
-const ThankYou: React.FC = () => {
+export function ThankYou() {
     return (
         <div className="min-h-screen font-sans bg-alabaster text-ink-950 selection:bg-ink-950 selection:text-alabaster relative flex items-center justify-center">
             <Background />
@@ -33,6 +33,4 @@ const ThankYou: React.FC = () => {
             </div>
         </div>
     );
-};
-
-export default ThankYou;
+}

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, CheckCircle, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
-import DecryptedText from '../ui/DecryptedText';
+import { DecryptedText } from '../ui/DecryptedText';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
-const Contact: React.FC = () => {
+export function Contact() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<FormStatus>('idle');
@@ -181,6 +181,4 @@ const Contact: React.FC = () => {
       )}
     </section>
   );
-};
-
-export default Contact;
+}
