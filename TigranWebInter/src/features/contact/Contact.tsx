@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, CheckCircle, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
@@ -40,6 +40,20 @@ export function Contact() {
     setStatus('idle');
     setErrorMessage('');
   };
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && status === 'error') {
+        closeModal();
+      }
+    };
+
+    if (status === 'error') {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [status]);
 
   return (
     <section id="contact" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm relative">
@@ -155,6 +169,7 @@ export function Contact() {
           <div className="relative bg-alabaster shadow-2xl border border-red-500 p-12 max-w-md w-full animate-[fadeIn_0.3s_ease-out]">
             <button
               onClick={closeModal}
+              aria-label="Close error modal"
               className="absolute top-4 right-4 text-ink-400 hover:text-ink-950 transition-colors"
             >
               <X size={20} />

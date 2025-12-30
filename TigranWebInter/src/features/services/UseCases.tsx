@@ -1,45 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight, Zap } from "lucide-react";
-
-const useCases = [
-    {
-        id: "01",
-        shortTitle: "Leads",
-        fullTitle: "Never Miss Leads",
-        tag: "#leadgen",
-        problem: "Leads arrive in 5 places and get missed.",
-        solution: "Enrichment → CRM Sync → Slack Alert.",
-        stats: "Lost leads ↓ 70%",
-    },
-    {
-        id: "02",
-        shortTitle: "Onboard",
-        fullTitle: "Instant Onboarding",
-        tag: "#onboarding",
-        problem: "Users don't activate, support gets flooded.",
-        solution: "Welcome sequence + checklist + usage alerts.",
-        stats: "Activation ↑ 24%",
-    },
-    {
-        id: "03",
-        shortTitle: "Support",
-        fullTitle: "24/7 Support Triage",
-        tag: "#support",
-        problem: "Slow replies kill conversions.",
-        solution: "AI intent tagging → Draft reply → Handoff.",
-        stats: "Response: 3h → 15m",
-    },
-    {
-        id: "04",
-        shortTitle: "Finance",
-        fullTitle: "Ops Reconciliation",
-        tag: "#finance",
-        problem: "Copy-pasting invoice data manually.",
-        solution: "OCR scan → Match PO → Accounting Sync.",
-        stats: "Manual work ↓ 8 hrs/wk",
-    },
-];
+import { useCases } from "./constants/useCasesData";
+import { useTypewriter } from "./hooks/useTypewriter";
 
 /** Spring transition config for consistent animations */
 const springTransition = { type: "spring", stiffness: 300, damping: 30 };
@@ -47,188 +10,44 @@ const springTransition = { type: "spring", stiffness: 300, damping: 30 };
 /** Content fade transition */
 const contentTransition = { duration: 0.2, ease: "easeOut" };
 
+/** Grid configuration for smooth layout transition */
+const gridConfig = [
+    "grid-rows-[auto_60px_60px_60px] lg:grid-cols-[2.5fr_1fr_1fr_1fr] lg:grid-rows-1",
+    "grid-rows-[60px_auto_60px_60px] lg:grid-cols-[1fr_2.5fr_1fr_1fr] lg:grid-rows-1",
+    "grid-rows-[60px_60px_auto_60px] lg:grid-cols-[1fr_1fr_2.5fr_1fr] lg:grid-rows-1",
+    "grid-rows-[60px_60px_60px_auto] lg:grid-cols-[1fr_1fr_1fr_2.5fr] lg:grid-rows-1",
+];
+
 export function UseCases() {
-    // Two states: pendingIndex for click target, activeIndex for actual display
     const [activeIndex, setActiveIndex] = useState(0);
     const [pendingIndex, setPendingIndex] = useState<number | null>(null);
     const [isContentVisible, setIsContentVisible] = useState(true);
 
-    // Animation State for Typewriter Effect
-    const [animState, setAnimState] = useState({
-        title: "",
-        problem: "",
-        solution: "",
-        impact: "",
+    const { animState, isExiting, handleExit, exitCancelledRef } = useTypewriter({
+        activeIndex,
+        isContentVisible,
+        useCases,
     });
-
-    // State to track if we're in exit animation
-    const [isExiting, setIsExiting] = useState(false);
-    const exitCancelledRef = useRef(false);
-
-    // Delete text helper (for exit animation)
-    const deleteTextAsync = async (
-        currentText: string,
-        setter: (value: string) => void,
-        delay: number = 15
-    ) => {
-        for (let i = currentText.length; i >= 0; i--) {
-            if (exitCancelledRef.current) return false;
-            setter(currentText.slice(0, i));
-            await new Promise((r) => setTimeout(r, delay));
-        }
-        return true;
-    };
 
     // Handle card click - start reverse typewriter then switch
     const handleCardClick = useCallback(async (index: number) => {
         if (index === activeIndex || isExiting) return;
 
-        setIsExiting(true);
-        exitCancelledRef.current = false;
-
-        const target = useCases[activeIndex];
-
-        // Reverse typewriter: delete in reverse order (impact → solution → problem → title)
-        // Delete impact
-        await deleteTextAsync(animState.impact, (v) =>
-            setAnimState((prev) => ({ ...prev, impact: v })), 3
-        );
+        await handleExit();
         if (exitCancelledRef.current) return;
 
-        // Delete solution
-        await deleteTextAsync(animState.solution, (v) =>
-            setAnimState((prev) => ({ ...prev, solution: v })), 2
-        );
-        if (exitCancelledRef.current) return;
-
-        // Delete problem
-        await deleteTextAsync(animState.problem, (v) =>
-            setAnimState((prev) => ({ ...prev, problem: v })), 2
-        );
-        if (exitCancelledRef.current) return;
-
-        // Delete title back to shortTitle
-        await deleteTextAsync(animState.title, (v) =>
-            setAnimState((prev) => ({ ...prev, title: v })), 5
-        );
-        if (exitCancelledRef.current) return;
-
-        // Now hide content and switch cards
         setIsContentVisible(false);
         setPendingIndex(index);
-        setIsExiting(false);
-    }, [activeIndex, isExiting, animState]);
+    }, [activeIndex, isExiting, handleExit, exitCancelledRef]);
 
     // After content fades out, switch the active card
     const handleContentExitComplete = useCallback(() => {
         if (pendingIndex !== null) {
-            // Switch grid layout
             setActiveIndex(pendingIndex);
             setPendingIndex(null);
-
-            // Show new content after grid starts animating
-            setTimeout(() => {
-                setIsContentVisible(true);
-            }, 150);
+            setTimeout(() => setIsContentVisible(true), 150);
         }
     }, [pendingIndex]);
-
-    // Typewriter effect
-    useEffect(() => {
-        if (!isContentVisible) return;
-
-        let isCancelled = false;
-        const target = useCases[activeIndex];
-
-        // Reset state for new animation
-        setAnimState({
-            title: target.shortTitle,
-            problem: "",
-            solution: "",
-            impact: "",
-        });
-
-        const typeText = async (
-            text: string,
-            setter: (value: string) => void,
-            delay: number = 30
-        ) => {
-            for (let i = 0; i <= text.length; i++) {
-                if (isCancelled) return false;
-                setter(text.slice(0, i));
-                await new Promise((r) => setTimeout(r, delay));
-            }
-            return true;
-        };
-
-        const deleteText = async (
-            text: string,
-            setter: (value: string) => void,
-            delay: number = 50
-        ) => {
-            for (let i = text.length; i >= 0; i--) {
-                if (isCancelled) return false;
-                setter(text.slice(0, i));
-                await new Promise((r) => setTimeout(r, delay));
-            }
-            return true;
-        };
-
-        const runAnimation = async () => {
-            // Wait for card expansion
-            await new Promise((r) => setTimeout(r, 100));
-            if (isCancelled) return;
-
-            // Delete short title
-            await deleteText(target.shortTitle, (v) =>
-                setAnimState((prev) => ({ ...prev, title: v }))
-            );
-            if (isCancelled) return;
-
-            // Type full title
-            await typeText(target.fullTitle, (v) =>
-                setAnimState((prev) => ({ ...prev, title: v }))
-            );
-            if (isCancelled) return;
-
-            // Type problem
-            await typeText(
-                target.problem,
-                (v) => setAnimState((prev) => ({ ...prev, problem: v })),
-                10
-            );
-            if (isCancelled) return;
-
-            // Type solution
-            await typeText(
-                target.solution,
-                (v) => setAnimState((prev) => ({ ...prev, solution: v })),
-                10
-            );
-            if (isCancelled) return;
-
-            // Type impact
-            await typeText(
-                target.stats,
-                (v) => setAnimState((prev) => ({ ...prev, impact: v })),
-                20
-            );
-        };
-
-        runAnimation();
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [activeIndex, isContentVisible]);
-
-    // Grid configuration for smooth layout transition
-    const gridConfig = [
-        "grid-rows-[auto_60px_60px_60px] lg:grid-cols-[2.5fr_1fr_1fr_1fr] lg:grid-rows-1",
-        "grid-rows-[60px_auto_60px_60px] lg:grid-cols-[1fr_2.5fr_1fr_1fr] lg:grid-rows-1",
-        "grid-rows-[60px_60px_auto_60px] lg:grid-cols-[1fr_1fr_2.5fr_1fr] lg:grid-rows-1",
-        "grid-rows-[60px_60px_60px_auto] lg:grid-cols-[1fr_1fr_1fr_2.5fr] lg:grid-rows-1",
-    ];
 
     return (
         <section className="relative py-24 bg-[#F5F5F0] border-b border-[#0A0A0A]/5">
@@ -245,10 +64,8 @@ export function UseCases() {
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl">
-                <motion.div
-                    className={`grid w-full min-h-[500px] lg:h-[600px] gap-2 ${gridConfig[activeIndex]}`}
-                    layout
-                    transition={springTransition}
+                <div
+                    className={`grid w-full min-h-[500px] lg:h-[600px] gap-2 transition-all duration-500 ease-out ${gridConfig[activeIndex]}`}
                 >
                     {useCases.map((item, index) => {
                         const isActive = activeIndex === index;
@@ -257,8 +74,17 @@ export function UseCases() {
                         return (
                             <motion.div
                                 key={index}
-                                layout
+                                layout="position"
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`View use case: ${item.shortTitle}`}
                                 onClick={() => handleCardClick(index)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        handleCardClick(index);
+                                    }
+                                }}
                                 className={`relative cursor-pointer group overflow-hidden ${isActive
                                     ? "border-2 border-[#0A0A0A]"
                                     : "border border-[#0A0A0A]/5"
@@ -279,7 +105,6 @@ export function UseCases() {
                                             <span className="font-mono text-lg sm:text-xl md:text-2xl text-[#0A0A0A]">
                                                 {item.id}
                                             </span>
-                                            {/* Tag - Only visible when active */}
                                             <AnimatePresence
                                                 mode="wait"
                                                 onExitComplete={isActive ? handleContentExitComplete : undefined}
@@ -396,7 +221,7 @@ export function UseCases() {
                             </motion.div>
                         );
                     })}
-                </motion.div>
+                </div>
             </div>
         </section>
     );

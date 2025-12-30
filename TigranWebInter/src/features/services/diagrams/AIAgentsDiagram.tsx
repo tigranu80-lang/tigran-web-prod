@@ -55,7 +55,7 @@ export function AIAgentsDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#10b981', fill: '#10b981', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-green)', fill: 'var(--color-accent-green)', strokeWidth: 1 }}
                             />
                         </marker>
                         <marker
@@ -72,7 +72,7 @@ export function AIAgentsDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#3b82f6', fill: '#3b82f6', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-blue)', fill: 'var(--color-accent-blue)', strokeWidth: 1 }}
                             />
                         </marker>
                     </defs>

@@ -22,6 +22,13 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-white/10">
+      {/* Skip to main content - Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-[#0A0A0A] focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+      >
+        Skip to content
+      </a>
       <div className="container mx-auto px-4 md:px-6 h-16 lg:h-20 flex items-center justify-between">
         {/* Logo */}
         <div

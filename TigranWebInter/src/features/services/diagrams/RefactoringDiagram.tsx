@@ -54,7 +54,7 @@ export function RefactoringDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#ef4444', fill: '#ef4444', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-red)', fill: 'var(--color-accent-red)', strokeWidth: 1 }}
                             />
                         </marker>
                         <marker
@@ -71,7 +71,7 @@ export function RefactoringDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#f97316', fill: '#f97316', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-orange)', fill: 'var(--color-accent-orange)', strokeWidth: 1 }}
                             />
                         </marker>
                         <marker
@@ -88,7 +88,7 @@ export function RefactoringDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#22c55e', fill: '#22c55e', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-green)', fill: 'var(--color-accent-green)', strokeWidth: 1 }}
                             />
                         </marker>
                     </defs>

@@ -59,7 +59,7 @@ export function GroupNode({
                 data-label="group"
                 style={{
                     color: color,
-                    backgroundColor: '#F5F5F0',
+                    backgroundColor: 'var(--color-brand-bg)',
                     border: `1px solid ${rgbaLabelBorder}`,
                     left: '50%',
                     transform: 'translate(-50%, -130%)',
@@ -75,7 +75,7 @@ export function GroupNode({
                 data-corner="top-left"
                 style={{
                     borderColor: color,
-                    backgroundColor: '#F5F5F0',
+                    backgroundColor: 'var(--color-brand-bg)',
                 }}
             ></div>
             <div
@@ -83,7 +83,7 @@ export function GroupNode({
                 data-corner="top-right"
                 style={{
                     borderColor: color,
-                    backgroundColor: '#F5F5F0',
+                    backgroundColor: 'var(--color-brand-bg)',
                 }}
             ></div>
             <div
@@ -91,7 +91,7 @@ export function GroupNode({
                 data-corner="bottom-left"
                 style={{
                     borderColor: color,
-                    backgroundColor: '#F5F5F0',
+                    backgroundColor: 'var(--color-brand-bg)',
                 }}
             ></div>
             <div
@@ -99,7 +99,7 @@ export function GroupNode({
                 data-corner="bottom-right"
                 style={{
                     borderColor: color,
-                    backgroundColor: '#F5F5F0',
+                    backgroundColor: 'var(--color-brand-bg)',
                 }}
             ></div>
 

@@ -7,6 +7,7 @@ import { Pricing } from '../features/pricing/Pricing';
 import { Footer } from '../features/layout/Footer';
 import { AIConsultant } from '../features/hero/AIConsultant';
 import { HeroNew } from '../features/hero/HeroNew';
+import { TechTicker } from '../features/hero/TechTicker';
 import { Contact } from '../features/contact/Contact';
 import { GlobeSection } from '../features/hero/GlobeSection';
 import { Background } from '../features/layout/Background';
@@ -19,7 +20,7 @@ export function Home() {
 
             <Header />
 
-            <main className="relative z-10">
+            <main id="main-content" className="relative z-10">
                 {/* Hero Section */}
                 <HeroNew />
 
@@ -30,6 +31,7 @@ export function Home() {
                 <Services />
                 <About />
                 <GlobeSection />
+                <TechTicker />
                 <Pricing />
                 <Contact />
 

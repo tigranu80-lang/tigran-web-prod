@@ -54,7 +54,7 @@ export function OrchestrationDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#f97316', fill: '#f97316', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-orange)', fill: 'var(--color-accent-orange)', strokeWidth: 1 }}
                             />
                         </marker>
                         <marker
@@ -71,7 +71,7 @@ export function OrchestrationDiagram() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 points="-5,-4 0,0 -5,4 -5,-4"
-                                style={{ stroke: '#3b82f6', fill: '#3b82f6', strokeWidth: 1 }}
+                                style={{ stroke: 'var(--color-accent-blue)', fill: 'var(--color-accent-blue)', strokeWidth: 1 }}
                             />
                         </marker>
                     </defs>
