@@ -153,7 +153,7 @@ export function ProductNode({
                         {label}
                     </div>
                     <div
-                        className="product-node-sublabel text-[9px] font-mono text-[#a3a3a3] mt-0.5 whitespace-nowrap"
+                        className="product-node-sublabel text-[9px] font-mono text-ink-400 mt-0.5 whitespace-nowrap"
                         data-label="sub"
                     >
                         {sublabel}

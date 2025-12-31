@@ -16,7 +16,7 @@ const technologies = [
 
 export function TechTicker() {
     return (
-        <section className="w-full bg-[#F5F5F0] border-b border-[#0A0A0A] overflow-hidden py-8 sm:py-12">
+        <section className="w-full bg-transparent border-b border-ink-950 overflow-hidden pt-1 pb-5 sm:pt-3 sm:pb-7 pl-4">
             <div className="flex whitespace-nowrap">
                 <motion.div
                     className="flex shrink-0 gap-8 sm:gap-16 items-center"
@@ -25,7 +25,7 @@ export function TechTicker() {
                     }}
                     transition={{
                         ease: "linear",
-                        duration: 60,
+                        duration: 240,
                         repeat: Infinity,
                     }}
                 >
@@ -33,12 +33,11 @@ export function TechTicker() {
                         <div
                             key={index}
                             className={`
-                                text-6xl sm:text-8xl md:text-9xl font-bold uppercase tracking-tighter
+                                text-5xl sm:text-7xl md:text-8xl uppercase tracking-tighter
                                 ${tech.stroke
-                                    ? "text-transparent [-webkit-text-stroke:1px_#0A0A0A] sm:[-webkit-text-stroke:2px_#0A0A0A]"
-                                    : "text-[#0A0A0A]"
+                                    ? "text-transparent [-webkit-text-stroke:1px_#0A0A0A] sm:[-webkit-text-stroke:1.5px_#0A0A0A] font-mono font-normal tracking-widest"
+                                    : "text-ink-950 font-bold font-sans"
                                 }
-                                font-sans
                             `}
                         >
                             {tech.name}
@@ -55,7 +54,7 @@ export function TechTicker() {
                     }}
                     transition={{
                         ease: "linear",
-                        duration: 60,
+                        duration: 240,
                         repeat: Infinity,
                     }}
                 >
@@ -63,12 +62,11 @@ export function TechTicker() {
                         <div
                             key={index}
                             className={`
-                                text-6xl sm:text-8xl md:text-9xl font-bold uppercase tracking-tighter
+                                text-5xl sm:text-7xl md:text-8xl uppercase tracking-tighter
                                 ${tech.stroke
-                                    ? "text-transparent [-webkit-text-stroke:1px_#0A0A0A] sm:[-webkit-text-stroke:2px_#0A0A0A]"
-                                    : "text-[#0A0A0A]"
+                                    ? "text-transparent [-webkit-text-stroke:1px_#0A0A0A] sm:[-webkit-text-stroke:1.5px_#0A0A0A] font-mono font-normal tracking-widest"
+                                    : "text-ink-950 font-bold font-sans"
                                 }
-                                font-sans
                             `}
                         >
                             {tech.name}

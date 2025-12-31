@@ -3,12 +3,13 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, CheckCircle, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
+import { CustomSelect } from './CustomSelect';
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function Contact() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', system: 'Lead handling', impact: 'Save time', message: '' });
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -56,7 +57,19 @@ export function Contact() {
   }, [status]);
 
   return (
-    <section id="contact" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm relative">
+    <section id="contact" className="relative border-t border-ink-950/10 bg-transparent backdrop-blur-sm">
+      {/* Technical Cut - Section Label */}
+      <div className="absolute top-0 w-full z-10 pointer-events-none">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+            <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
+            <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
+              SYS.08 /// CONTACT_RELAY
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-ink-950/10">
@@ -96,7 +109,7 @@ export function Contact() {
               {/* Row 1 */}
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="name" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Identity_Name</label>
+                  <label htmlFor="name" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4">/// Identity_Name</label>
                   <input
                     type="text"
                     id="name"
@@ -108,7 +121,7 @@ export function Contact() {
                   />
                 </div>
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="email" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Contact_Relay</label>
+                  <label htmlFor="email" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4">/// Contact_Relay</label>
                   <input
                     type="email"
                     id="email"
@@ -121,16 +134,47 @@ export function Contact() {
                 </div>
               </div>
 
-              {/* Row 2: Message */}
-              <div className="p-8 flex-1 border-b border-ink-950/5 min-h-[200px] group focus-within:bg-white/40 transition-colors">
-                <label htmlFor="message" className="block text-[9px] font-mono uppercase text-ink-400 font-bold tracking-[0.2em] mb-4 group-focus-within:text-orange-600 transition-colors">/// Transmission_Content</label>
+              {/* Row 2: Selectors */}
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
+                <CustomSelect
+                  id="system"
+                  label="/// Target_System"
+                  value={formData.system}
+                  onChange={(val) => setFormData({ ...formData, system: val })}
+                  options={[
+                    "Lead handling",
+                    "Onboarding",
+                    "Support",
+                    "Finance ops",
+                    "Reporting",
+                    "Other"
+                  ]}
+                />
+
+                <CustomSelect
+                  id="impact"
+                  label="/// Desired_Impact"
+                  value={formData.impact}
+                  onChange={(val) => setFormData({ ...formData, impact: val })}
+                  options={[
+                    "Save time",
+                    "Reduce costs",
+                    "Increase revenue",
+                    "Quality & errors"
+                  ]}
+                />
+              </div>
+
+              {/* Row 3: Message */}
+              <div className="p-8 flex-1 border-b border-ink-950/5 min-h-[160px] group focus-within:bg-white/40 transition-colors flex flex-col">
+                <label htmlFor="message" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4 w-fit">/// Additional_Context</label>
                 <textarea
                   id="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="INPUT PARAMETERS..."
-                  className="w-full h-full bg-transparent resize-none text-ink-950 focus:outline-none placeholder:text-ink-300 font-mono text-xs leading-relaxed border-l-2 border-transparent focus:border-orange-500 pl-0 focus:pl-4 transition-all duration-300"
+                  className="w-full flex-1 bg-transparent resize-none text-ink-950 focus:outline-none placeholder:text-ink-300 font-mono text-xs leading-relaxed border-l-2 border-transparent focus:border-orange-500 pl-0 focus:pl-4 transition-all duration-300"
                 ></textarea>
               </div>
 

@@ -15,16 +15,16 @@ import { ProductNode } from '../ProductNode';
 export function OrchestrationDiagram() {
     return (
         <div
-            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-[#0A0A0A]/5 relative shadow-sm overflow-hidden"
+            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-ink-950/5 relative shadow-sm overflow-hidden"
             data-component="architecture-demo"
             data-tab="1"
             style={{ opacity: 1, transform: 'none' }}
         >
             {/* Corner markers on container */}
-            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-[#0A0A0A] z-20" data-corner="container-top-left"></div>
-            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-[#0A0A0A] z-20" data-corner="container-top-right"></div>
-            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-[#0A0A0A] z-20" data-corner="container-bottom-left"></div>
-            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-[#0A0A0A] z-20" data-corner="container-bottom-right"></div>
+            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-ink-950 z-20" data-corner="container-top-left"></div>
+            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-ink-950 z-20" data-corner="container-top-right"></div>
+            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-ink-950 z-20" data-corner="container-bottom-left"></div>
+            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-ink-950 z-20" data-corner="container-bottom-right"></div>
 
             {/* Background pattern */}
             <div className="react-flow-container absolute inset-0 z-0" data-container="react-flow-wrapper">
@@ -172,7 +172,7 @@ export function OrchestrationDiagram() {
                             {/* Trigger group → Workflow group */}
                             <path
                                 d="M 210 225 L 350 225"
-                                stroke="#f97316"
+                                stroke="var(--color-accent-orange)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -187,7 +187,7 @@ export function OrchestrationDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#f97316" x="-2" y="-2" opacity="1">
+                            <rect width="4" height="4" fill="var(--color-accent-orange)" x="-2" y="-2" opacity="1">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -199,7 +199,7 @@ export function OrchestrationDiagram() {
                             {/* Workflow group → CRM (top of integrations) */}
                             <path
                                 d="M 460 185 L 540 185 L 540 97 L 600 97"
-                                stroke="#3b82f6"
+                                stroke="var(--color-accent-blue)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -214,7 +214,7 @@ export function OrchestrationDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#3b82f6" x="-2" y="-2" opacity="1">
+                            <rect width="4" height="4" fill="var(--color-accent-blue)" x="-2" y="-2" opacity="1">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -226,7 +226,7 @@ export function OrchestrationDiagram() {
                             {/* Workflow group → Slack (center) */}
                             <path
                                 d="M 460 225 L 600 225"
-                                stroke="#3b82f6"
+                                stroke="var(--color-accent-blue)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -241,7 +241,7 @@ export function OrchestrationDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#3b82f6" x="-2" y="-2" opacity="1">
+                            <rect width="4" height="4" fill="var(--color-accent-blue)" x="-2" y="-2" opacity="1">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -253,7 +253,7 @@ export function OrchestrationDiagram() {
                             {/* Workflow group → Email (bottom) */}
                             <path
                                 d="M 460 265 L 540 265 L 540 337 L 600 337"
-                                stroke="#3b82f6"
+                                stroke="var(--color-accent-blue)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -268,7 +268,7 @@ export function OrchestrationDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#3b82f6" x="-2" y="-2" opacity="1">
+                            <rect width="4" height="4" fill="var(--color-accent-blue)" x="-2" y="-2" opacity="1">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"

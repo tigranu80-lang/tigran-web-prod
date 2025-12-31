@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Home } from './pages/Home';
+import { BlueprintsArchive } from './pages/BlueprintsArchive';
 import { ThankYou } from './pages/ThankYou';
 
 export function App() {
@@ -15,6 +16,7 @@ export function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/blueprints" element={<BlueprintsArchive />} />
         <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
 

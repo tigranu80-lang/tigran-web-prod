@@ -1,103 +1,163 @@
 import React from 'react';
-import { Check, Plus } from 'lucide-react';
+import { Check, Plus, ArrowRight } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
 import { FadeIn } from '../ui/FadeIn';
 
-const plans = [
+const services = [
   {
     name: 'Audit',
-    price: '$500',
     description: 'Deep Analysis.',
     features: ['Workflow Mapping', 'Tech Stack Review', 'Bottleneck Report'],
   },
   {
     name: 'Build',
-    price: '$2,500',
     description: 'Implementation.',
-    features: ['Custom Integrations', 'Script Development', 'Dashboard Setup', '2 Weeks Support'],
+    features: ['Custom Integrations', 'Script Development', 'Dashboard Setup'],
   },
   {
-    name: 'Scale',
-    price: '$4,000',
-    description: 'Full Retainer.',
-    features: ['Unlimited Tweaks', 'AI Agent Monitoring', 'Priority Support', 'Monthly Optimization'],
+    name: 'Training',
+    description: 'Team Empowerment.',
+    features: ['Internal Workshops', 'AI Agent Monitoring', 'SOP Documentation'],
   }
 ];
 
 export function Pricing() {
   return (
-    <section id="pricing" className="border-t border-ink-950/10 bg-white/30 backdrop-blur-sm">
-      <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10 pb-6 md:pb-12 lg:pb-24">
-
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end p-6 md:p-12 lg:p-24 border-b border-ink-950/10">
-          <div>
-            <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Investment Protocols</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
-              <DecryptedText text="Pricing Models" />
-            </h2>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-[1px] w-12 bg-ink-950"></div>
-            <p className="text-ink-400 text-sm font-mono uppercase tracking-wide">
-              Transparent.<br />Flat Rate.
-            </p>
+    <section id="pricing" className="relative border-t border-ink-950/10 bg-[#F5F5F0]/60 backdrop-blur-[2px]">
+      {/* Technical Cut - Section Label */}
+      <div className="absolute top-0 w-full z-10 pointer-events-none">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+            <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
+            <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
+              SYS.07 /// PRICING_MODELS
+            </span>
           </div>
         </div>
+      </div>
 
-        {/* Strict Grid Table - No Gaps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((plan, index) => (
-            <FadeIn key={index} delay={index * 150} direction="up">
-              <div className="relative p-12 flex flex-col min-h-[600px] transition-all duration-500 group border border-dashed bg-white/40 border-ink-950/20 hover:border-orange-500/30 hover:bg-white/60">
+      <div className="container mx-auto px-6 max-w-7xl pt-16 pb-12 md:pb-24">
 
-                {/* Technical Corner Marking - Top Left */}
-                <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t border-l transition-colors duration-300 border-ink-950/30 group-hover:border-orange-500"></div>
-                {/* Technical Corner Marking - Top Right */}
-                <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t border-r transition-colors duration-300 border-ink-950/30 group-hover:border-orange-500"></div>
-                {/* Technical Corner Marking - Bottom Left */}
-                <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b border-l transition-colors duration-300 border-ink-950/30 group-hover:border-orange-500"></div>
-                {/* Technical Corner Marking - Bottom Right */}
-                <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b border-r transition-colors duration-300 border-ink-950/30 group-hover:border-orange-500"></div>
+        {/* Header */}
+        <div className="mb-12 md:mb-16">
+          <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">Engagement Protocols</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-medium mt-6 text-ink-950 tracking-tight">
+            <DecryptedText text="Start with Strategy" />
+          </h2>
+        </div>
 
-                {/* Technical Crosshair inside */}
-                <div className="absolute top-6 right-6 text-ink-950/10 group-hover:text-orange-500/20 transition-colors">
-                  <Plus size={16} strokeWidth={1} />
-                </div>
+        {/* Main 2-Column Asymmetrical Layout */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
 
-                <div className="mb-16">
-                  <h3 className="font-mono text-xs uppercase tracking-[0.2em] mb-4 text-ink-400 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-ink-300 group-hover:bg-orange-500/50 transition-colors"></span>
-                    0{index + 1} — {plan.name}
-                  </h3>
-                  <div className="flex items-baseline gap-1 mt-8">
-                    <span className="text-6xl font-serif font-medium text-ink-950">{plan.price}</span>
-                    {plan.name === 'Scale' && <span className="font-mono text-xs text-ink-400">/MO</span>}
+          {/* LEFT COLUMN: Primary CTA (Free Strategy Call) - 45% */}
+          {/* Styled matching the 'Active Blueprint' logic: Thin Orange Border, Clean White Bg */}
+          <div className="w-full lg:w-[45%] flex flex-col">
+            <div className="relative flex-1 bg-white border border-orange-500/50 p-8 md:p-12 shadow-[0px_4px_24px_-12px_rgba(234,88,12,0.15)] flex flex-col justify-between group overflow-hidden">
+
+              {/* Decorative corner accents - Technical */}
+              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-orange-500"></div>
+              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-orange-500"></div>
+              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-orange-500"></div>
+              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-orange-500"></div>
+
+              <div className="absolute top-8 right-8">
+                <span className="font-mono text-[10px] text-orange-600 uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-600 animate-pulse rounded-full"></span>
+                  Priority Access
+                </span>
+              </div>
+
+              <div>
+                <span className="font-mono text-xs text-ink-400 uppercase tracking-widest mb-6 block">/// Step 01.</span>
+
+                <h3 className="text-3xl md:text-4xl font-serif font-medium leading-tight mb-6 text-ink-950">
+                  <span className="text-orange-600">Discovery</span> & <br />
+                  Roadmap Call
+                </h3>
+
+                <p className="text-ink-500 font-sans font-light leading-relaxed mb-10 text-sm md:text-base border-l-2 border-orange-500/20 pl-4 py-1">
+                  We don't sell blind. Join us for a 30-minute discovery session to map your workflow and define your automation roadmap.
+                </p>
+
+                {/* Vertical Step Timeline - Technical Minimalist */}
+                <div className="space-y-6 mb-12 relative pl-2">
+                  {/* Vertical Line */}
+                  <div className="absolute top-2 bottom-full left-[19px] w-[1px] bg-dashed border-l border-ink-950/10 h-[80%]"></div>
+
+                  <div className="relative flex items-center gap-4">
+                    <div className="w-6 h-6 rounded-full bg-white border border-ink-950/20 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-[10px] font-mono text-ink-400">01</span>
+                    </div>
+                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Identify Challenges</span>
                   </div>
-                  <p className="text-xs mt-6 font-mono uppercase tracking-wide text-ink-500 border-l-2 border-ink-950/10 pl-4 py-1 leading-relaxed max-w-[200px]">
-                    /// {plan.description}
+                  <div className="relative flex items-center gap-4">
+                    <div className="w-6 h-6 rounded-full bg-white border border-ink-950/20 flex items-center justify-center shrink-0 z-10">
+                      <span className="text-[10px] font-mono text-ink-400">02</span>
+                    </div>
+                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Blueprint</span>
+                  </div>
+                  <div className="relative flex items-center gap-4">
+                    <div className="w-6 h-6 rounded-full bg-orange-600 border border-orange-600 flex items-center justify-center shrink-0 z-10 shadow-sm">
+                      <Check size={12} className="text-white" />
+                    </div>
+                    <span className="font-mono text-xs uppercase tracking-wider text-orange-600 font-bold">Execution</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Button matching 'View Full Archive' style exactly */}
+              <button
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="w-full py-4 bg-white text-ink-950 border-2 border-ink-950 rounded-none font-mono text-xs uppercase tracking-[0.2em] shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3 group/btn"
+              >
+                <span>Book Discovery Session</span>
+                <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Engagement Options - 55% */}
+          {/* Lighter, grid-based, 'Blueprints' aesthetic */}
+          <div className="w-full lg:w-[55%] flex flex-col gap-4">
+            {services.map((service, index) => (
+              <div key={index} className="flex-1 group relative bg-[#F9F9F9] border border-ink-950/5 p-6 md:p-8 hover:bg-white hover:border-ink-950/20 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-ink-300 group-hover:bg-orange-600 transition-colors"></span>
+                    <span className="font-mono text-[10px] text-ink-400 uppercase tracking-widest">
+                        /// Option 0{index + 1}
+                    </span>
+                  </div>
+                  <h4 className="text-xl font-serif font-medium text-ink-950 group-hover:text-orange-600 transition-colors">{service.name}</h4>
+                  <p className="text-xs font-mono text-ink-500 uppercase tracking-wide max-w-xs opacity-70">
+                    {service.description}
                   </p>
                 </div>
 
-                <div className="flex-1">
-                  <ul className="space-y-5">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-4 text-xs font-mono uppercase tracking-wide text-ink-600 group-hover:text-ink-950 transition-colors">
-                        <div className="w-3 h-3 border border-ink-950/20 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-orange-500/30 transition-colors">
-                          <Check size={8} className="text-ink-950 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <span className="opacity-80">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Minimal Feature List */}
+                <div className="flex flex-col gap-2 border-l border-ink-950/5 pl-4 md:pl-8 min-w-[180px]">
+                  {service.features.map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-ink-500 font-mono uppercase tracking-wide">
+                      <Check size={10} className="text-ink-300 group-hover:text-orange-500 transition-colors" />
+                      {feature}
+                    </div>
+                  ))}
                 </div>
 
-                <button className="w-full mt-12 py-4 text-xs font-mono uppercase tracking-[0.2em] border transition-all relative overflow-hidden group/btn bg-transparent text-ink-950 border-ink-950/20 hover:border-orange-500 hover:text-orange-600">
-                  <span className="relative z-10">Initialize {plan.name}</span>
-                </button>
+                <div className="md:ml-auto shrink-0">
+                  <button
+                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="w-full md:w-auto px-4 py-2 border border-ink-950/10 bg-transparent text-[10px] font-mono uppercase tracking-widest text-ink-400 hover:text-orange-600 hover:border-orange-600 transition-colors flex items-center justify-center gap-2"
+                  >
+                    Explore
+                    <ArrowRight size={10} className="-rotate-45 group-hover:rotate-0 transition-transform" />
+                  </button>
+                </div>
               </div>
-            </FadeIn>
-          ))}
+            ))}
+          </div>
+
         </div>
 
       </div>

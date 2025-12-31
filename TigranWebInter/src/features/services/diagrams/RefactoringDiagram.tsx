@@ -15,16 +15,16 @@ import { ProductNode } from '../ProductNode';
 export function RefactoringDiagram() {
     return (
         <div
-            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-[#0A0A0A]/5 relative shadow-sm overflow-hidden"
+            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-ink-950/5 relative shadow-sm overflow-hidden"
             data-component="architecture-demo"
             data-tab="3"
             style={{ opacity: 1, transform: 'none' }}
         >
             {/* Corner markers */}
-            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-[#0A0A0A] z-20"></div>
+            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-ink-950 z-20"></div>
 
             {/* Background pattern */}
             <div className="react-flow-container absolute inset-0 z-0">
@@ -180,7 +180,7 @@ export function RefactoringDiagram() {
                             {/* Legacy group (from top) → Transform group - SHARP angles */}
                             <path
                                 d="M 210 147 L 310 147 L 310 210 L 350 210"
-                                stroke="#ef4444"
+                                stroke="var(--color-accent-red)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -194,7 +194,7 @@ export function RefactoringDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#ef4444" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-red)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -206,7 +206,7 @@ export function RefactoringDiagram() {
                             {/* Legacy group (from bottom) → Transform group - SHARP angles */}
                             <path
                                 d="M 210 267 L 310 267 L 310 210 L 350 210"
-                                stroke="#ef4444"
+                                stroke="var(--color-accent-red)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -220,7 +220,7 @@ export function RefactoringDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#ef4444" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-red)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -232,7 +232,7 @@ export function RefactoringDiagram() {
                             {/* Transform group → Modern group (to top) - SHARP angles */}
                             <path
                                 d="M 460 189 L 550 189 L 550 147 L 600 147"
-                                stroke="#f97316"
+                                stroke="var(--color-accent-orange)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -246,7 +246,7 @@ export function RefactoringDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#f97316" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-orange)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -258,7 +258,7 @@ export function RefactoringDiagram() {
                             {/* Transform group → Modern group (to bottom) - SHARP angles */}
                             <path
                                 d="M 460 231 L 550 231 L 550 267 L 600 267"
-                                stroke="#f97316"
+                                stroke="var(--color-accent-orange)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -272,7 +272,7 @@ export function RefactoringDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#f97316" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-orange)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"

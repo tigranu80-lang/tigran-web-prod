@@ -6,6 +6,9 @@ export function Background() {
   const gridSpacing = 48; // 3rem = 48px
   const majorGridSpacing = 192; // 12rem = 192px
 
+  // Animation delay for initial draw
+  const drawDuration = 2; // seconds for initial draw to complete
+
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
 
@@ -26,7 +29,7 @@ export function Background() {
         <div className="w-full h-full bg-gray-100/60 blur-[100px] rounded-full animate-pulse mix-blend-multiply"></div>
       </div>
 
-      {/* LAYER 2: Animated SVG Grid (Draws itself in) */}
+      {/* LAYER 2: Animated SVG Grid (Draws itself in, then breathes) */}
       <svg
         className="absolute inset-0 w-full h-full z-10"
         style={{
@@ -44,10 +47,20 @@ export function Background() {
             stroke="rgba(10, 10, 10, 0.07)"
             strokeWidth="1"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0, 1, 0.04, 0.08, 0.04] // Draw in, then breathe
+            }}
             transition={{
               pathLength: { duration: 1.5, delay: i * 0.02, ease: "easeOut" },
-              opacity: { duration: 0.3, delay: i * 0.02 }
+              opacity: {
+                duration: 6,
+                delay: drawDuration + (i % 5) * 0.5, // Stagger breathing
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                times: [0, 0.1, 0.5, 0.9, 1] // Quick draw, then slow breathe
+              }
             }}
           />
         ))}
@@ -63,10 +76,20 @@ export function Background() {
             stroke="rgba(10, 10, 10, 0.07)"
             strokeWidth="1"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0, 1, 0.04, 0.08, 0.04]
+            }}
             transition={{
               pathLength: { duration: 1.5, delay: 0.5 + i * 0.02, ease: "easeOut" },
-              opacity: { duration: 0.3, delay: 0.5 + i * 0.02 }
+              opacity: {
+                duration: 8,
+                delay: drawDuration + 0.5 + (i % 7) * 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                times: [0, 0.1, 0.5, 0.9, 1]
+              }
             }}
           />
         ))}
@@ -82,10 +105,20 @@ export function Background() {
             stroke="rgba(10, 10, 10, 0.12)"
             strokeWidth="1"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0, 1, 0.08, 0.14, 0.08]
+            }}
             transition={{
               pathLength: { duration: 2, delay: 1 + i * 0.1, ease: "easeOut" },
-              opacity: { duration: 0.5, delay: 1 + i * 0.1 }
+              opacity: {
+                duration: 10,
+                delay: drawDuration + 1 + i * 0.8,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                times: [0, 0.1, 0.5, 0.9, 1]
+              }
             }}
           />
         ))}
@@ -101,10 +134,20 @@ export function Background() {
             stroke="rgba(10, 10, 10, 0.12)"
             strokeWidth="1"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0, 1, 0.08, 0.14, 0.08]
+            }}
             transition={{
               pathLength: { duration: 2, delay: 1.5 + i * 0.1, ease: "easeOut" },
-              opacity: { duration: 0.5, delay: 1.5 + i * 0.1 }
+              opacity: {
+                duration: 12,
+                delay: drawDuration + 1.5 + i * 0.6,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                times: [0, 0.1, 0.5, 0.9, 1]
+              }
             }}
           />
         ))}

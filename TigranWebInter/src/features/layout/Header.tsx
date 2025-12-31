@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,11 +22,11 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-ink-950/90 backdrop-blur-md border-b border-white/10">
       {/* Skip to main content - Accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-[#0A0A0A] focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-ink-950 focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
       >
         Skip to content
       </a>
@@ -81,29 +82,38 @@ export function Header() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {isMenuOpen && (
-        <div className="lg:hidden bg-[#0A0A0A] border-t border-white/10">
-          <div className="container mx-auto px-4 py-6">
-            <nav className="flex flex-col gap-4">
-              {navItems.map((item) => (
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:hidden bg-ink-950 border-t border-white/10 overflow-hidden"
+          >
+            <div className="container mx-auto px-4 py-6">
+              <nav className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => scrollToSection(item.id)}
+                    className="text-left text-sm font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors py-2"
+                  >
+                    {item.name}
+                  </button>
+                ))}
                 <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.id)}
-                  className="text-left text-sm font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors py-2"
+                  onClick={() => scrollToSection("contact")}
+                  className="mt-4 w-full px-6 py-4 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
                 >
-                  {item.name}
+                  Get Started
                 </button>
-              ))}
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="mt-4 w-full px-6 py-4 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
-              >
-                Get Started
-              </button>
-            </nav>
-          </div>
-        </div>
-      )}
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

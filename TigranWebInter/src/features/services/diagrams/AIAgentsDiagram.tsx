@@ -16,16 +16,16 @@ import { ProductNode } from '../ProductNode';
 export function AIAgentsDiagram() {
     return (
         <div
-            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-[#0A0A0A]/5 relative shadow-sm overflow-hidden"
+            className="architecture-demo-container w-full h-full min-h-[500px] bg-white border border-ink-950/5 relative shadow-sm overflow-hidden"
             data-component="architecture-demo"
             data-tab="2"
             style={{ opacity: 1, transform: 'none' }}
         >
             {/* Corner markers on container */}
-            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-[#0A0A0A] z-20"></div>
-            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-[#0A0A0A] z-20"></div>
+            <div className="corner-marker-container corner-top-left absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-top-right absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-bottom-left absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-ink-950 z-20"></div>
+            <div className="corner-marker-container corner-bottom-right absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-ink-950 z-20"></div>
 
             {/* Background pattern */}
             <div className="react-flow-container absolute inset-0 z-0">
@@ -175,7 +175,7 @@ export function AIAgentsDiagram() {
                             {/* Input group → Compute group */}
                             <path
                                 d="M 190 215 L 280 215"
-                                stroke="#3b82f6"
+                                stroke="var(--color-accent-blue)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -189,7 +189,7 @@ export function AIAgentsDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#3b82f6" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-blue)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"
@@ -201,7 +201,7 @@ export function AIAgentsDiagram() {
                             {/* Compute group → Action group */}
                             <path
                                 d="M 540 215 L 630 215"
-                                stroke="#10b981"
+                                stroke="var(--color-accent-green)"
                                 strokeWidth="2"
                                 strokeDasharray="5,5"
                                 fill="none"
@@ -215,7 +215,7 @@ export function AIAgentsDiagram() {
                                     repeatCount="indefinite"
                                 />
                             </path>
-                            <rect width="4" height="4" fill="#10b981" x="-2" y="-2">
+                            <rect width="4" height="4" fill="var(--color-accent-green)" x="-2" y="-2">
                                 <animateMotion
                                     dur="2s"
                                     repeatCount="indefinite"

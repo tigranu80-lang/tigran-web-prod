@@ -19,11 +19,11 @@ export function GlobeSection() {
             theta: 0,
             dark: 0,
             diffuse: 1.2,
-            mapSamples: 12000, // Reduced from 16000 for "empty" look
-            mapBrightness: 12, // Increased brightness to make it lighter/fainter against white
-            baseColor: [0.96, 0.96, 0.94], // Transparent match
-            markerColor: [0.97, 0.45, 0.09], // Orange
-            glowColor: [0.96, 0.96, 0.94], // No glow border
+            mapSamples: 20000, // Richer dot density
+            mapBrightness: 6, // Adjusted for clarity
+            baseColor: [0.96, 0.96, 0.94], // Perfectly matches #F5F5F0 (Alabaster)
+            markerColor: [234 / 255, 88 / 255, 12 / 255], // Orange #ea580c
+            glowColor: [0.96, 0.96, 0.94], // Matches background to hide glow edge
             markers: [
                 { location: [37.7595, -122.4367], size: 0.03 },
                 { location: [40.7128, -74.0060], size: 0.03 },
@@ -35,8 +35,14 @@ export function GlobeSection() {
                 { location: [48.8566, 2.3522], size: 0.03 },
                 { location: [25.2048, 55.2708], size: 0.03 },
                 { location: [-23.5505, -46.6333], size: 0.03 },
+                // Add random "active" nodes to simulate traffic
+                ...Array.from({ length: 15 }).map(() => ({
+                    location: [Math.random() * 160 - 80, Math.random() * 360 - 180],
+                    size: Math.random() * 0.02,
+                })),
             ],
             onRender: (state) => {
+                // Rotation
                 state.phi = phi;
                 phi += 0.003;
             },
@@ -48,16 +54,24 @@ export function GlobeSection() {
     }, []);
 
     return (
-        <section className="relative py-20 bg-alabaster border-t border-ink-950/10 overflow-hidden">
+        <section className="relative pt-32 pb-20 bg-transparent border-t border-ink-950/10">
+            {/* Technical Cut - Section Label */}
+            <div className="absolute top-0 w-full z-10 pointer-events-none">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+                        <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
+                        <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
+                            SYS.06 /// GLOBAL_OPS
+                        </span>
+                    </div>
+                </div>
+            </div>
 
             {/* Container */}
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
 
                 {/* Header - Compact */}
                 <div className="text-center mb-10 relative z-20">
-                    <span className="font-mono text-xs text-orange-600 tracking-[0.2em] uppercase block mb-3">
-                        Global Operations
-                    </span>
                     <h2 className="text-4xl md:text-5xl font-serif font-medium text-ink-950 tracking-tight">
                         Intelligence Without Borders
                     </h2>
@@ -86,77 +100,41 @@ export function GlobeSection() {
                     </div>
                 </div>
 
-                {/* Stats Cards - Technical Style */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-30 -mt-20">
+                {/* Stats Cards - Unified Technical Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 relative z-30 -mt-20 border-t border-ink-950/10 bg-white/40 backdrop-blur-md">
 
                     {/* Card 1 */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="relative bg-white/80 backdrop-blur-md border border-dashed border-ink-950/20 p-6 text-center md:text-left group hover:border-orange-500/30 transition-colors"
-                    >
-                        {/* Technical Corner Ticks */}
-                        <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-
-                        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mb-4 mx-auto md:mx-0">
-                            <Globe size={16} />
+                    <div className="relative p-8 md:p-12 text-center md:text-left group border-b md:border-b-0 border-ink-950/10">
+                        <div className="mb-6 text-ink-950">
+                            <Globe strokeWidth={1} size={32} className="mx-auto md:mx-0" />
                         </div>
-                        <h3 className="text-lg font-serif font-bold text-ink-950 mb-2">Multi-Language Support</h3>
-                        <p className="text-xs text-ink-600 leading-relaxed font-sans">
-                            Our agents are fluent in <strong className="text-ink-950">95+ languages</strong>, ready to support your customers globally.
+                        <h3 className="text-xl font-serif font-medium text-ink-950 mb-3">Multi-Language Support</h3>
+                        <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">
+                            Our agents are fluent in <strong className="font-medium text-ink-950">95+ languages</strong>, ready to support your customers globally.
                         </p>
-                    </motion.div>
+                    </div>
 
                     {/* Card 2 */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="relative bg-white/80 backdrop-blur-md border border-dashed border-ink-950/20 p-6 text-center md:text-left group hover:border-orange-500/30 transition-colors"
-                    >
-                        {/* Technical Corner Ticks */}
-                        <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-
-                        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mb-4 mx-auto md:mx-0">
-                            <Zap size={16} />
+                    <div className="relative p-8 md:p-12 text-center md:text-left group border-b md:border-b-0 md:border-l border-ink-950/10">
+                        <div className="mb-6 text-ink-950">
+                            <Zap strokeWidth={1} size={32} className="mx-auto md:mx-0" />
                         </div>
-                        <h3 className="text-lg font-serif font-bold text-ink-950 mb-2">24/7 Availability</h3>
-                        <p className="text-xs text-ink-600 leading-relaxed font-sans">
-                            Intelligence that never sleeps. Your automation runs <strong className="text-ink-950">round the clock</strong> across all time zones.
+                        <h3 className="text-xl font-serif font-medium text-ink-950 mb-3">24/7 Availability</h3>
+                        <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">
+                            Intelligence that never sleeps. Your automation runs <strong className="font-medium text-ink-950">round the clock</strong> across all time zones.
                         </p>
-                    </motion.div>
+                    </div>
 
                     {/* Card 3 */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="relative bg-white/80 backdrop-blur-md border border-dashed border-ink-950/20 p-6 text-center md:text-left group hover:border-orange-500/30 transition-colors"
-                    >
-                        {/* Technical Corner Ticks */}
-                        <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-                        <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-ink-950/40 group-hover:border-orange-500/60 transition-colors"></div>
-
-                        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 mb-4 mx-auto md:mx-0">
-                            <Shield size={16} />
+                    <div className="relative p-8 md:p-12 text-center md:text-left group md:border-l border-ink-950/10">
+                        <div className="mb-6 text-ink-950">
+                            <Shield strokeWidth={1} size={32} className="mx-auto md:mx-0" />
                         </div>
-                        <h3 className="text-lg font-serif font-bold text-ink-950 mb-2">Global Compliance</h3>
-                        <p className="text-xs text-ink-600 leading-relaxed font-sans">
-                            Systems built to strict standards, ensuring <strong className="text-ink-950">GDPR & CCPA</strong> compliance wherever you operate.
+                        <h3 className="text-xl font-serif font-medium text-ink-950 mb-3">Global Compliance</h3>
+                        <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">
+                            Systems built to strict standards, ensuring <strong className="font-medium text-ink-950">GDPR & CCPA</strong> compliance wherever you operate.
                         </p>
-                    </motion.div>
+                    </div>
 
                 </div>
 

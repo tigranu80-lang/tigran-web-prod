@@ -12,6 +12,11 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
+        // Brand tokens (use CSS variables for dynamic theming)
+        'brand-bg': 'var(--color-brand-bg, #F5F5F0)',
+        'brand-text': 'var(--color-brand-text, #0A0A0A)',
+        'brand-accent': 'var(--color-accent-orange, #ea580c)',
+        // Legacy tokens (kept for backward compatibility)
         'alabaster': '#F5F5F0',
         'alabaster-dark': '#EBEBE6',
         'ink-950': '#0A0A0A',

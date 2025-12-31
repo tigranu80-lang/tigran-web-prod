@@ -12,7 +12,19 @@ export function About() {
   }, []);
 
   return (
-    <section id="about" className="border-t border-ink-950/10 bg-alabaster-dark/30 backdrop-blur-sm">
+    <section id="about" className="relative border-t border-ink-950/10 bg-[#F5F5F0]/60 backdrop-blur-[2px]">
+      {/* Technical Cut - Section Label */}
+      <div className="absolute top-0 w-full z-10 pointer-events-none">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+            <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
+            <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
+              SYS.05 /// THE_ARCHITECTS
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-6 max-w-7xl border-x border-ink-950/10">
 
         {/* Grid Layout */}
@@ -22,7 +34,6 @@ export function About() {
           <div className="p-12 md:p-24 flex flex-col justify-between min-h-[600px]">
             <FadeIn direction="left">
               <div>
-                <span className="font-mono text-xs text-ink-500 tracking-[0.2em] uppercase">The Architects</span>
                 <h2 className="text-6xl md:text-8xl font-serif font-medium mt-8 text-ink-950 tracking-tight leading-[0.9]">
                   {names[0]} &<br /> <span className="italic text-ink-400">{names[1]}.</span>
                 </h2>

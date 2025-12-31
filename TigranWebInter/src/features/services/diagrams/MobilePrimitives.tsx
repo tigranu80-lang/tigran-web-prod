@@ -162,12 +162,12 @@ export function AnimatedArrow({ delay = 0, color = '#a3a3a3' }: { delay?: number
 /** Canvas wrapper with dot pattern background */
 export function MobileCanvasWrapper({ children }: { children: React.ReactNode }) {
     return (
-        <div className="relative bg-white border border-[#0A0A0A]/10 rounded-none overflow-hidden">
+        <div className="relative bg-white border border-ink-950/10 rounded-none overflow-hidden">
             {/* Corner markers */}
-            <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-[#0A0A0A] z-20" />
-            <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-[#0A0A0A] z-20" />
-            <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-[#0A0A0A] z-20" />
-            <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-[#0A0A0A] z-20" />
+            <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t-2 border-l-2 border-ink-950 z-20" />
+            <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t-2 border-r-2 border-ink-950 z-20" />
+            <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-2 border-l-2 border-ink-950 z-20" />
+            <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-2 border-r-2 border-ink-950 z-20" />
 
             {/* Dot pattern background */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
