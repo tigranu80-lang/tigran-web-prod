@@ -7,16 +7,9 @@ import { useTypewriter } from "./hooks/useTypewriter";
 /** Spring transition config for consistent animations */
 const springTransition = { type: "spring", stiffness: 300, damping: 30 };
 
-/** Content fade transition */
-const contentTransition = { duration: 0.2, ease: "easeOut" };
+/** Content fade transition - spring for consistency */
+const contentTransition = { type: "spring", stiffness: 400, damping: 30, mass: 0.5 };
 
-/** Grid configuration for smooth layout transition */
-const gridConfig = [
-    "grid-rows-[auto_60px_60px_60px] lg:grid-cols-[2.5fr_1fr_1fr_1fr] lg:grid-rows-1",
-    "grid-rows-[60px_auto_60px_60px] lg:grid-cols-[1fr_2.5fr_1fr_1fr] lg:grid-rows-1",
-    "grid-rows-[60px_60px_auto_60px] lg:grid-cols-[1fr_1fr_2.5fr_1fr] lg:grid-rows-1",
-    "grid-rows-[60px_60px_60px_auto] lg:grid-cols-[1fr_1fr_1fr_2.5fr] lg:grid-rows-1",
-];
 
 export function UseCases() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -29,16 +22,13 @@ export function UseCases() {
         useCases,
     });
 
-    // Handle card click - start reverse typewriter then switch
-    const handleCardClick = useCallback(async (index: number) => {
-        if (index === activeIndex || isExiting) return;
-
-        await handleExit();
-        if (exitCancelledRef.current) return;
+    // Handle card click - immediately switch (no reverse typewriter)
+    const handleCardClick = useCallback((index: number) => {
+        if (index === activeIndex) return;
 
         setIsContentVisible(false);
         setPendingIndex(index);
-    }, [activeIndex, isExiting, handleExit, exitCancelledRef]);
+    }, [activeIndex]);
 
     // After content fades out, switch the active card
     const handleContentExitComplete = useCallback(() => {
@@ -64,9 +54,7 @@ export function UseCases() {
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl">
-                <div
-                    className={`grid w-full min-h-[500px] lg:h-[600px] gap-2 transition-all duration-500 ease-out ${gridConfig[activeIndex]}`}
-                >
+                <div className="flex flex-col lg:flex-row w-full min-h-[500px] lg:h-[600px] gap-2">
                     {useCases.map((item, index) => {
                         const isActive = activeIndex === index;
                         const showContent = isActive && isContentVisible;
@@ -74,7 +62,6 @@ export function UseCases() {
                         return (
                             <motion.div
                                 key={index}
-                                layout="position"
                                 role="button"
                                 tabIndex={0}
                                 aria-label={`View use case: ${item.shortTitle}`}
@@ -89,8 +76,16 @@ export function UseCases() {
                                     ? "border-2 border-ink-950"
                                     : "border border-ink-950/5"
                                     }`}
+                                style={{
+                                    flex: isActive ? 2.5 : 1,
+                                    willChange: 'flex',
+                                    transition: isActive
+                                        ? 'flex 500ms cubic-bezier(0.4, 0, 0.2, 1)'
+                                        : 'flex 300ms cubic-bezier(0.4, 0, 0.6, 1)'
+                                }}
                                 animate={{
                                     backgroundColor: isActive ? "#FFFFFF" : "#E5E5E5",
+                                    opacity: isActive ? 1 : 0.7,
                                 }}
                                 whileHover={{
                                     backgroundColor: isActive ? "#FFFFFF" : "#d4d4d4",

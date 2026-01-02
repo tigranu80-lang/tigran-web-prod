@@ -1,5 +1,5 @@
 import React, { useRef, useMemo } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { colors } from "@/src/config/theme";
 
@@ -137,15 +137,22 @@ export const Protocol: React.FC = () => {
         offset: ["start start", "end end"],
     });
 
+    // Smooth scroll progress with spring physics
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
     // Memoize steps array
     const steps = useMemo(() => STEPS, []);
 
-    // Progress line height (0% to 100%) - pure MotionValue, no re-render
-    const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+    // Progress line scale (0 to 1) - GPU-only, no layout recalc
+    const progressScale = useTransform(smoothProgress, [0, 1], [0, 1]);
 
     // CTA visibility - pure MotionValue
-    const ctaOpacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
-    const ctaY = useTransform(scrollYProgress, [0.7, 0.85], [20, 0]);
+    const ctaOpacity = useTransform(smoothProgress, [0.7, 0.85], [0, 1]);
+    const ctaY = useTransform(smoothProgress, [0.7, 0.85], [20, 0]);
 
     return (
         <section
@@ -201,7 +208,7 @@ export const Protocol: React.FC = () => {
                                     <p className="font-mono text-[10px] uppercase font-bold text-ink-400 tracking-widest mb-1">
                                         Risk Reversal
                                     </p>
-                                    <p className="text-sm text-ink-950 font-serif italic leading-relaxed">
+                                    <p className="text-sm text-ink-950 font-serif leading-relaxed">
                                         “If we don’t find ROI potential, we credit the audit toward Build.”
                                     </p>
                                 </div>
@@ -214,10 +221,10 @@ export const Protocol: React.FC = () => {
                         {/* Background Vertical Line (gray - thin) */}
                         <div className="absolute left-[12px] top-6 bottom-16 w-[1px] bg-ink-950/20 -translate-x-1/2"></div>
 
-                        {/* Progress Line (orange) - THICK (6px), no rounded corners */}
+                        {/* Progress Line (orange) - GPU-only scaleY transform */}
                         <motion.div
-                            style={{ height: progressHeight }}
-                            className="absolute left-[12px] top-6 w-[6px] bg-orange-600 origin-top z-[5] -translate-x-1/2"
+                            style={{ scaleY: progressScale, transformOrigin: 'top' }}
+                            className="absolute left-[9px] top-6 bottom-16 w-[6px] bg-orange-600 z-[5]"
                         />
 
                         <div className="flex flex-col gap-8 md:gap-16 pb-12">
@@ -226,7 +233,7 @@ export const Protocol: React.FC = () => {
                                     key={step.id}
                                     step={step}
                                     index={index}
-                                    sectionProgress={scrollYProgress}
+                                    sectionProgress={smoothProgress}
                                 />
                             ))}
 
