@@ -1,5 +1,5 @@
 import React, { useRef, useMemo } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { colors } from "@/src/config/theme";
 
@@ -49,7 +49,7 @@ const STEPS: Step[] = [
 const ProtocolStep = React.memo<{
     step: Step;
     index: number;
-    sectionProgress: ReturnType<typeof useTransform>;
+    sectionProgress: MotionValue<number>;
 }>(({ step, index, sectionProgress }) => {
     // Calculate this step's active range (each step = 25% of section)
     const stepStart = index / STEPS.length;

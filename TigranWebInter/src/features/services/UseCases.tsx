@@ -5,10 +5,10 @@ import { useCases } from "./constants/useCasesData";
 import { useTypewriter } from "./hooks/useTypewriter";
 
 /** Spring transition config for consistent animations */
-const springTransition = { type: "spring", stiffness: 300, damping: 30 };
+const springTransition = { type: "spring" as const, stiffness: 300, damping: 30 };
 
 /** Content fade transition - spring for consistency */
-const contentTransition = { type: "spring", stiffness: 400, damping: 30, mass: 0.5 };
+const contentTransition = { type: "spring" as const, stiffness: 400, damping: 30, mass: 0.5 };
 
 
 export function UseCases() {
