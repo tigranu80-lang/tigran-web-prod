@@ -170,3 +170,88 @@ body {
     opacity: 0;
   }
 }
+
+/* Grid fade-in animation (performance optimized) */
+@keyframes grid-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.06;
+  }
+}
+
+.animate-grid-fade {
+  animation: grid-fade 2s ease-out forwards;
+}
+
+/* Ticker animation (CSS only - much more performant than JS) */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-wrapper {
+  will-change: transform;
+}
+
+.ticker-track {
+  animation: ticker-scroll 60s linear infinite;
+}
+
+/* ========================================
+   NEUBRUTALIST ANIMATION UTILITIES
+   Use these as alternatives to Framer Motion
+   for simple enter/hover animations
+   ======================================== */
+
+@layer utilities {
+  /* Brutal Hover Effect - hard shift with shadow */
+  .brutal-hover {
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .brutal-hover:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 4px 4px 0 0 var(--color-brand-text);
+  }
+
+  /* Fade In Animations */
+  .animate-fade-in {
+    animation: fadeInSimple 0.5s ease-out forwards;
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUpSimple 0.5s ease-out forwards;
+  }
+
+  .animate-fade-in-delayed {
+    animation: fadeInSimple 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInSimple {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUpSimple {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

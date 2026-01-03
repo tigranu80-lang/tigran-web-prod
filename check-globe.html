@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Globe Test</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #F5F5F0; }
+        canvas { border: 1px solid #000; }
+    </style>
+</head>
+<body>
+    <h1>Testing Cobe Globe</h1>
+    <canvas id="globe" width="600" height="600"></canvas>
+    <script type="module">
+        import createGlobe from 'http://localhost:3000/node_modules/cobe/dist/index.esm.js';
+        const canvas = document.getElementById('globe');
+        createGlobe(canvas, {
+            devicePixelRatio: 2,
+            width: 600,
+            height: 600,
+            phi: 0,
+            theta: 0,
+            dark: 0,
+            diffuse: 1.2,
+            mapSamples: 8000,
+            mapBrightness: 6,
+            baseColor: [0.96, 0.96, 0.94],
+            markerColor: [234 / 255, 88 / 255, 12 / 255],
+            glowColor: [0.96, 0.96, 0.94],
+            markers: [
+                { location: [37.7595, -122.4367], size: 0.03 }
+            ]
+        });
+    </script>
+</body>
+</html>

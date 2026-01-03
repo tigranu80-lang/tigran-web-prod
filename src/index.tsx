@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { App } from './App'
+import { initPerformanceMonitoring } from './utils/performance'
 import './index.css'
+
+// Initialize performance monitoring
+initPerformanceMonitoring();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

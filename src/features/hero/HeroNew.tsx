@@ -1,17 +1,25 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useSpring, useInView, useMotionValue } from 'framer-motion';
+import { useRef, useEffect, useCallback } from 'react';
+import { useSpring, useMotionValue } from 'framer-motion';
+import { useInView } from '../../hooks/useInView';
 import { Zap, ArrowRight, TrendingUp, User, Bell, Plus, Crosshair } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
 
 function CountUp({ to, prefix = '', suffix = '' }: { to: number; prefix?: string; suffix?: string }) {
-    const ref = useRef<HTMLSpanElement>(null);
+    const spanRef = useRef<HTMLSpanElement | null>(null);
+    const { ref: inViewRef, inView: isInView } = useInView<HTMLSpanElement>({ once: true, margin: "-20px" });
+
     const motionValue = useMotionValue(0);
     const springValue = useSpring(motionValue, {
         damping: 30,
         stiffness: 100,
-        duration: 2 // Slower, more deliberate counting
+        duration: 2
     });
-    const isInView = useInView(ref, { once: true, margin: "-20px" });
+
+    // Combine refs: inViewRef for intersection, spanRef for textContent
+    const setRefs = useCallback((node: HTMLSpanElement | null) => {
+        spanRef.current = node;
+        (inViewRef as React.MutableRefObject<HTMLSpanElement | null>).current = node;
+    }, [inViewRef]);
 
     useEffect(() => {
         if (isInView) {
@@ -21,21 +29,17 @@ function CountUp({ to, prefix = '', suffix = '' }: { to: number; prefix?: string
 
     useEffect(() => {
         return springValue.on("change", (latest) => {
-            if (ref.current) {
-                // Determine formatting based on the target value 'to'
+            if (spanRef.current) {
                 let formatted = latest.toFixed(0);
-
-                // For thousands (e.g., 2400), format with comma -> "2,400"
                 if (to >= 1000) {
                     formatted = Math.round(latest).toLocaleString('en-US');
                 }
-
-                ref.current.textContent = `${prefix}${formatted}${suffix}`;
+                spanRef.current.textContent = `${prefix}${formatted}${suffix}`;
             }
         });
     }, [springValue, to, prefix, suffix]);
 
-    return <span ref={ref} />;
+    return <span ref={setRefs} />;
 }
 
 export function HeroNew() {
