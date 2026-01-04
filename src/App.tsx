@@ -24,7 +24,7 @@ export function App() {
   return (
     <>
       <Helmet>
-        <title>AutoMate | Agency Automation Infrastructure</title>
+        <title>EsperaStudio | Agency Automation Infrastructure</title>
         <meta name="description" content="Stop trading time for money. We build autonomous digital infrastructure that handles outreach, onboarding, and fulfillment." />
       </Helmet>
 

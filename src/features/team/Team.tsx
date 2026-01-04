@@ -39,7 +39,7 @@ export function About() {
                 </h2>
 
                 <p className="mt-12 text-ink-600 text-lg leading-relaxed font-sans font-light max-w-md">
-                  We are a two-person unit obsessed with efficiency. Founded in 2025, AutoMate was built on a simple premise: human potential is wasted on repetitive tasks.
+                  We are a two-person unit obsessed with efficiency. Founded in 2025, EsperaStudio was built on a simple premise: human potential is wasted on repetitive tasks.
                 </p>
               </div>
             </FadeIn>
@@ -91,7 +91,7 @@ export function About() {
           </FadeIn>
 
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

@@ -9,7 +9,7 @@ test.describe('Home Page', () => {
 
   test('should load home page successfully', async ({ page }) => {
     // Wait for the page to load
-    await expect(page).toHaveTitle(/AutoMate/);
+    await expect(page).toHaveTitle(/EsperaStudio/);
   });
 
   test('should display header navigation', async ({ page }) => {

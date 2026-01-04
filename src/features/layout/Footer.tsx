@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex gap-8">
           <a href="#" className="hover:text-ink-950 transition-colors">X / Twitter</a>
           <span className="text-xl font-bold tracking-tighter">EsperaStudio</span>
-          <a href="mailto:hello@automate.agency" className="hover:text-ink-950 transition-colors">Email</a>
+          <a href="mailto:hello@esperastudio.agency" className="hover:text-ink-950 transition-colors">Email</a>
         </div>
       </div>
     </footer>
