@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'AutoMate Contact <onboarding@resend.dev>',
+      from: 'EsperaStudio Contact <onboarding@resend.dev>',
       to: [TO_EMAIL],
       subject: `New Contact Form: ${name}`,
       html: `
@@ -55,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           
           <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 30px 0;" />
           <p style="color: #a3a3a3; font-size: 11px;">
-            Sent from AutoMate website contact form
+            Sent from EsperaStudio website contact form
           </p>
         </div>
       `,
