@@ -16,7 +16,7 @@ class MockIntersectionObserver {
 describe('FadeIn', () => {
   beforeEach(() => {
     // Setup IntersectionObserver mock
-    global.IntersectionObserver = MockIntersectionObserver as any;
+    global.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
   });
 
   it('renders children correctly', () => {

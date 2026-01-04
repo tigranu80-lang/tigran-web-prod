@@ -1,7 +1,5 @@
-import React from 'react';
-import { Check, Plus, ArrowRight } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
-import { FadeIn } from '../ui/FadeIn';
 
 const services = [
   {

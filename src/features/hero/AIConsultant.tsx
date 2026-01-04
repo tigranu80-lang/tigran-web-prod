@@ -51,7 +51,7 @@ export function AIConsultant() {
       };
       setMessages(prev => [...prev, botMsg]);
       setStatus(BotStatus.IDLE);
-    } catch (error) {
+    } catch {
       const errorMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'model',

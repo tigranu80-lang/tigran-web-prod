@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface DecryptedTextProps {
   text: string;
@@ -17,7 +17,12 @@ const shuffle = (array: number[]): number[] => {
     const randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
-    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+    const tmp1 = arr[currentIndex];
+    const tmp2 = arr[randomIndex];
+    if (tmp1 !== undefined && tmp2 !== undefined) {
+      arr[currentIndex] = tmp2;
+      arr[randomIndex] = tmp1;
+    }
   }
 
   return arr;
@@ -35,15 +40,9 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
     };
   }, []);
 
-  const firstStages = useCallback((child: HTMLElement) => {
+  const thirdStages = useCallback((child: HTMLElement) => {
     if (child.classList.contains('state-2')) {
       child.classList.add('state-3');
-    } else if (child.classList.contains('state-1')) {
-      child.classList.add('state-2');
-    } else if (!child.classList.contains('state-1')) {
-      child.classList.add('state-1');
-      const timeout = setTimeout(() => secondStages(child), 100);
-      timeoutsRef.current.push(timeout);
     }
   }, []);
 
@@ -55,13 +54,19 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
     } else if (!child.classList.contains('state-1')) {
       child.classList.add('state-1');
     }
-  }, []);
+  }, [thirdStages]);
 
-  const thirdStages = useCallback((child: HTMLElement) => {
+  const firstStages = useCallback((child: HTMLElement) => {
     if (child.classList.contains('state-2')) {
       child.classList.add('state-3');
+    } else if (child.classList.contains('state-1')) {
+      child.classList.add('state-2');
+    } else if (!child.classList.contains('state-1')) {
+      child.classList.add('state-1');
+      const timeout = setTimeout(() => secondStages(child), 100);
+      timeoutsRef.current.push(timeout);
     }
-  }, []);
+  }, [secondStages]);
 
   const decodeText = useCallback(() => {
     if (!containerRef.current) return;
@@ -75,7 +80,10 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
     // Reset all states
     const state: number[] = [];
     for (let i = 0; i < children.length; i++) {
-      children[i].classList.remove('state-1', 'state-2', 'state-3');
+      const child = children[i];
+      if (child) {
+        child.classList.remove('state-1', 'state-2', 'state-3');
+      }
       state[i] = i;
     }
 
@@ -84,9 +92,11 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
 
     // Animate each letter
     for (let i = 0; i < shuffled.length; i++) {
-      const child = children[shuffled[i]] as HTMLElement;
+      const index = shuffled[i];
+      if (index === undefined) continue;
+      const child = children[index] as HTMLElement | undefined;
 
-      if (child.classList.contains('text-animation')) {
+      if (child?.classList.contains('text-animation')) {
         // Random delay between 50ms and 2000ms
         const state1Time = Math.round(Math.random() * (2000 - 300)) + 50;
         const timeout = setTimeout(() => firstStages(child), state1Time);
@@ -98,7 +108,8 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !hasAnimatedRef.current) {
+        const firstEntry = entries[0];
+        if (firstEntry?.isIntersecting && !hasAnimatedRef.current) {
           decodeText();
           hasAnimatedRef.current = true;
         }

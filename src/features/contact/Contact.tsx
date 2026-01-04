@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { X, CheckCircle, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { X, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
 import { CustomSelect } from './CustomSelect';
 
@@ -30,8 +30,9 @@ export function Contact() {
       }
 
       navigate('/thank-you');
-    } catch (error) {
-      console.error('Contact form error:', error);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.error('Contact form error');
       setStatus('error');
       setErrorMessage('Failed to send message. Please try again.');
     }
@@ -44,16 +45,18 @@ export function Contact() {
 
   // Handle Escape key to close modal
   useEffect(() => {
+    if (status !== 'error') {
+      return;
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && status === 'error') {
+      if (e.key === 'Escape') {
         closeModal();
       }
     };
 
-    if (status === 'error') {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [status]);
 
   return (

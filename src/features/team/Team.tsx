@@ -1,15 +1,10 @@
-import { useState, useEffect } from 'react';
 import { FadeIn } from '../ui/FadeIn';
 
-export function About() {
-  const [names, setNames] = useState(['Tigran', 'Dima']);
+// Randomize once at module load to solve the "who goes first" dilemma
+const initialNames = Math.random() > 0.5 ? ['Dima', 'Tigran'] as const : ['Tigran', 'Dima'] as const;
 
-  useEffect(() => {
-    // Randomize names on mount to solve the "who goes first" dilemma
-    if (Math.random() > 0.5) {
-      setNames(['Dima', 'Tigran']);
-    }
-  }, []);
+export function About() {
+  const names = initialNames;
 
   return (
     <section id="about" className="relative border-t border-ink-950/10 bg-[#F5F5F0]/60 backdrop-blur-[2px]">

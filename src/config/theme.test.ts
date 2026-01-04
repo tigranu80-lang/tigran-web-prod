@@ -41,19 +41,20 @@ describe('Theme Configuration', () => {
   it('all color values are valid hex codes', () => {
     const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/;
 
-    const checkColors = (obj: any): boolean => {
+    const checkColors = (obj: Record<string, unknown>): boolean => {
       for (const key in obj) {
-        if (typeof obj[key] === 'string') {
-          if (obj[key].startsWith('#')) {
+        const value = obj[key];
+        if (typeof value === 'string') {
+          if (value.startsWith('#')) {
             // Extract just the hex part (before any alpha)
-            const hexPart = obj[key].split(/[^\dA-Fa-f#]/)[0];
-            if (!hexRegex.test(hexPart) && hexPart !== '#73737333') {
+            const hexPart = value.split(/[^\dA-Fa-f#]/)[0];
+            if (hexPart && !hexRegex.test(hexPart) && hexPart !== '#73737333') {
               // Allow the one color with alpha
               return false;
             }
           }
-        } else if (typeof obj[key] === 'object') {
-          if (!checkColors(obj[key])) {
+        } else if (typeof value === 'object' && value !== null) {
+          if (!checkColors(value as Record<string, unknown>)) {
             return false;
           }
         }

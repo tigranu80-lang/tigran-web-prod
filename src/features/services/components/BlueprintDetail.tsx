@@ -1,4 +1,4 @@
-import { ArrowLeft, X, Check, ArrowRight } from "lucide-react";
+import { ArrowLeft, Check, ArrowRight } from "lucide-react";
 import { Blueprint } from "../constants/blueprintsData";
 import { motion } from "framer-motion";
 

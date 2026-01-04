@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -15,7 +15,7 @@ interface ErrorBoundaryState {
  * Prevents entire app from crashing on component errors
  */
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-    state: ErrorBoundaryState = {
+    override state: ErrorBoundaryState = {
         hasError: false,
         error: null,
     };
@@ -24,11 +24,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return { hasError: true, error };
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+        // eslint-disable-next-line no-console
         console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
 
-    render(): ReactNode {
+    override render(): ReactNode {
         if (this.state.hasError) {
             // Fallback UI
             if (this.props.fallback) {

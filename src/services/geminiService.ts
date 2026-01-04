@@ -50,6 +50,7 @@ export const sendMessageToGemini = async (message: string): Promise<string> => {
 
     return "I processed your request but couldn't generate a text response.";
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Gemini API Error:", error);
     throw new Error("Failed to communicate with the AI core.");
   }

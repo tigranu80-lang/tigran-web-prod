@@ -21,6 +21,7 @@ type PerformanceMetric = {
 function sendToAnalytics(metric: PerformanceMetric) {
   // Log to console in development
   if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
     console.log('[Performance]', {
       metric: metric.name,
       value: `${metric.value.toFixed(2)}ms`,
@@ -31,8 +32,9 @@ function sendToAnalytics(metric: PerformanceMetric) {
   // In production, send to analytics service
   if (import.meta.env.PROD) {
     // Example: Send to Google Analytics
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', metric.name, {
+    const win = window as Window & { gtag?: (command: string, name: string, params: Record<string, unknown>) => void };
+    if (typeof window !== 'undefined' && win.gtag) {
+      win.gtag('event', metric.name, {
         event_category: 'Web Vitals',
         value: Math.round(metric.value),
         event_label: metric.id,
@@ -60,6 +62,7 @@ function sendToAnalytics(metric: PerformanceMetric) {
         method: 'POST',
         body,
         keepalive: true,
+        // eslint-disable-next-line no-console
       }).catch(console.error);
     }
   }
@@ -101,6 +104,7 @@ export function initPerformanceMonitoring() {
       const connectTime = perfData.responseEnd - perfData.requestStart;
       const renderTime = perfData.domComplete - perfData.domLoading;
 
+      // eslint-disable-next-line no-console
       console.log('[Performance] Page Metrics:', {
         'Page Load Time': `${pageLoadTime}ms`,
         'Connection Time': `${connectTime}ms`,
@@ -130,11 +134,13 @@ export function measurePerformance(name: string, startMark: string, endMark: str
       const measure = window.performance.getEntriesByName(name)[0];
 
       if (import.meta.env.DEV && measure) {
+        // eslint-disable-next-line no-console
         console.log(`[Performance] ${name}: ${measure.duration.toFixed(2)}ms`);
       }
 
       return measure;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Performance measurement failed:', error);
       return null;
     }

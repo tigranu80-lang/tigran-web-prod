@@ -78,8 +78,10 @@ export function useTypewriter({ activeIndex, isContentVisible, useCases }: UseTy
 
         let isCancelled = false;
         const target = useCases[activeIndex];
+        if (!target) return;
 
         // Reset state for new animation
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: needed for animation reset on index change
         setAnimState({
             title: target.shortTitle,
             problem: "",
