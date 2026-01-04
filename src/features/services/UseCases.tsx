@@ -16,7 +16,7 @@ export function UseCases() {
     const [pendingIndex, setPendingIndex] = useState<number | null>(null);
     const [isContentVisible, setIsContentVisible] = useState(true);
 
-    const { animState, isExiting, handleExit, exitCancelledRef } = useTypewriter({
+    const { animState } = useTypewriter({
         activeIndex,
         isContentVisible,
         useCases,
@@ -77,15 +77,15 @@ export function UseCases() {
                                     : "border border-ink-950/5"
                                     }`}
                                 style={{
-                                    flex: isActive ? 2.5 : 1,
+                                    // Mobile: Auto height (Accordion), Desktop: Flex transition
+                                    flex: window.matchMedia('(min-width: 1024px)').matches ? (isActive ? 2.5 : 1) : 'initial',
                                     willChange: 'flex',
-                                    transition: isActive
-                                        ? 'flex 500ms cubic-bezier(0.4, 0, 0.2, 1)'
-                                        : 'flex 300ms cubic-bezier(0.4, 0, 0.6, 1)'
+                                    transition: 'flex 500ms cubic-bezier(0.4, 0, 0.2, 1)'
                                 }}
                                 animate={{
                                     backgroundColor: isActive ? "#FFFFFF" : "#E5E5E5",
                                     opacity: isActive ? 1 : 0.7,
+                                    // Mobile specific height animation could go here if needed, but 'auto' via CSS is safer for layout
                                 }}
                                 whileHover={{
                                     backgroundColor: isActive ? "#FFFFFF" : "#d4d4d4",

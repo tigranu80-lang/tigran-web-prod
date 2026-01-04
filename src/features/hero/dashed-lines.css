@@ -1,0 +1,10 @@
+/* Technical Dashed Line Utilities */
+.dashed-line {
+    background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+    background-size: 8px 100%;
+}
+
+.dashed-vertical {
+    background-image: linear-gradient(to bottom, currentColor 50%, transparent 50%);
+    background-size: 100% 8px;
+}

@@ -145,12 +145,21 @@ export function GlobeSection() {
                 </div>
 
                 {/* Stats Cards - Matches Contact.tsx style EXACTLY */}
-                <div className="container mx-auto px-6 max-w-7xl relative z-30 -mt-20 md:-mt-32 pb-24">
-                    {/* Frame border + standard background + divide logic */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 bg-white/40 backdrop-blur-sm border border-ink-950/5 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 shadow-none rounded-none">
+                <div className="container mx-auto px-6 max-w-7xl relative z-30 -mt-20 md:-mt-32 pb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
 
                         {/* Card 1 */}
-                        <div className="group p-8 md:p-12 text-center md:text-left hover:bg-white/60 transition-colors">
+                        <div className="relative group p-8 md:p-12 text-center md:text-left bg-white/90 backdrop-blur-md hover:bg-white/95 transition-colors">
+                            {/* Tech Border - Top Left */}
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-ink-950"></div>
+                            <div className="absolute top-0 left-6 right-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute top-6 left-0 bottom-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
+                            {/* Tech Border - Bottom Right */}
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-ink-950"></div>
+                            <div className="absolute bottom-0 right-6 left-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute bottom-6 right-0 top-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
                             <Globe strokeWidth={1} size={32} className="mx-auto md:mx-0 text-orange-600 mb-4" />
                             <h3 className="text-xl font-serif font-medium text-ink-950 mb-2">Multi-Language Support</h3>
                             <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">
@@ -159,7 +168,17 @@ export function GlobeSection() {
                         </div>
 
                         {/* Card 2 */}
-                        <div className="group p-8 md:p-12 text-center md:text-left hover:bg-white/60 transition-colors">
+                        <div className="relative group p-8 md:p-12 text-center md:text-left bg-white/90 backdrop-blur-md hover:bg-white/95 transition-colors">
+                            {/* Tech Border - Top Left */}
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-ink-950"></div>
+                            <div className="absolute top-0 left-6 right-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute top-6 left-0 bottom-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
+                            {/* Tech Border - Bottom Right */}
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-ink-950"></div>
+                            <div className="absolute bottom-0 right-6 left-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute bottom-6 right-0 top-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
                             <Zap strokeWidth={1} size={32} className="mx-auto md:mx-0 text-orange-600 mb-4" />
                             <h3 className="text-xl font-serif font-medium text-ink-950 mb-2">24/7 Availability</h3>
                             <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">
@@ -168,7 +187,17 @@ export function GlobeSection() {
                         </div>
 
                         {/* Card 3 */}
-                        <div className="group p-8 md:p-12 text-center md:text-left hover:bg-white/60 transition-colors">
+                        <div className="relative group p-8 md:p-12 text-center md:text-left bg-white/90 backdrop-blur-md hover:bg-white/95 transition-colors">
+                            {/* Tech Border - Top Left */}
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-ink-950"></div>
+                            <div className="absolute top-0 left-6 right-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute top-6 left-0 bottom-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
+                            {/* Tech Border - Bottom Right */}
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-ink-950"></div>
+                            <div className="absolute bottom-0 right-6 left-0 h-[1px] bg-ink-950/20 dashed-line"></div>
+                            <div className="absolute bottom-6 right-0 top-0 w-[1px] bg-ink-950/20 dashed-vertical"></div>
+
                             <Shield strokeWidth={1} size={32} className="mx-auto md:mx-0 text-orange-600 mb-4" />
                             <h3 className="text-xl font-serif font-medium text-ink-950 mb-2">Global Compliance</h3>
                             <p className="text-sm text-ink-600 leading-relaxed font-sans font-light">

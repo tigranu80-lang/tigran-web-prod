@@ -1,13 +1,11 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSpring, useMotionValue } from 'framer-motion';
-import { useInView } from '../../hooks/useInView';
 import { Zap, ArrowRight, TrendingUp, User, Bell, Plus, Crosshair } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
 
-function CountUp({ to, prefix = '', suffix = '' }: { to: number; prefix?: string; suffix?: string }) {
+// Cinematic CountUp - Starts after Preloader
+function CountUp({ to, prefix = '', suffix = '', delay = 0 }: { to: number; prefix?: string; suffix?: string; delay?: number }) {
     const spanRef = useRef<HTMLSpanElement | null>(null);
-    const { ref: inViewRef, inView: isInView } = useInView<HTMLSpanElement>({ once: true, margin: "-20px" });
-
     const motionValue = useMotionValue(0);
     const springValue = useSpring(motionValue, {
         damping: 30,
@@ -15,17 +13,14 @@ function CountUp({ to, prefix = '', suffix = '' }: { to: number; prefix?: string
         duration: 2
     });
 
-    // Combine refs: inViewRef for intersection, spanRef for textContent
-    const setRefs = useCallback((node: HTMLSpanElement | null) => {
-        spanRef.current = node;
-        (inViewRef as React.MutableRefObject<HTMLSpanElement | null>).current = node;
-    }, [inViewRef]);
-
     useEffect(() => {
-        if (isInView) {
+        // Wait for Preloader (2.5s) + Exit Fade (0.3s)
+        const timer = setTimeout(() => {
             motionValue.set(to);
-        }
-    }, [isInView, to, motionValue]);
+        }, delay);
+
+        return () => clearTimeout(timer);
+    }, [to, delay, motionValue]);
 
     useEffect(() => {
         return springValue.on("change", (latest) => {
@@ -39,7 +34,7 @@ function CountUp({ to, prefix = '', suffix = '' }: { to: number; prefix?: string
         });
     }, [springValue, to, prefix, suffix]);
 
-    return <span ref={setRefs} />;
+    return <span ref={spanRef} className="tabular-nums">{prefix}0{suffix}</span>;
 }
 
 export function HeroNew() {
@@ -115,19 +110,19 @@ export function HeroNew() {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mb-4 md:mb-5">
                             <div>
                                 <span className="block font-mono text-3xl font-bold text-ink-950 mb-1">
-                                    <CountUp to={120} suffix="+" />
+                                    <CountUp to={120} suffix="+" delay={2600} />
                                 </span>
                                 <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-500">Systems Deployed</span>
                             </div>
                             <div>
                                 <span className="block font-mono text-3xl font-bold text-ink-950 mb-1">
-                                    <CountUp to={2400} suffix="+" />
+                                    <CountUp to={2400} suffix="+" delay={2700} />
                                 </span>
                                 <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-500">Hours Saved</span>
                             </div>
                             <div>
                                 <span className="block font-mono text-3xl font-bold text-ink-950 mb-1">
-                                    <CountUp to={14250} prefix="$" suffix="+" />
+                                    <CountUp to={14250} prefix="$" suffix="+" delay={2800} />
                                 </span>
                                 <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-500">Estimated Cost Saved</span>
                             </div>

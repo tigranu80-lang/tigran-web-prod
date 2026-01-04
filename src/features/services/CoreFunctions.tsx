@@ -171,16 +171,16 @@ export function CoreFunctions() {
                                         <h4 className="font-mono text-[10px] text-ink-950/40 uppercase tracking-[0.2em] mb-3">
                                             Capabilities
                                         </h4>
-                                        <ul className="space-y-2.5">
+                                        <ul className="grid grid-cols-2 gap-x-2 gap-y-2.5">
                                             {content.capabilities.map((capability, index) => (
                                                 <motion.li
                                                     key={index}
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: 0.1 + index * 0.08 }}
-                                                    className="flex items-start gap-2.5 text-ink-950 text-[13px]"
+                                                    className="flex items-start gap-2 text-ink-950 text-[12px] sm:text-[13px] leading-tight"
                                                 >
-                                                    <Check className="w-3.5 h-3.5 mt-0.5 text-neutral-400" />
+                                                    <Check className="w-3 h-3 mt-0.5 text-neutral-400 shrink-0" />
                                                     <span>{capability}</span>
                                                 </motion.li>
                                             ))}

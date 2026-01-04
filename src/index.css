@@ -176,6 +176,7 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 0.06;
   }
@@ -190,6 +191,7 @@ body {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -210,12 +212,13 @@ body {
    ======================================== */
 
 @layer utilities {
+
   /* Brutal Hover Effect - hard shift with shadow */
   .brutal-hover {
     transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .brutal-hover:hover {
     transform: translate(-4px, -4px);
     box-shadow: 4px 4px 0 0 var(--color-brand-text);
@@ -225,7 +228,7 @@ body {
   .animate-fade-in {
     animation: fadeInSimple 0.5s ease-out forwards;
   }
-  
+
   .animate-fade-in-up {
     animation: fadeInUpSimple 0.5s ease-out forwards;
   }
@@ -240,6 +243,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -250,8 +254,22 @@ body {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Technical Dashed Lines */
+.dashed-line {
+  background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+  background-size: 4px 1px;
+  /* Tighter dash */
+}
+
+.dashed-vertical {
+  background-image: linear-gradient(to bottom, currentColor 50%, transparent 50%);
+  background-size: 1px 4px;
+  /* Tighter dash */
 }
