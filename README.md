@@ -1,20 +1,67 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# EsperaStudio
 
-# Run and deploy your AI Studio app
+**Agency Automation Infrastructure Platform**
 
-This contains everything you need to run your app locally.
+A modern React + TypeScript single-page application featuring a Neubrutalist design aesthetic, interactive architecture diagrams, and AI-powered consultation via Google Gemini.
 
-View your app in AI Studio: https://ai.studio/apps/drive/14idvPV_9C-BuNgW0YfTIjosPAvddx7_A
+## Tech Stack
 
-## Run Locally
+- **Frontend:** React 19, TypeScript, Vite
+- **Styling:** Tailwind CSS (Neubrutalism aesthetic)
+- **Animation:** Framer Motion
+- **AI Integration:** Google Gemini 2.5 Flash
+- **Deployment:** Vercel
+- **Testing:** Vitest + Playwright
 
-**Prerequisites:**  Node.js
+## Quick Start
 
+```bash
+# Install dependencies
+npm install
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# Set environment variables
+cp .env.example .env.local
+# Add your GEMINI_API_KEY and RESEND_API_KEY
+
+# Run development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run unit tests |
+| `npm run test:e2e` | Run E2E tests |
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `RESEND_API_KEY` | Resend email API key |
+| `CONTACT_EMAIL` | Contact form recipient |
+
+## Project Structure
+
+```
+src/
+├── features/       # Feature-based modules
+│   ├── hero/       # Hero section + AI Consultant
+│   ├── services/   # Core Functions, Use Cases, Blueprints
+│   ├── pricing/    # Pricing section
+│   ├── contact/    # Contact form
+│   └── layout/     # Header, Footer, Background
+├── pages/          # Route pages
+├── components/     # Shared components
+└── utils/          # Utilities
+```
+
+## License
+
+Private — All rights reserved.
