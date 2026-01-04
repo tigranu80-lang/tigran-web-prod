@@ -1,5 +1,3 @@
-import React from "react";
-
 const technologies = [
     { name: "n8n", stroke: false },
     { name: "OpenAI", stroke: true },

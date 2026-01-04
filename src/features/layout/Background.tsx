@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function Background() {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
@@ -22,7 +20,7 @@ export function Background() {
       </div>
 
       {/* LAYER 2: Static CSS Grid (GPU-accelerated, no JS) */}
-      <div 
+      <div
         className="absolute inset-0 z-10 opacity-[0.06] animate-grid-fade"
         style={{
           backgroundImage: `

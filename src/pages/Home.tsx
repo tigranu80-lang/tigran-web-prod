@@ -1,4 +1,3 @@
-import React from 'react';
 import { Header } from '../features/layout/Header';
 import { Protocol } from '../features/services/Protocol';
 import { Services } from '../features/services/Services';

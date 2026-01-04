@@ -22,7 +22,6 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true,
-
     /* Strict Type-Checking Options */
     "strict": true,
     "noImplicitAny": true,
@@ -32,7 +31,6 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-
     /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -41,10 +39,21 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-
     /* Import Resolution */
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.config.ts",
+    "*.config.js",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "vitest.setup.ts"
+  ]
 }

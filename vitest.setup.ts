@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { expect, afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import * as matchers from '@testing-library/jest-dom/matchers';
@@ -11,5 +12,5 @@ afterEach(() => {
 });
 
 // Mock environment variables for tests
-process.env.API_KEY = 'test-api-key';
-process.env.GEMINI_API_KEY = 'test-gemini-key';
+process.env['API_KEY'] = 'test-api-key';
+process.env['GEMINI_API_KEY'] = 'test-gemini-key';
