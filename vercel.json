@@ -1,7 +1,7 @@
 {
   "headers": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "X-Frame-Options",
@@ -24,15 +24,6 @@
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://generativelanguage.googleapis.com https://va.vercel-scripts.com; frame-ancestors 'none';"
         }
       ]
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/api/:path*",
-      "dest": "/api/:path*"
     }
   ]
 }
