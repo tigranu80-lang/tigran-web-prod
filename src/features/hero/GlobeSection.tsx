@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import createGlobe from 'cobe';
-import { motion } from 'framer-motion';
-import { Globe, Zap, Server, Shield } from 'lucide-react';
-import { colors } from '@/config/theme';
+import { Globe, Zap, Shield } from 'lucide-react';
 
 export function GlobeSection() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -50,7 +48,7 @@ export function GlobeSection() {
                     { location: [-23.5505, -46.6333], size: 0.05 }, // São Paulo
                 ],
                 onRender: (state) => {
-                    state.phi = phi;
+                    state['phi'] = phi;
                     phi += 0.0005;
                 },
             });

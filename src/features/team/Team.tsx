@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FadeIn } from '../ui/FadeIn';
 
 export function About() {

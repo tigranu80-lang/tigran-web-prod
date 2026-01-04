@@ -120,3 +120,17 @@ dist
 
 # Amp MCP config (contains API tokens)
 .amp/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# Playwright
+playwright-report/
+test-results/
+
+# Vercel
+.vercel
+
+# IDE
+.idea/

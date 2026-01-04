@@ -2,8 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
 
 // Email is stored in Vercel Environment Variable - NOT in code
-const resend = new Resend(process.env.RESEND_API_KEY);
-const TO_EMAIL = process.env.CONTACT_EMAIL || '';
+const resend = new Resend(process.env['RESEND_API_KEY']);
+const TO_EMAIL = process.env['CONTACT_EMAIL'] || '';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow POST
@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Check if email is configured
-    if (!TO_EMAIL || !process.env.RESEND_API_KEY) {
+    if (!TO_EMAIL || !process.env['RESEND_API_KEY']) {
       console.error('Missing environment variables: CONTACT_EMAIL or RESEND_API_KEY');
       return res.status(500).json({ error: 'Server configuration error' });
     }
