@@ -20,7 +20,21 @@ function PageLoader() {
   );
 }
 
+import { Preloader } from './features/ui/Preloader';
+import { AnimatePresence } from 'framer-motion';
+
 export function App() {
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    // Artificial delay for the cinematic preloader
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -28,6 +42,7 @@ export function App() {
         <meta name="description" content="Stop trading time for money. We build autonomous digital infrastructure that handles outreach, onboarding, and fulfillment." />
       </Helmet>
 
+      {/* Main App loads in background */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -35,6 +50,11 @@ export function App() {
           <Route path="/thank-you" element={<ThankYou />} />
         </Routes>
       </Suspense>
+
+      {/* Cinematic Preloader Overlay */}
+      <AnimatePresence mode="wait">
+        {isLoading && <Preloader key="preloader" />}
+      </AnimatePresence>
 
       <Analytics />
     </>
