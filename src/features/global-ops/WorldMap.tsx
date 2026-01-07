@@ -35,64 +35,71 @@ export function WorldMap() {
     });
 
     return (
-        <div className="relative w-full h-full bg-transparent overflow-hidden select-none isolate">
+        <div className="relative w-full h-full bg-transparent select-none isolate">
 
-            {/* 1. Base Grid Layer - Lighter Stroke */}
-            <div className="absolute inset-0 z-0">
-                <svg className="w-full h-full opacity-10" preserveAspectRatio="none">
-                    <pattern id="grid-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" className="text-ink-400" strokeWidth="1" />
-                    </pattern>
-                    <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-                </svg>
-            </div>
-
-            {/* 2. Map Layer (SVG) */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center p-4 md:p-12">
-                <div className="relative w-full max-w-6xl aspect-[2/1]">
-
-                    <svg
-                        viewBox={WORLD_MAP_VIEWBOX}
-                        className="w-full h-full drop-shadow-[0_0_10px_rgba(0,0,0,0.05)]"
-                        style={{ filter: 'drop-shadow(0 0 2px rgba(234,88,12,0.05))' }}
-                    >
-                        <defs>
-                            {/* Dotted Pattern Definition - Maximum Visibility Fix */}
-                            <pattern id="dotPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
-                                <circle cx="4" cy="4" r="2" className="fill-ink-500" opacity="1" />
+            {/* CLIPPED LAYER: Grid, Map, Radar */}
+            <div className="absolute inset-0 overflow-hidden z-0">
+                {/* CLIPPED LAYER: Grid, Map, Radar */}
+                <div className="absolute inset-0 overflow-hidden">
+                    {/* 1. Base Grid Layer - Lighter Stroke */}
+                    <div className="absolute inset-0 z-0">
+                        <svg className="w-full h-full opacity-10" preserveAspectRatio="none">
+                            <pattern id="grid-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" className="text-ink-400" strokeWidth="1" />
                             </pattern>
-                        </defs>
+                            <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+                        </svg>
+                    </div>
 
-                        {/* World Map with Dotted Fill & Visible Outline */}
-                        <path
-                            d={WORLD_MAP_PATH_TECH}
-                            fill="url(#dotPattern)"
-                            className="stroke-ink-300"
-                            strokeWidth="0.5"
-                            strokeOpacity="0.6"
-                        />
+                    {/* 2. Map Layer (SVG) */}
+                    <div className="absolute inset-0 z-10 flex items-center justify-center p-4 md:p-12">
+                        <div className="relative w-full max-w-6xl aspect-[2/1]">
 
-                        {/* Interactive Nodes */}
-                        {SERVER_LOCATIONS.map((loc) => {
-                            const isRevealed = hoveredCity === loc.city || revealedCities.has(loc.city);
-                            return (
-                                <g key={loc.city}>
-                                    <circle
-                                        cx={loc.x}
-                                        cy={loc.y}
-                                        r={isRevealed ? 4 : 3}
-                                        className="fill-brand-accent transition-all duration-300"
-                                        opacity={isRevealed ? 1 : 0.6}
-                                    />
-                                </g>
-                            );
-                        })}
-                    </svg>
+                            <svg
+                                viewBox={WORLD_MAP_VIEWBOX}
+                                className="w-full h-full drop-shadow-[0_0_10px_rgba(0,0,0,0.05)]"
+                                style={{ filter: 'drop-shadow(0 0 2px rgba(234,88,12,0.05))' }}
+                            >
+                                <defs>
+                                    {/* Dotted Pattern Definition - Maximum Visibility Fix */}
+                                    <pattern id="dotPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                                        <circle cx="4" cy="4" r="2" className="fill-ink-500" opacity="1" />
+                                    </pattern>
+                                </defs>
 
-                    {/* 3. Sharp Radar Line (Interactive Scan) */}
-                    {isScanning && <div className="radar-line-sharp" />}
+                                {/* World Map with Dotted Fill & Visible Outline */}
+                                <path
+                                    d={WORLD_MAP_PATH_TECH}
+                                    fill="url(#dotPattern)"
+                                    className="stroke-ink-300"
+                                    strokeWidth="0.5"
+                                    strokeOpacity="0.6"
+                                />
 
+                                {/* Interactive Nodes */}
+                                {SERVER_LOCATIONS.map((loc) => {
+                                    const isRevealed = hoveredCity === loc.city || revealedCities.has(loc.city);
+                                    return (
+                                        <g key={loc.city}>
+                                            <circle
+                                                cx={loc.x}
+                                                cy={loc.y}
+                                                r={isRevealed ? 4 : 3}
+                                                className="fill-brand-accent transition-all duration-300"
+                                                opacity={isRevealed ? 1 : 0.6}
+                                            />
+                                        </g>
+                                    );
+                                })}
+                            </svg>
+
+                            {/* 3. Sharp Radar Line (Interactive Scan) */}
+                            {isScanning && <div className="radar-line-sharp" />}
+
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             {/* 4. HTML Overlay for Interactivity (Tooltips & Beacons with CSS Shadows) */}

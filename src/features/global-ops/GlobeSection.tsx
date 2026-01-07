@@ -44,7 +44,8 @@ export function GlobeSection() {
                     </div>
 
                     {/* 2. Map Screen Area - The 'Monitor' */}
-                    <div className="relative w-full h-[400px] md:h-[500px] bg-[#F5F5F0] overflow-hidden border-b-2 border-ink-950">
+                    {/* Removed overflow-hidden to allow tooltips to pop out */}
+                    <div className="relative w-full h-[400px] md:h-[500px] bg-[#F5F5F0] border-b-2 border-ink-950">
                         {/* Vignette Overlay for Screen Effect */}
                         <div className="absolute inset-0 pointer-events-none z-20 shadow-[inset_0_0_100px_rgba(0,0,0,0.05)]" />
 
