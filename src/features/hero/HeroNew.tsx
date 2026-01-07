@@ -140,8 +140,15 @@ export function HeroNew() {
                 {/* RIGHT COLUMN: Visuals / Card Cluster */}
                 <div className="relative z-10 h-auto lg:h-[600px] w-full flex items-center justify-center mt-8 lg:mt-0">
 
-                    {/* The Gradient Blob Anchor - Desktop only (lg+) */}
-                    <div className="hidden lg:block absolute inset-0 bg-gradient-to-tr from-gray-200 via-slate-200 to-stone-200 blur-[80px] opacity-80 rounded-full scale-75 animate-drift-slow"></div>
+                    {/* The Gradient Blob Anchor - Desktop only (lg+) - GPU accelerated */}
+                    <div
+                        className="hidden lg:block absolute inset-0 bg-gradient-to-tr from-gray-200 via-slate-200 to-stone-200 blur-[80px] opacity-80 rounded-full scale-75 animate-drift-slow"
+                        style={{
+                            transform: 'translateZ(0)',
+                            willChange: 'transform',
+                            backfaceVisibility: 'hidden'
+                        }}
+                    ></div>
 
                     {/* Floating Card Cluster Container */}
                     <div className="relative w-full h-full perspective-1000 lg:scale-100 origin-center">

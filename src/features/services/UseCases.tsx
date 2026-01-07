@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight, Zap } from "lucide-react";
 import { useCases } from "./constants/useCasesData";
@@ -15,6 +15,12 @@ export function UseCases() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [pendingIndex, setPendingIndex] = useState<number | null>(null);
     const [isContentVisible, setIsContentVisible] = useState(true);
+
+    // Memoize media query check to avoid re-evaluation on every render
+    const isDesktop = useMemo(() => {
+        if (typeof window === 'undefined') return true;
+        return window.matchMedia('(min-width: 1024px)').matches;
+    }, []);
 
     const { animState } = useTypewriter({
         activeIndex,
@@ -72,15 +78,15 @@ export function UseCases() {
                                         handleCardClick(index);
                                     }
                                 }}
-                                className={`relative cursor-pointer group overflow-hidden ${isActive
+                                className={`relative cursor-pointer group overflow-hidden contain-layout ${isActive
                                     ? "border-2 border-ink-950"
                                     : "border border-ink-950/5"
                                     }`}
                                 style={{
                                     // Mobile: Auto height (Accordion), Desktop: Flex transition
-                                    flex: window.matchMedia('(min-width: 1024px)').matches ? (isActive ? 2.5 : 1) : 'initial',
-                                    willChange: 'flex',
-                                    transition: 'flex 500ms cubic-bezier(0.4, 0, 0.2, 1)'
+                                    flex: isDesktop ? (isActive ? 2.5 : 1) : 'initial',
+                                    transition: 'flex 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                    willChange: 'auto'
                                 }}
                                 animate={{
                                     backgroundColor: isActive ? "#FFFFFF" : "#E5E5E5",
@@ -122,8 +128,9 @@ export function UseCases() {
                                             {isActive ? animState.title : item.shortTitle}
                                             {showContent && (
                                                 <span
-                                                    className="ml-1 inline-block w-2 h-[1em] bg-orange-600 align-middle"
-                                                    style={{ animation: 'blink 530ms steps(1) infinite' }}
+                                                    className="ml-1 inline-block w-2 h-[1em] bg-orange-600 align-middle flex-shrink-0"
+                                                    style={{ animation: 'blink 530ms steps(1) infinite', minWidth: '0.5rem' }}
+                                                    aria-hidden="true"
                                                 ></span>
                                             )}
                                         </h3>

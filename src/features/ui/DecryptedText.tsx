@@ -40,34 +40,6 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
     };
   }, []);
 
-  const thirdStages = useCallback((child: HTMLElement) => {
-    if (child.classList.contains('state-2')) {
-      child.classList.add('state-3');
-    }
-  }, []);
-
-  const secondStages = useCallback((child: HTMLElement) => {
-    if (child.classList.contains('state-1')) {
-      child.classList.add('state-2');
-      const timeout = setTimeout(() => thirdStages(child), 100);
-      timeoutsRef.current.push(timeout);
-    } else if (!child.classList.contains('state-1')) {
-      child.classList.add('state-1');
-    }
-  }, [thirdStages]);
-
-  const firstStages = useCallback((child: HTMLElement) => {
-    if (child.classList.contains('state-2')) {
-      child.classList.add('state-3');
-    } else if (child.classList.contains('state-1')) {
-      child.classList.add('state-2');
-    } else if (!child.classList.contains('state-1')) {
-      child.classList.add('state-1');
-      const timeout = setTimeout(() => secondStages(child), 100);
-      timeoutsRef.current.push(timeout);
-    }
-  }, [secondStages]);
-
   const decodeText = useCallback(() => {
     if (!containerRef.current) return;
 
@@ -90,7 +62,28 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
     // Shuffle for random order
     const shuffled = shuffle(state);
 
-    // Animate each letter
+    // Batch animations using requestAnimationFrame for better Chrome performance
+    const animateChar = (child: HTMLElement, delay: number) => {
+      const timeout = setTimeout(() => {
+        // Use requestAnimationFrame to batch DOM updates
+        requestAnimationFrame(() => {
+          child.classList.add('state-1');
+
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              child.classList.add('state-2');
+
+              setTimeout(() => {
+                child.classList.add('state-3');
+              }, 100);
+            }, 100);
+          });
+        });
+      }, delay);
+      timeoutsRef.current.push(timeout);
+    };
+
+    // Animate each letter with staggered timing
     for (let i = 0; i < shuffled.length; i++) {
       const index = shuffled[i];
       if (index === undefined) continue;
@@ -98,12 +91,11 @@ export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
 
       if (child?.classList.contains('text-animation')) {
         // Random delay between 50ms and 2000ms
-        const state1Time = Math.round(Math.random() * (2000 - 300)) + 50;
-        const timeout = setTimeout(() => firstStages(child), state1Time);
-        timeoutsRef.current.push(timeout);
+        const delay = Math.round(Math.random() * (2000 - 300)) + 50;
+        animateChar(child, delay);
       }
     }
-  }, [firstStages]);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

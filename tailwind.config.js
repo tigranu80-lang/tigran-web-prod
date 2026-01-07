@@ -40,26 +40,29 @@ export default {
         'blob': 'blob 7s infinite',
       },
       keyframes: {
+        // GPU-accelerated float - translateZ(0) forces compositor layer
         float: {
-          "0%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-20px)" },
-          "100%": { transform: "translateY(0px)" }
+          "0%": { transform: "translateY(0px) translateZ(0)" },
+          "50%": { transform: "translateY(-20px) translateZ(0)" },
+          "100%": { transform: "translateY(0px) translateZ(0)" }
         },
+        // GPU-accelerated drift
         drift: {
-          "0%": { transform: "translate(0, 0)" },
-          "100%": { transform: "translate(30px, 40px)" }
+          "0%": { transform: "translate(0, 0) translateZ(0)" },
+          "100%": { transform: "translate(30px, 40px) translateZ(0)" }
         },
+        // GPU-accelerated blob
         blob: {
-          "0%": { transform: "translate(0px, 0px) scale(1)" },
-          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
-          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
-          "100%": { transform: "translate(0px, 0px) scale(1)" }
+          "0%": { transform: "translate(0px, 0px) scale(1) translateZ(0)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1) translateZ(0)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9) translateZ(0)" },
+          "100%": { transform: "translate(0px, 0px) scale(1) translateZ(0)" }
         },
         converge: {
-          "0%": { opacity: "0", transform: "translate(0, 0)" },
+          "0%": { opacity: "0", transform: "translate(0, 0) translateZ(0)" },
           "10%": { opacity: "1" },
           "90%": { opacity: "1" },
-          "100%": { opacity: "0", transform: "translate(var(--tx), var(--ty))" }
+          "100%": { opacity: "0", transform: "translate(var(--tx), var(--ty)) translateZ(0)" }
         }
       }
     }

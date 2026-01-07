@@ -96,6 +96,44 @@ export function initPerformanceMonitoring() {
   onLCP(reportWebVitals);  // Largest Contentful Paint
   onTTFB(reportWebVitals); // Time to First Byte
 
+  // Long Tasks Observer - detect tasks blocking main thread > 50ms
+  if (import.meta.env.DEV && typeof PerformanceObserver !== 'undefined') {
+    try {
+      const longTaskObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.duration > 50) {
+            // eslint-disable-next-line no-console
+            console.warn(`[LongTask] ${entry.name}: ${entry.duration.toFixed(2)}ms`, {
+              startTime: entry.startTime.toFixed(2),
+              duration: entry.duration.toFixed(2),
+            });
+          }
+        }
+      });
+      longTaskObserver.observe({ type: 'longtask', buffered: true });
+    } catch {
+      // PerformanceObserver for longtask not supported
+    }
+
+    // Layout Shift Observer - detect unexpected layout shifts
+    try {
+      const layoutShiftObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const layoutShift = entry as PerformanceEntry & { value: number; hadRecentInput: boolean };
+          if (!layoutShift.hadRecentInput && layoutShift.value > 0.01) {
+            // eslint-disable-next-line no-console
+            console.warn(`[LayoutShift] Score: ${layoutShift.value.toFixed(4)}`, {
+              startTime: entry.startTime.toFixed(2),
+            });
+          }
+        }
+      });
+      layoutShiftObserver.observe({ type: 'layout-shift', buffered: true });
+    } catch {
+      // PerformanceObserver for layout-shift not supported
+    }
+  }
+
   // Log performance timing information in development
   if (import.meta.env.DEV) {
     window.addEventListener('load', () => {

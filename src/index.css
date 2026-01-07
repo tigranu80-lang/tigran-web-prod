@@ -186,19 +186,20 @@ body {
   animation: grid-fade 2s ease-out forwards;
 }
 
-/* Ticker animation (CSS only - much more performant than JS) */
+/* Ticker animation (GPU optimized) */
 @keyframes ticker-scroll {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 .ticker-wrapper {
   will-change: transform;
+  transform: translateZ(0);
 }
 
 .ticker-track {
@@ -272,4 +273,137 @@ body {
   background-image: linear-gradient(to bottom, currentColor 50%, transparent 50%);
   background-size: 1px 4px;
   /* Tighter dash */
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATION UTILITIES
+   CSS Containment & Layout Stability
+   ======================================== */
+
+/* CSS Containment - isolates layout/paint recalculations */
+.contain-layout {
+  contain: layout style;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+/* Content-visibility for off-screen optimization */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Will-change utilities - use sparingly */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Layout stability for dynamic content */
+.min-h-typewriter {
+  min-height: 1.5em;
+}
+
+/* Prevent typewriter cursor layout shifts */
+.typewriter-cursor {
+  flex-shrink: 0;
+  width: 0.5rem;
+  min-width: 0.5rem;
+}
+
+/* Stable container for animated cards */
+.stable-card-container {
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* ============================================
+   GLOBE RADAR SWEEP ANIMATION
+   Pure CSS - no Framer Motion for performance
+   ============================================ */
+
+
+/* ============================================
+   NEW MAP ANIMATIONS (Optimized)
+   ============================================ */
+
+/* 1. Radar Sweep - Sharp Linear Scan */
+@keyframes radar-scan {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.radar-line-sharp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: #ea580c;
+  /* brand-accent */
+  box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
+  animation: radar-scan 10s linear infinite;
+  will-change: left;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* 2. Pulse Ring - Box Shadow Expansion */
+@keyframes pulse-ring-optimized {
+  0% {
+    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(234, 88, 12, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
+  }
+}
+
+.pulse-beacon {
+  animation: pulse-ring-optimized 2.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  will-change: box-shadow;
 }

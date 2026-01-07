@@ -6,9 +6,9 @@ import { Pricing } from '../features/pricing/Pricing';
 import { Footer } from '../features/layout/Footer';
 import { AIConsultant } from '../features/hero/AIConsultant';
 import { HeroNew } from '../features/hero/HeroNew';
-import { TechTicker } from '../features/hero/TechTicker';
+import { TechTicker } from '../features/ui/TechTicker';
 import { Contact } from '../features/contact/Contact';
-import { GlobeSection } from '../features/hero/GlobeSection';
+import { GlobeSection } from '../features/global-ops/GlobeSection';
 import { Background } from '../features/layout/Background';
 
 export function Home() {

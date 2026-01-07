@@ -1,22 +1,35 @@
 export function Background() {
+  // Check for reduced motion preference
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
 
-      {/* LAYER 1: Parallax Color Blobs (Bottom) */}
+      {/* LAYER 1: Parallax Color Blobs (Bottom) - GPU accelerated */}
 
       {/* Gradient Blob 1: Stone/Warm Grey (Top Left) */}
-      <div className="absolute top-[-10%] left-[-5%] w-[60vw] h-[60vw] z-0">
-        <div className="w-full h-full bg-stone-200/60 blur-[120px] rounded-full animate-drift-slow mix-blend-multiply"></div>
+      <div
+        className="absolute top-[-10%] left-[-5%] w-[60vw] h-[60vw] z-0"
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+      >
+        <div className={`w-full h-full bg-stone-200/60 blur-[100px] rounded-full mix-blend-multiply ${prefersReducedMotion ? '' : 'animate-drift-slow'}`}></div>
       </div>
 
       {/* Gradient Blob 2: Slate/Cool Grey (Bottom Right) */}
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] z-0">
-        <div className="w-full h-full bg-slate-200/60 blur-[120px] rounded-full animate-drift-medium mix-blend-multiply"></div>
+      <div
+        className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] z-0"
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+      >
+        <div className={`w-full h-full bg-slate-200/60 blur-[100px] rounded-full mix-blend-multiply ${prefersReducedMotion ? '' : 'animate-drift-medium'}`}></div>
       </div>
 
       {/* Gradient Blob 3: Very Faint Grey (Middle Accent) */}
-      <div className="absolute top-[40%] right-[20%] w-[40vw] h-[40vw] z-0">
-        <div className="w-full h-full bg-gray-100/60 blur-[100px] rounded-full animate-pulse mix-blend-multiply"></div>
+      <div
+        className="absolute top-[40%] right-[20%] w-[40vw] h-[40vw] z-0"
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+      >
+        <div className={`w-full h-full bg-gray-100/60 blur-[80px] rounded-full mix-blend-multiply ${prefersReducedMotion ? '' : 'animate-pulse'}`}></div>
       </div>
 
       {/* LAYER 2: Static CSS Grid (GPU-accelerated, no JS) */}
