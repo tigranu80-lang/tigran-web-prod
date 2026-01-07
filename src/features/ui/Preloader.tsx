@@ -24,7 +24,7 @@ export function Preloader() {
         >
             <div className="w-full max-w-md px-6">
                 {/* Cinematic Logo Sequence */}
-                <div className="flex flex-col items-center justify-center mb-12">
+                <div className="relative flex flex-col items-center justify-center mb-12">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}

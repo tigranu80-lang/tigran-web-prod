@@ -140,24 +140,25 @@ export function WorldMap() {
                                         ${isVisible ? 'pulse-beacon scale-110 shadow-[0_0_10px_rgba(234,88,12,0.6)]' : 'opacity-60 scale-100'}`}
                                     />
 
-                                    {/* Tooltip */}
-                                    <div className={`absolute left-full top-1/2 -translate-y-1/2 ml-4 bg-white/95 backdrop-blur-md border border-ink-200 text-ink-950 p-3 min-w-[140px] pointer-events-none transition-all duration-300 origin-left shadow-xl
-                                        ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 pointer-events-none'}`}>
+                                    {/* Tooltip - Only render when visible for performance */}
+                                    {isVisible && (
+                                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 bg-white/95 backdrop-blur-md border border-ink-200 text-ink-950 p-3 min-w-[140px] pointer-events-none transition-all duration-300 origin-left shadow-xl opacity-100 translate-x-0">
 
-                                        <div className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2 w-4 h-[1px] bg-brand-accent" />
+                                            <div className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2 w-4 h-[1px] bg-brand-accent" />
 
-                                        <div className="text-[10px] uppercase tracking-widest text-brand-accent font-mono mb-1">
-                                            /// SERVER_NODE
+                                            <div className="text-[10px] uppercase tracking-widest text-brand-accent font-mono mb-1">
+                                                /// SERVER_NODE
+                                            </div>
+                                            <div className="font-serif text-lg leading-none mb-2 font-medium">{loc.city}</div>
+
+                                            <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-ink-500">
+                                                <div>LATENCY</div>
+                                                <div className="text-right text-ink-950 font-bold">{loc.latency}</div>
+                                                <div>AGENTS</div>
+                                                <div className="text-right text-ink-950 font-bold">{loc.agents}</div>
+                                            </div>
                                         </div>
-                                        <div className="font-serif text-lg leading-none mb-2 font-medium">{loc.city}</div>
-
-                                        <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-ink-500">
-                                            <div>LATENCY</div>
-                                            <div className="text-right text-ink-950 font-bold">{loc.latency}</div>
-                                            <div>AGENTS</div>
-                                            <div className="text-right text-ink-950 font-bold">{loc.agents}</div>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             );
                         })}

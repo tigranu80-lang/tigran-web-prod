@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface UseRadarScanProps {
     locations: Array<{ city: string; x: number }>;
@@ -26,12 +26,18 @@ export function useRadarScan({
     // Refs for mutable state in the RAF loop
     const startTimeRef = useRef<number | null>(null);
     const requestRef = useRef<number>(0);
+    // Ref to hold the animate function — avoids TDZ and stale closure issues
+    const animateFnRef = useRef<(timestamp: number) => void>(() => { });
+    // Throttle: only check collisions every 100ms (10x per second instead of 60x)
+    const lastCollisionCheckRef = useRef<number>(0);
+    const COLLISION_CHECK_INTERVAL = 100; // ms
 
     const prefersReducedMotion = typeof window !== 'undefined'
         ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
         : false;
 
-    const animate = useCallback((timestamp: number) => {
+    // Define animation function (updated on every render)
+    const animate = (timestamp: number) => {
         if (!startTimeRef.current) startTimeRef.current = timestamp;
 
         const elapsed = timestamp - startTimeRef.current;
@@ -39,7 +45,16 @@ export function useRadarScan({
 
         setScanProgress(progress);
 
-        // 1. Identify active collisions in this frame
+        // THROTTLE: Only check collisions every 100ms (10x/sec instead of 60x/sec)
+        const now = Date.now();
+        if (now - lastCollisionCheckRef.current < COLLISION_CHECK_INTERVAL) {
+            // Skip collision detection this frame, just continue animation
+            requestRef.current = requestAnimationFrame(animateFnRef.current);
+            return;
+        }
+        lastCollisionCheckRef.current = now;
+
+        // 1. Identify active collisions (only runs 10x per second now)
         const activeHits = new Set<string>();
         locations.forEach(loc => {
             const locPercent = (loc.x / 2000) * 100;
@@ -52,17 +67,10 @@ export function useRadarScan({
         // 2. Update the Revealed Map state
         setRevealedMap(prevMap => {
             const nextMap = new Map(prevMap);
-            const now = Date.now();
             let hasChanges = false;
 
             // A. Register NEW hits
             activeHits.forEach(city => {
-                // Only register if not currently tracked (or if we want to refresh? Let's refresh on re-hit)
-                // Actually, to prevent flickering, if it's already "hot", we typically keep the ORIGINAL reveal time 
-                // OR we update it to keep it open longer?
-                // UX decision: "Hold for 2.5s AFTER the scan passes"? Or "2.5s from first contact"?
-                // Let's do "2.5s from first contact" to keep the rhythm steady.
-
                 if (!nextMap.has(city)) {
                     nextMap.set(city, now);
                     hasChanges = true;
@@ -70,8 +78,6 @@ export function useRadarScan({
             });
 
             // B. Prune EXPIRED hits
-            // Logic: If (now - revealTime > holdDuration) AND (radar is NOT currently hitting it), remove it.
-            // If radar IS hitting it, keep it (effectively holding it open while scanning).
             for (const [city, revealTime] of nextMap.entries()) {
                 const isOverHoldTime = (now - revealTime) > holdDuration;
                 const isCurrentlyHit = activeHits.has(city);
@@ -85,18 +91,24 @@ export function useRadarScan({
             return hasChanges ? nextMap : prevMap;
         });
 
-        requestRef.current = requestAnimationFrame(animate);
-    }, [cycleDuration, holdDuration, locations, tolerance]);
+        // Call RAF through ref to always use latest function
+        requestRef.current = requestAnimationFrame(animateFnRef.current);
+    };
+
+    // Keep ref updated with latest animate function (inside effect to avoid render-time update)
+    useEffect(() => {
+        animateFnRef.current = animate;
+    });
 
     useEffect(() => {
         if (prefersReducedMotion) return;
 
-        requestRef.current = requestAnimationFrame(animate);
+        requestRef.current = requestAnimationFrame(animateFnRef.current);
 
         return () => {
             cancelAnimationFrame(requestRef.current);
         };
-    }, [animate, prefersReducedMotion]);
+    }, [prefersReducedMotion]); // Minimal dependencies — ref always has latest function
 
     // Convert Map keys to Set for consumption
     const revealedCities = new Set(revealedMap.keys());
