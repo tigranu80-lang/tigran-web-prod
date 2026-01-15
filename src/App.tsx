@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const BlueprintsArchive = lazy(() => import('./pages/BlueprintsArchive').then(m => ({ default: m.BlueprintsArchive })));
 const ThankYou = lazy(() => import('./pages/ThankYou').then(m => ({ default: m.ThankYou })));
+const Test = lazy(() => import('./pages/Test').then(m => ({ default: m.Test })));
 
 // Loading fallback component
 function PageLoader() {
@@ -48,6 +49,7 @@ export function App() {
           <Route path="/" element={<Home />} />
           <Route path="/blueprints" element={<BlueprintsArchive />} />
           <Route path="/thank-you" element={<ThankYou />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </Suspense>
 
