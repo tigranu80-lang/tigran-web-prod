@@ -23,9 +23,7 @@ import {
     MessageSquare, Bot, Users,
     Layers,
     CheckCircle2, ArrowRight,
-    LayoutTemplate,
-    RefreshCw,
-    Sparkles
+    LayoutTemplate
 } from "lucide-react";
 
 // --- Types & Data ---
@@ -396,11 +394,11 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                     <path d={`M ${centerX - 120} ${yFeatures + 24} L ${centerX - 120} ${yFeatures + 30} L ${centerX - 126} ${yFeatures + 30}`} stroke="#ea580c" strokeWidth="2" fill="none" />
                     <foreignObject x={centerX - 272} y={yFeatures - 7} width="14" height="14">
                         <div className="flex items-center justify-center text-ink-950">
-                            {content.features[0].icon}
+                            {content.features?.[0]?.icon}
                         </div>
                     </foreignObject>
                     <text x={centerX - 200} y={yFeatures + 5} textAnchor="middle" className="text-[10px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
-                        {content.features[0].label}
+                        {content.features?.[0]?.label}
                     </text>
                 </motion.g>
 
@@ -419,11 +417,11 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                     <path d={`M ${centerX + 80} ${yFeatures + 24} L ${centerX + 80} ${yFeatures + 30} L ${centerX + 74} ${yFeatures + 30}`} stroke="#ea580c" strokeWidth="2" fill="none" />
                     <foreignObject x={centerX - 72} y={yFeatures - 7} width="14" height="14">
                         <div className="flex items-center justify-center text-ink-950">
-                            {content.features[1].icon}
+                            {content.features?.[1]?.icon}
                         </div>
                     </foreignObject>
                     <text x={centerX} y={yFeatures + 5} textAnchor="middle" className="text-[10px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
-                        {content.features[1].label}
+                        {content.features?.[1]?.label}
                     </text>
                 </motion.g>
 
@@ -442,11 +440,11 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                     <path d={`M ${centerX + 280} ${yFeatures + 24} L ${centerX + 280} ${yFeatures + 30} L ${centerX + 274} ${yFeatures + 30}`} stroke="#ea580c" strokeWidth="2" fill="none" />
                     <foreignObject x={centerX + 128} y={yFeatures - 7} width="14" height="14">
                         <div className="flex items-center justify-center text-ink-950">
-                            {content.features[2].icon}
+                            {content.features?.[2]?.icon}
                         </div>
                     </foreignObject>
                     <text x={centerX + 200} y={yFeatures + 5} textAnchor="middle" className="text-[10px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
-                        {content.features[2].label}
+                        {content.features?.[2]?.label}
                     </text>
                 </motion.g>
 
