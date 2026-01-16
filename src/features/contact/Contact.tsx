@@ -112,26 +112,28 @@ export function Contact() {
               {/* Row 1 */}
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="name" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4">/// Identity_Name</label>
+                  <label htmlFor="name" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// IDENTITY_NAME</label>
+                  <div className="text-ink-600 font-sans text-sm mb-3">Your Name</div>
                   <input
                     type="text"
                     id="name"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="ENTER DESIGNATION"
+                    placeholder="Enter your name"
                     className="w-full bg-transparent border-b border-dashed border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-orange-500 transition-colors placeholder:text-ink-300 font-mono text-xs"
                   />
                 </div>
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="email" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4">/// Contact_Relay</label>
+                  <label htmlFor="email" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// CONTACT_RELAY</label>
+                  <div className="text-ink-600 font-sans text-sm mb-3">Email Address</div>
                   <input
                     type="email"
                     id="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="ENTER SIGNAL ADDRESS"
+                    placeholder="Enter your email"
                     className="w-full bg-transparent border-b border-dashed border-ink-950/20 py-2 text-ink-950 focus:outline-none focus:border-orange-500 transition-colors placeholder:text-ink-300 font-mono text-xs"
                   />
                 </div>
@@ -141,7 +143,8 @@ export function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
                 <CustomSelect
                   id="system"
-                  label="/// Target_System"
+                  label="/// TARGET_SYSTEM"
+                  sublabel="What do you need?"
                   value={formData.system}
                   onChange={(val) => setFormData({ ...formData, system: val })}
                   options={[
@@ -156,7 +159,8 @@ export function Contact() {
 
                 <CustomSelect
                   id="impact"
-                  label="/// Desired_Impact"
+                  label="/// DESIRED_IMPACT"
+                  sublabel="Expected outcome?"
                   value={formData.impact}
                   onChange={(val) => setFormData({ ...formData, impact: val })}
                   options={[
@@ -170,13 +174,14 @@ export function Contact() {
 
               {/* Row 3: Message */}
               <div className="p-8 flex-1 border-b border-ink-950/5 min-h-[160px] group focus-within:bg-white/40 transition-colors flex flex-col">
-                <label htmlFor="message" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4 w-fit">/// Additional_Context</label>
+                <label htmlFor="message" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2 w-fit">/// ADDITIONAL_CONTEXT</label>
+                <div className="text-ink-600 font-sans text-sm mb-3">Tell us more about your challenge...</div>
                 <textarea
                   id="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="INPUT PARAMETERS..."
+                  placeholder="Describe your current process, pain points, and goals..."
                   className="w-full flex-1 bg-transparent resize-none text-ink-950 focus:outline-none placeholder:text-ink-300 font-mono text-xs leading-relaxed border-l-2 border-transparent focus:border-orange-500 pl-0 focus:pl-4 transition-all duration-300"
                 ></textarea>
               </div>

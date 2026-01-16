@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { UseCase } from "../constants/useCasesData";
 
 interface TypewriterState {
@@ -25,52 +25,6 @@ export function useTypewriter({ activeIndex, isContentVisible, useCases }: UseTy
         solution: "",
         impact: "",
     });
-
-    const [isExiting, setIsExiting] = useState(false);
-    const exitCancelledRef = useRef(false);
-
-    // Delete text helper (for exit animation)
-    const deleteTextAsync = async (
-        currentText: string,
-        setter: (value: string) => void,
-        delay: number = 15
-    ) => {
-        for (let i = currentText.length; i >= 0; i--) {
-            if (exitCancelledRef.current) return false;
-            setter(currentText.slice(0, i));
-            await new Promise((r) => setTimeout(r, delay));
-        }
-        return true;
-    };
-
-    // Handle exit animation
-    const handleExit = useCallback(async () => {
-        setIsExiting(true);
-        exitCancelledRef.current = false;
-
-        // Reverse typewriter: delete in reverse order
-        await deleteTextAsync(animState.impact, (v) =>
-            setAnimState((prev) => ({ ...prev, impact: v })), 3
-        );
-        if (exitCancelledRef.current) return;
-
-        await deleteTextAsync(animState.solution, (v) =>
-            setAnimState((prev) => ({ ...prev, solution: v })), 2
-        );
-        if (exitCancelledRef.current) return;
-
-        await deleteTextAsync(animState.problem, (v) =>
-            setAnimState((prev) => ({ ...prev, problem: v })), 2
-        );
-        if (exitCancelledRef.current) return;
-
-        await deleteTextAsync(animState.title, (v) =>
-            setAnimState((prev) => ({ ...prev, title: v })), 5
-        );
-
-        setIsExiting(false);
-        return true;
-    }, [animState]);
 
     // Typewriter effect
     useEffect(() => {
@@ -102,52 +56,46 @@ export function useTypewriter({ activeIndex, isContentVisible, useCases }: UseTy
             return true;
         };
 
-        const deleteText = async (
-            text: string,
-            setter: (value: string) => void,
-            delay: number = 50
-        ) => {
-            for (let i = text.length; i >= 0; i--) {
-                if (isCancelled) return false;
-                setter(text.slice(0, i));
-                await new Promise((r) => setTimeout(r, delay));
-            }
-            return true;
-        };
-
         const runAnimation = async () => {
             await new Promise((r) => setTimeout(r, 100));
             if (isCancelled) return;
 
-            await deleteText(target.shortTitle, (v) =>
-                setAnimState((prev) => ({ ...prev, title: v }))
-            );
-            if (isCancelled) return;
-
-            await typeText(target.fullTitle, (v) =>
-                setAnimState((prev) => ({ ...prev, title: v }))
-            );
-            if (isCancelled) return;
-
-            await typeText(
+            // Title is shown immediately (no typing animation since shortTitle === fullTitle)
+            // Run all typewriters in parallel with staggered starts (500ms offset)
+            const typeProblem = typeText(
                 target.problem,
                 (v) => setAnimState((prev) => ({ ...prev, problem: v })),
-                10
+                12
             );
-            if (isCancelled) return;
 
-            await typeText(
-                target.solution,
-                (v) => setAnimState((prev) => ({ ...prev, solution: v })),
-                10
-            );
-            if (isCancelled) return;
+            // Start solution 500ms after problem starts
+            const typeSolution = new Promise((resolve) => {
+                setTimeout(async () => {
+                    if (isCancelled) return resolve(false);
+                    await typeText(
+                        target.solution,
+                        (v) => setAnimState((prev) => ({ ...prev, solution: v })),
+                        12
+                    );
+                    resolve(true);
+                }, 500);
+            });
 
-            await typeText(
-                target.stats,
-                (v) => setAnimState((prev) => ({ ...prev, impact: v })),
-                20
-            );
+            // Start impact 500ms after solution starts (1000ms after problem)
+            const typeImpact = new Promise((resolve) => {
+                setTimeout(async () => {
+                    if (isCancelled) return resolve(false);
+                    await typeText(
+                        target.stats,
+                        (v) => setAnimState((prev) => ({ ...prev, impact: v })),
+                        25
+                    );
+                    resolve(true);
+                }, 1000);
+            });
+
+            // Wait for all to complete
+            await Promise.all([typeProblem, typeSolution, typeImpact]);
         };
 
         runAnimation();
@@ -159,8 +107,5 @@ export function useTypewriter({ activeIndex, isContentVisible, useCases }: UseTy
 
     return {
         animState,
-        isExiting,
-        handleExit,
-        exitCancelledRef,
     };
 }

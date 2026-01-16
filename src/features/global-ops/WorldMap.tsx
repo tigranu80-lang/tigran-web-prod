@@ -3,17 +3,14 @@ import { WORLD_MAP_PATH_TECH, WORLD_MAP_VIEWBOX } from '../../utils/worldMapData
 import { projectPoint } from '../../utils/mapProjection';
 import { useRadarScan } from './useRadarScan';
 
-// Active server locations
-// We map these using our real projection logic now!
-const SERVER_LOCATIONS = [
-    { city: 'London', lat: 51.5074, lng: -0.1278, latency: '12ms', agents: 16 },
-    { city: 'New York', lat: 40.7128, lng: -74.0060, latency: '8ms', agents: 24 },
-    { city: 'San Francisco', lat: 37.7749, lng: -122.4194, latency: '18ms', agents: 12 },
-    { city: 'Tokyo', lat: 35.6762, lng: 139.6503, latency: '22ms', agents: 14 },
-    { city: 'Singapore', lat: 1.3521, lng: 103.8198, latency: '45ms', agents: 8 },
-    { city: 'Sydney', lat: -33.8688, lng: 151.2093, latency: '32ms', agents: 6 },
-    { city: 'São Paulo', lat: -23.5505, lng: -46.6333, latency: '54ms', agents: 9 },
-    { city: 'Dubai', lat: 25.2048, lng: 55.2708, latency: '38ms', agents: 11 },
+// Client project locations
+const CLIENT_LOCATIONS = [
+    { city: 'London', country: '🇬🇧 UK', lat: 51.5074, lng: -0.1278, industry: 'E-commerce', impact: '40h/week saved' },
+    { city: 'Berlin', country: '🇩🇪 DE', lat: 52.5200, lng: 13.4050, industry: 'SaaS Startup', impact: '10x content' },
+    { city: 'New York', country: '🇺🇸 USA', lat: 40.7128, lng: -74.0060, industry: 'Marketing Agency', impact: '70% less leads lost' },
+    { city: 'Kyiv', country: '🇺🇦 UA', lat: 50.4501, lng: 30.5234, industry: 'FMCG Expansion', impact: '100+ leads/week' },
+    { city: 'Singapore', country: '🇸🇬 SG', lat: 1.3521, lng: 103.8198, industry: 'Fintech', impact: '5 days → 30 min' },
+    { city: 'Dubai', country: '🇦🇪 UAE', lat: 25.2048, lng: 55.2708, industry: 'Real Estate', impact: 'Support 24/7' },
 ].map(loc => ({
     ...loc,
     ...projectPoint(loc.lat, loc.lng)
@@ -24,15 +21,18 @@ export function WorldMap() {
 
     // Map Locations for collision detection hook
     const mapLocations = useMemo(() =>
-        SERVER_LOCATIONS.map(loc => ({ city: loc.city, x: loc.x })),
+        CLIENT_LOCATIONS.map(loc => ({ city: loc.city, x: loc.x })),
         []);
 
     const { revealedCities, isScanning } = useRadarScan({
         locations: mapLocations,
-        cycleDuration: 10000, // 10s cycle
-        tolerance: 3, // 3% tolerance window
-        holdDuration: 2500 // 2.5s hold time
+        cycleDuration: 20000, // 20s cycle (slower scan)
+        tolerance: 1.5, // 1.5% tolerance window (tighter sync with line)
+        holdDuration: 5000 // 5s hold time for pulsing dots
     });
+
+    // Tooltip shows ONLY on hover - no auto-reveal to avoid chaos
+    const tooltipCity = hoveredCity;
 
     return (
         <div className="relative w-full h-full bg-transparent select-none isolate">
@@ -77,7 +77,7 @@ export function WorldMap() {
                                 />
 
                                 {/* Interactive Nodes */}
-                                {SERVER_LOCATIONS.map((loc) => {
+                                {CLIENT_LOCATIONS.map((loc) => {
                                     const isRevealed = hoveredCity === loc.city || revealedCities.has(loc.city);
                                     return (
                                         <g key={loc.city}>
@@ -106,12 +106,18 @@ export function WorldMap() {
             <div className="absolute inset-0 z-50 pointer-events-none">
                 <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
                     <div className="relative w-full max-w-6xl aspect-[2/1]">
-                        {SERVER_LOCATIONS.map((loc) => {
+                        {CLIENT_LOCATIONS.map((loc) => {
                             // Dual Trigger Logic: Hover OR Scan
                             // Hover manual override gets higher z-index focus
                             const isHovered = hoveredCity === loc.city;
                             const isScanned = revealedCities.has(loc.city);
-                            const isVisible = isHovered || isScanned;
+                            // Beacon pulsing: any revealed city
+                            const isPulsing = isHovered || isScanned;
+                            // Tooltip: only ONE city at a time (priority: hover > last scanned)
+                            const showTooltip = loc.city === tooltipCity;
+
+                            // Smart positioning: tooltip on left for right-side cities, on right for left-side
+                            const isRightSide = loc.x > 1000; // 1000 = center of 2000 viewBox width
 
                             return (
                                 <div
@@ -128,34 +134,35 @@ export function WorldMap() {
                                     onMouseEnter={() => setHoveredCity(loc.city)}
                                     onMouseLeave={() => setHoveredCity(null)}
                                     tabIndex={0}
-                                    aria-label={`Server in ${loc.city}, ${loc.latency} latency`}
+                                    aria-label={`Client in ${loc.city}, ${loc.industry}`}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' || e.key === ' ') {
                                             setHoveredCity(prev => prev === loc.city ? null : loc.city);
                                         }
                                     }}
                                 >
-                                    {/* Beacon Pulse (Always visible but brighter when active) */}
+                                    {/* Beacon Pulse (Shows for any revealed city) */}
                                     <div className={`absolute w-2 h-2 rounded-full bg-brand-accent transition-all duration-300
-                                        ${isVisible ? 'pulse-beacon scale-110 shadow-[0_0_10px_rgba(234,88,12,0.6)]' : 'opacity-60 scale-100'}`}
+                                        ${isPulsing ? 'pulse-beacon scale-110 shadow-[0_0_10px_rgba(234,88,12,0.6)]' : 'opacity-60 scale-100'}`}
                                     />
 
-                                    {/* Tooltip - Only render when visible for performance */}
-                                    {isVisible && (
-                                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 bg-white/95 backdrop-blur-md border border-ink-200 text-ink-950 p-3 min-w-[140px] pointer-events-none transition-all duration-300 origin-left shadow-xl opacity-100 translate-x-0">
+                                    {/* Tooltip - ONLY for the single selected city */}
+                                    {showTooltip && (
+                                        <div className={`absolute top-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-md border border-ink-200 text-ink-950 p-3 min-w-[160px] pointer-events-none transition-all duration-300 shadow-xl opacity-100
+                                            ${isRightSide ? 'right-full mr-4 origin-right' : 'left-full ml-4 origin-left'}`}>
 
-                                            <div className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2 w-4 h-[1px] bg-brand-accent" />
+                                            {/* Connector line - flips based on position */}
+                                            <div className={`absolute top-1/2 -translate-y-1/2 w-4 h-[1px] bg-brand-accent
+                                                ${isRightSide ? 'right-0 translate-x-full' : 'left-0 -translate-x-full'}`} />
 
                                             <div className="text-[10px] uppercase tracking-widest text-brand-accent font-mono mb-1">
-                                                /// SERVER_NODE
+                                                /// CLIENT_FOOTPRINT
                                             </div>
-                                            <div className="font-serif text-lg leading-none mb-2 font-medium">{loc.city}</div>
+                                            <div className="font-serif text-lg leading-none mb-1 font-medium">{loc.city}, {loc.country}</div>
+                                            <div className="font-sans text-xs text-ink-500 mb-2">{loc.industry}</div>
 
-                                            <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-ink-500">
-                                                <div>LATENCY</div>
-                                                <div className="text-right text-ink-950 font-bold">{loc.latency}</div>
-                                                <div>AGENTS</div>
-                                                <div className="text-right text-ink-950 font-bold">{loc.agents}</div>
+                                            <div className="pt-2 border-t border-ink-100">
+                                                <div className="font-mono text-xs font-bold text-ink-950">{loc.impact}</div>
                                             </div>
                                         </div>
                                     )}

@@ -81,10 +81,10 @@ export function HeroNew() {
 
                     {/* Subheadline */}
                     <p className="text-base md:text-lg lg:text-xl text-ink-500 max-w-lg mb-4 md:mb-5 lg:mb-6 font-sans font-light leading-[1.7] md:leading-[1.6] lg:leading-relaxed">
-                        We design and ship automation systems that save time, cut costs, and scale operations.
+                        We design and ship AI systems that save time, cut costs, and scale operations.
                     </p>
                     <p className="text-sm md:text-base lg:text-lg text-ink-500 max-w-lg mb-8 md:mb-10 lg:mb-12 font-sans font-light leading-[1.7] md:leading-[1.6] lg:leading-relaxed">
-                        Start with a strategy session. Get a clear <b className="text-ink-950 font-medium italic">roadmap in 72 hours.</b>
+                        Start with a free call. Get a clear <b className="text-ink-950 font-medium italic">brief in 72 hours.</b>
                     </p>
 
                     {/* CTA Group */}
@@ -98,10 +98,10 @@ export function HeroNew() {
                         </button>
 
                         <button
-                            onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="px-6 py-4 text-ink-950 font-mono text-xs uppercase tracking-widest underline underline-offset-4 hover:text-[#525252] transition-colors"
+                            onClick={() => document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="px-6 py-4 text-ink-950 font-mono text-sm uppercase tracking-widest underline underline-offset-4 hover:text-[#525252] transition-colors"
                         >
-                            View Blueprints
+                            Use Cases
                         </button>
                     </div>
 
@@ -110,7 +110,7 @@ export function HeroNew() {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mb-4 md:mb-5">
                             <div>
                                 <span className="block font-mono text-3xl font-bold text-ink-950 mb-1">
-                                    <CountUp to={120} suffix="+" delay={2600} />
+                                    <CountUp to={20} suffix="+" delay={2600} />
                                 </span>
                                 <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-500">Systems Deployed</span>
                             </div>

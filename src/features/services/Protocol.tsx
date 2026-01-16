@@ -33,14 +33,14 @@ const STEPS: Step[] = [
         phase: "Implementation",
         title: "Build",
         description:
-            "Connecting integrations, building agent logic, setting up logging.",
+            "Connecting integrations, building logic, and setting up a system.",
         output: "Working System",
     },
     {
         id: "04",
         phase: "Quality",
-        title: "Test & Harden",
-        description: "Edge cases, error handling, and load testing.",
+        title: "Test & Learn",
+        description: "Edge cases, error handling, onboard a team.",
         output: "Validation Report",
     },
 ];

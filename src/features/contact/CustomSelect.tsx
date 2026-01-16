@@ -4,6 +4,7 @@ import { Check, ChevronDown } from 'lucide-react';
 
 interface CustomSelectProps {
     label: string;
+    sublabel?: string;
     value: string;
     onChange: (value: string) => void;
     options: string[];
@@ -11,7 +12,7 @@ interface CustomSelectProps {
     id: string;
 }
 
-export function CustomSelect({ label, value, onChange, options, placeholder, id }: CustomSelectProps) {
+export function CustomSelect({ label, sublabel, value, onChange, options, placeholder, id }: CustomSelectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,10 +32,11 @@ export function CustomSelect({ label, value, onChange, options, placeholder, id 
         <div className="relative group p-8 focus-within:bg-white/40 transition-colors" ref={containerRef}>
             <label
                 htmlFor={id}
-                className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4"
+                className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2"
             >
                 {label}
             </label>
+            {sublabel && <div className="text-ink-600 font-sans text-sm mb-3">{sublabel}</div>}
 
             <div className="relative">
                 <button

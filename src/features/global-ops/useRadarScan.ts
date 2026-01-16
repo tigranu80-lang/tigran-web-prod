@@ -11,6 +11,7 @@ interface UseRadarScanResult {
     isScanning: boolean;
     scanProgress: number; // 0 to 100
     revealedCities: Set<string>;
+    currentCity: string | null; // City currently being scanned (in tolerance window)
 }
 
 export function useRadarScan({
@@ -20,6 +21,7 @@ export function useRadarScan({
     holdDuration = 2500
 }: UseRadarScanProps): UseRadarScanResult {
     const [scanProgress, setScanProgress] = useState(0);
+    const [currentCity, setCurrentCity] = useState<string | null>(null);
     // Use a Map to track WHEN each city was revealed: City -> Timestamp
     const [revealedMap, setRevealedMap] = useState<Map<string, number>>(new Map());
 
@@ -56,13 +58,24 @@ export function useRadarScan({
 
         // 1. Identify active collisions (only runs 10x per second now)
         const activeHits = new Set<string>();
+        let closestCity: string | null = null;
+        let closestDiff = Infinity;
+
         locations.forEach(loc => {
             const locPercent = (loc.x / 2000) * 100;
             const diff = Math.abs(progress - locPercent);
             if (diff < tolerance) {
                 activeHits.add(loc.city);
+                // Track the closest city to the radar line
+                if (diff < closestDiff) {
+                    closestDiff = diff;
+                    closestCity = loc.city;
+                }
             }
         });
+
+        // Update current city (the one radar is scanning RIGHT NOW)
+        setCurrentCity(closestCity);
 
         // 2. Update the Revealed Map state
         setRevealedMap(prevMap => {
@@ -116,6 +129,7 @@ export function useRadarScan({
     return {
         isScanning: !prefersReducedMotion,
         scanProgress,
-        revealedCities
+        revealedCities,
+        currentCity
     };
 }

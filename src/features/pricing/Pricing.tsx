@@ -45,7 +45,7 @@ export function Pricing() {
         </div>
 
         {/* Main 2-Column Asymmetrical Layout */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-6 items-stretch">
 
           {/* LEFT COLUMN: Primary CTA (Free Strategy Call) - 45% */}
           {/* Styled matching the 'Active Blueprint' logic: Thin Orange Border, Clean White Bg */}
@@ -61,20 +61,20 @@ export function Pricing() {
               <div className="absolute top-8 right-8">
                 <span className="font-mono text-[10px] text-orange-600 uppercase tracking-widest flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-orange-600 animate-pulse rounded-full"></span>
-                  Priority Access
+                  FREE
                 </span>
               </div>
 
               <div>
-                <span className="font-mono text-xs text-ink-400 uppercase tracking-widest mb-6 block">/// Step 01.</span>
+                <span className="font-mono text-xs text-ink-400 uppercase tracking-widest mb-6 block">/// STEP 01</span>
 
                 <h3 className="text-3xl md:text-4xl font-serif font-medium leading-tight mb-6 text-ink-950">
-                  <span className="text-orange-600">Discovery</span> & <br />
-                  Roadmap Call
+                  <span className="text-orange-600">Discovery</span> Call{' '}
+                  <span className="text-base md:text-lg text-ink-400 font-light">(free · 30 min)</span>
                 </h3>
 
                 <p className="text-ink-500 font-sans font-light leading-relaxed mb-10 text-sm md:text-base border-l-2 border-orange-500/20 pl-4 py-1">
-                  We don't sell blind. Join us for a 30-minute discovery session to map your workflow and define your automation roadmap.
+                  We discuss your current workflow, biggest time sinks, and quick automation opportunities.
                 </p>
 
                 {/* Vertical Step Timeline - Technical Minimalist */}
@@ -86,19 +86,19 @@ export function Pricing() {
                     <div className="w-6 h-6 rounded-full bg-white border border-ink-950/20 flex items-center justify-center shrink-0 z-10">
                       <span className="text-[10px] font-mono text-ink-400">01</span>
                     </div>
-                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Identify Challenges</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Your Workflow</span>
                   </div>
                   <div className="relative flex items-center gap-4">
                     <div className="w-6 h-6 rounded-full bg-white border border-ink-950/20 flex items-center justify-center shrink-0 z-10">
                       <span className="text-[10px] font-mono text-ink-400">02</span>
                     </div>
-                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Blueprint</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-ink-950/70">Time Sinks</span>
                   </div>
                   <div className="relative flex items-center gap-4">
                     <div className="w-6 h-6 rounded-full bg-orange-600 border border-orange-600 flex items-center justify-center shrink-0 z-10 shadow-sm">
                       <Check size={12} className="text-white" />
                     </div>
-                    <span className="font-mono text-xs uppercase tracking-wider text-orange-600 font-bold">Execution</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-orange-600 font-bold">Clear Recommendation</span>
                   </div>
                 </div>
               </div>
@@ -108,15 +108,25 @@ export function Pricing() {
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="w-full py-4 bg-white text-ink-950 border-2 border-ink-950 rounded-none font-mono text-xs uppercase tracking-[0.2em] shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3 group/btn"
               >
-                <span>Book Discovery Session</span>
+                <span>Book <strong>Free</strong> Discovery Call</span>
                 <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
 
+          {/* Vertical Divider Text - Hidden on mobile */}
+          <div className="hidden lg:flex items-center justify-center">
+            <span
+              className="font-mono text-xs text-ink-400 uppercase tracking-[0.3em] whitespace-nowrap"
+              style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+            >
+              If you're a good fit, we offer →
+            </span>
+          </div>
+
           {/* RIGHT COLUMN: Engagement Options - 55% */}
           {/* Lighter, grid-based, 'Blueprints' aesthetic */}
-          <div className="w-full lg:w-[55%] flex flex-col gap-4">
+          <div className="w-full lg:w-[52%] flex flex-col gap-4">
             {services.map((service, index) => (
               <div key={index} className="flex-1 group relative bg-[#F9F9F9] border border-ink-950/5 p-6 md:p-8 hover:bg-white hover:border-ink-950/20 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
 
@@ -159,6 +169,6 @@ export function Pricing() {
         </div>
 
       </div>
-    </section>
+    </section >
   );
 }

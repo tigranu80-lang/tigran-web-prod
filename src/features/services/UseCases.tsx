@@ -60,7 +60,7 @@ export function UseCases() {
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex flex-col lg:flex-row w-full min-h-[500px] lg:h-[600px] gap-2">
+                <div className="flex flex-col lg:flex-row w-full min-h-[650px] lg:min-h-[700px] gap-2">
                     {useCases.map((item, index) => {
                         const isActive = activeIndex === index;
                         const showContent = isActive && isContentVisible;
@@ -78,7 +78,7 @@ export function UseCases() {
                                         handleCardClick(index);
                                     }
                                 }}
-                                className={`relative cursor-pointer group overflow-hidden contain-layout ${isActive
+                                className={`relative cursor-pointer group overflow-visible ${isActive
                                     ? "border-2 border-ink-950"
                                     : "border border-ink-950/5"
                                     }`}
@@ -98,8 +98,8 @@ export function UseCases() {
                                 }}
                                 transition={springTransition}
                             >
-                                {/* Content */}
-                                <div className="relative z-10 h-full p-4 sm:p-6 lg:p-10 flex flex-col justify-between">
+                                {/* Content - flex column with h-full to push CTA to bottom */}
+                                <div className="relative z-10 h-full p-4 sm:p-6 lg:p-10 flex flex-col">
                                     {/* Top: Number + Title */}
                                     <div className="flex flex-col gap-2 sm:gap-4">
                                         <div className="flex justify-between items-start">
@@ -144,31 +144,31 @@ export function UseCases() {
                                                     exit={{ opacity: 0 }}
                                                     transition={contentTransition}
                                                 >
-                                                    <div className="pt-4 sm:pt-6 lg:pt-8 space-y-4 sm:space-y-6 lg:space-y-8">
+                                                    <div className="pt-4 sm:pt-6 lg:pt-8">
                                                         {/* Problem Block */}
-                                                        <div className="relative pl-4 sm:pl-6 border-l-2 border-ink-950/10">
+                                                        <div className="relative pl-4 sm:pl-6 border-l-2 border-ink-950/10 mb-8">
                                                             <span className="absolute -left-[5px] -top-1 w-2 h-2 rounded-full bg-ink-950/20"></span>
                                                             <h4 className="font-mono text-[10px] uppercase tracking-widest text-ink-950/50 mb-1 sm:mb-2">
-                                                                Problem
+                                                                Challenge
                                                             </h4>
-                                                            <p className="font-sans text-sm sm:text-base text-ink-950/80 leading-relaxed max-w-sm min-h-[2em] sm:min-h-[3em]">
+                                                            <p className="font-sans text-sm sm:text-base text-ink-950/80 leading-relaxed max-w-md">
                                                                 {animState.problem}
                                                             </p>
                                                         </div>
 
                                                         {/* Solution Block */}
-                                                        <div className="relative pl-4 sm:pl-6 border-l-2 border-ink-950">
+                                                        <div className="relative pl-4 sm:pl-6 border-l-2 border-ink-950 mb-8">
                                                             <span className="absolute -left-[5px] -top-1 w-2 h-2 rounded-full bg-orange-600"></span>
                                                             <h4 className="font-mono text-[10px] uppercase tracking-widest text-orange-600 mb-1 sm:mb-2">
                                                                 Solution
                                                             </h4>
-                                                            <p className="font-sans text-sm sm:text-base font-medium text-ink-950 leading-relaxed max-w-sm min-h-[2em] sm:min-h-[3em]">
+                                                            <p className="font-sans text-sm sm:text-base font-medium text-ink-950 leading-relaxed max-w-md">
                                                                 {animState.solution}
                                                             </p>
                                                         </div>
 
                                                         {/* Result Metric */}
-                                                        <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-ink-950/10 flex items-center gap-3 sm:gap-4">
+                                                        <div className="flex items-center gap-3 sm:gap-4">
                                                             <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-ink-950 text-white shadow-[2px_2px_0px_0px_rgba(234,88,12,1)]">
                                                                 <Zap size={16} strokeWidth={1.5} className="sm:w-[18px] sm:h-[18px]" />
                                                             </div>
@@ -176,7 +176,7 @@ export function UseCases() {
                                                                 <h4 className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-ink-950/50 mb-0.5">
                                                                     Impact
                                                                 </h4>
-                                                                <p className="font-mono text-base sm:text-lg font-bold text-ink-950 tracking-tight min-w-[80px] sm:min-w-[100px]">
+                                                                <p className="font-mono text-base sm:text-lg font-bold text-ink-950 tracking-tight">
                                                                     {animState.impact}
                                                                 </p>
                                                             </div>
@@ -187,8 +187,8 @@ export function UseCases() {
                                         </AnimatePresence>
                                     </div>
 
-                                    {/* Bottom: Toggle Icon or CTA Button */}
-                                    <div className="flex justify-center lg:justify-start mt-4 sm:mt-6">
+                                    {/* Bottom: Toggle Icon or CTA Button - pushed to bottom with mt-auto */}
+                                    <div className="flex justify-center lg:justify-start mt-auto pt-10 border-t border-ink-950/10">
                                         <AnimatePresence mode="wait">
                                             {!isActive ? (
                                                 <motion.div
@@ -217,7 +217,7 @@ export function UseCases() {
                                                     }}
                                                     className="px-4 py-2.5 sm:px-6 sm:py-3 bg-white text-ink-950 border-2 border-ink-950 rounded-none font-mono text-[10px] sm:text-xs uppercase tracking-widest shadow-[3px_3px_0px_0px_#0A0A0A] sm:shadow-[4px_4px_0px_0px_#0A0A0A] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_0px_#0A0A0A] sm:hover:translate-x-[2px] sm:hover:translate-y-[2px] sm:hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center gap-2"
                                                 >
-                                                    BOOK FREE CALL
+                                                    {item.ctaText}
                                                     <ArrowRight size={12} className="sm:w-[14px] sm:h-[14px]" />
                                                 </motion.button>
                                             ) : null}
