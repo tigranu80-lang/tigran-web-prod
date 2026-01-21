@@ -1,25 +1,61 @@
+import { useState } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
 
-const services = [
+interface ServiceTier {
+  name: string;
+  description: string;
+  features: string[];
+  price?: string;
+  timeline?: string;
+  validation?: string;
+  benefits?: {
+    title: string;
+    items: string[];
+  };
+}
+
+const services: ServiceTier[] = [
   {
     name: 'Audit',
-    description: 'Deep Analysis.',
-    features: ['Workflow Mapping', 'Tech Stack Review', 'Bottleneck Report'],
+    description: 'DEEP ANALYSIS.',
+    features: ['WORKFLOW MAPPING', 'TECH STACK REVIEW', 'BOTTLENECK REPORT'],
+    price: '€500',
+    timeline: '3-5 days',
+    validation: 'Credits toward Build if you proceed',
+    benefits: {
+      title: 'Why Start Here?',
+      items: ['Zero risk: know ROI before spending', 'Credits apply to full build', 'Get exact savings forecast']
+    }
   },
   {
     name: 'Build',
-    description: 'Implementation.',
-    features: ['Custom Integrations', 'Script Development', 'Dashboard Setup'],
+    description: 'IMPLEMENTATION.',
+    features: ['CUSTOM INTEGRATIONS', 'SCRIPT DEVELOPMENT', 'DASHBOARD SETUP'],
+    price: 'Custom Quoted',
+    timeline: '2-6 weeks',
+    validation: 'INCLUDES AUDIT IF SKIPPED',
+    benefits: {
+      title: 'Why Choose This?',
+      items: ['Production-ready system in weeks', 'No hiring, no training needed', 'Ongoing support included']
+    }
   },
   {
     name: 'Training',
-    description: 'Team Empowerment.',
-    features: ['Internal Workshops', 'AI Agent Monitoring', 'SOP Documentation'],
+    description: 'TEAM EMPOWERMENT.',
+    features: ['INTERNAL WORKSHOPS', 'AI AGENT MONITORING', 'SOP DOCUMENTATION'],
+    price: '€200/hour',
+    timeline: '1-2 weeks',
+    benefits: {
+      title: 'Why Add This?',
+      items: ['Your team runs it independently', 'Reduce reliance on external help', 'Custom SOPs for your workflow']
+    }
   }
 ];
 
 export function Pricing() {
+  const [activeTab, setActiveTab] = useState(0);
+
   return (
     <section id="pricing" className="relative border-t border-ink-950/10 bg-[#F5F5F0]/60 backdrop-blur-[2px]">
       {/* Technical Cut - Section Label */}
@@ -117,58 +153,131 @@ export function Pricing() {
           {/* Vertical Divider Text - Hidden on mobile */}
           <div className="hidden lg:flex items-center justify-center">
             <span
-              className="font-mono text-xs text-ink-400 uppercase tracking-[0.3em] whitespace-nowrap"
+              className="font-mono text-xs font-bold text-orange-600 uppercase tracking-[0.3em] whitespace-nowrap"
               style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
             >
-              If you're a good fit, we offer →
+              AFTER THE CALL, WE OFFER:
             </span>
           </div>
 
           {/* RIGHT COLUMN: Engagement Options - 55% */}
           {/* Lighter, grid-based, 'Blueprints' aesthetic */}
-          <div className="w-full lg:w-[52%] flex flex-col gap-4">
-            {services.map((service, index) => (
-              <div key={index} className="flex-1 group relative bg-[#F9F9F9] border border-ink-950/5 p-6 md:p-8 hover:bg-white hover:border-ink-950/20 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="w-full lg:w-[52%] flex flex-col gap-6">
 
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-ink-300 group-hover:bg-orange-600 transition-colors"></span>
-                    <span className="font-mono text-[10px] text-ink-400 uppercase tracking-widest">
-                        /// Option 0{index + 1}
-                    </span>
-                  </div>
-                  <h4 className="text-xl font-serif font-medium text-ink-950 group-hover:text-orange-600 transition-colors">{service.name}</h4>
-                  <p className="text-xs font-mono text-ink-500 uppercase tracking-wide max-w-xs opacity-70">
-                    {service.description}
-                  </p>
-                </div>
+            {/* Tabs Navigation */}
+            <div className="flex items-center gap-1 border-b border-ink-950/10">
+              {services.map((service, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  className={`px-6 py-3 text-xs font-mono uppercase tracking-widest transition-all relative ${activeTab === index
+                    ? 'text-ink-950 font-bold bg-[#F9F9F9] border-t border-l border-r border-ink-950/10 -mb-[1px]'
+                    : 'text-ink-400 hover:text-orange-600'
+                    }`}
+                >
+                  [{service.name}]
+                  {activeTab === index && (
+                    <span className="absolute top-0 left-0 w-full h-[2px] bg-orange-600"></span>
+                  )}
+                </button>
+              ))}
+            </div>
 
-                {/* Minimal Feature List */}
-                <div className="flex flex-col gap-2 border-l border-ink-950/5 pl-4 md:pl-8 min-w-[180px]">
-                  {service.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-ink-500 font-mono uppercase tracking-wide">
-                      <Check size={10} className="text-ink-300 group-hover:text-orange-500 transition-colors" />
-                      {feature}
+            {/* Active Service Card - Blueprint Layout */}
+            {(() => {
+              const activeService = services[activeTab];
+              if (!activeService) return null;
+              return (
+                <div className="flex-1 group relative bg-white border border-ink-950/10 transition-all duration-300 min-h-[280px]">
+
+                  {/* Card Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-ink-950/10 bg-[#FAFAFA]">
+                    <div className="flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-orange-600"></span>
+                      <span className="font-mono text-[10px] text-ink-400 uppercase tracking-widest">
+                        Module 0{activeTab + 1}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <h4 className="text-lg font-serif font-medium text-ink-950">{activeService.name}</h4>
+                  </div>
 
-                <div className="md:ml-auto shrink-0">
-                  <button
-                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="w-full md:w-auto px-4 py-2 border border-ink-950/10 bg-transparent text-[10px] font-mono uppercase tracking-widest text-ink-400 hover:text-orange-600 hover:border-orange-600 transition-colors flex items-center justify-center gap-2"
-                  >
-                    Explore
-                    <ArrowRight size={10} className="-rotate-45 group-hover:rotate-0 transition-transform" />
-                  </button>
+                  {/* Two Column Content */}
+                  <div className="flex flex-col md:flex-row">
+
+                    {/* LEFT: Features + Benefits */}
+                    <div className="flex-1 p-6 md:p-8 flex flex-col gap-6">
+
+                      {/* Features */}
+                      <div className="flex flex-col gap-3">
+                        <span className="text-[10px] font-mono text-ink-400 uppercase tracking-widest">/// Includes</span>
+                        {activeService.features.map((feature, i) => (
+                          <div key={i} className="flex items-center gap-3 text-sm text-ink-700 font-sans">
+                            <Check size={14} className="text-orange-600 shrink-0" strokeWidth={2.5} />
+                            <span>{feature.charAt(0) + feature.slice(1).toLowerCase()}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Benefits */}
+                      {activeService.benefits && (
+                        <div className="flex flex-col gap-3 pt-4 border-t border-dashed border-ink-950/10">
+                          <span className="text-[10px] font-mono text-ink-400 uppercase tracking-widest">
+                            /// {activeService.benefits.title}
+                          </span>
+                          {activeService.benefits.items.map((item: string, i: number) => (
+                            <div key={i} className="flex items-start gap-3 text-sm text-ink-500 font-sans leading-relaxed">
+                              <ArrowRight size={12} className="text-orange-600 shrink-0 mt-1" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Vertical Divider */}
+                    <div className="hidden md:block w-px bg-ink-950/10"></div>
+
+                    {/* RIGHT: Price/Timeline + CTA */}
+                    <div className="w-full md:w-[240px] p-6 md:p-8 flex flex-col justify-between bg-[#FAFAFA] border-t md:border-t-0 border-ink-950/10">
+
+                      {/* Price Block */}
+                      <div className="flex flex-col gap-4">
+                        <div>
+                          <span className="text-[10px] font-mono text-ink-400 uppercase tracking-widest block mb-2">Investment</span>
+                          <span className="text-2xl font-serif font-medium text-ink-950">{activeService.price ?? '—'}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-mono text-ink-400 uppercase tracking-widest block mb-2">Timeline</span>
+                          <span className="text-lg font-serif text-ink-950">{activeService.timeline ?? '—'}</span>
+                        </div>
+                        {activeService.validation && (
+                          <div className="text-[10px] font-mono uppercase tracking-widest text-orange-600 font-bold flex items-center gap-2 pt-2 border-t border-dashed border-ink-950/10">
+                            <span className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse"></span>
+                            {activeService.validation}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* CTA Button */}
+                      <button
+                        onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                        className="mt-6 w-full py-4 bg-ink-950 text-white border-2 border-ink-950 font-mono text-xs uppercase tracking-[0.15em] shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-2"
+                      >
+                        Get Started
+                        <ArrowRight size={12} />
+                      </button>
+                    </div>
+
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })()}
+
           </div>
 
         </div>
 
       </div>
-    </section >
+    </section>
   );
 }
