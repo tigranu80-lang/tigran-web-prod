@@ -84,7 +84,7 @@ export function WorldMap() {
                                             <circle
                                                 cx={loc.x}
                                                 cy={loc.y}
-                                                r={isRevealed ? 4 : 3}
+                                                r={isRevealed ? 6 : 4}
                                                 className="fill-brand-accent transition-all duration-300"
                                                 opacity={isRevealed ? 1 : 0.6}
                                             />
@@ -142,8 +142,8 @@ export function WorldMap() {
                                     }}
                                 >
                                     {/* Beacon Pulse (Shows for any revealed city) */}
-                                    <div className={`absolute w-2 h-2 rounded-full bg-brand-accent transition-all duration-300
-                                        ${isPulsing ? 'pulse-beacon scale-110 shadow-[0_0_10px_rgba(234,88,12,0.6)]' : 'opacity-60 scale-100'}`}
+                                    <div className={`absolute w-3 h-3 rounded-full bg-brand-accent transition-all duration-300
+                                        ${isPulsing ? 'pulse-beacon scale-125 shadow-[0_0_20px_rgba(234,88,12,0.8)]' : 'opacity-60 scale-100'}`}
                                     />
 
                                     {/* Tooltip - ONLY for the single selected city */}

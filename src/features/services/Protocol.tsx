@@ -14,34 +14,34 @@ interface Step {
 const STEPS: Step[] = [
     {
         id: "01",
-        phase: "Discovery",
-        title: "Audit & Baseline",
+        phase: "AUDIT & DESIGN",
+        title: "Find What's Broken, Plan The Fix",
         description:
-            "Find leaks. Identify quick wins. Establish current baseline metrics.",
-        output: "Roadmap + ROI Hypothesis",
+            "We map your current workflows, identify where time and money leak, and design a system that plugs the gaps. You get a detailed roadmap with projected savings before spending another dollar.\n\nFixed Price for audit!\nTimeline: 3-5 days\nCredits toward Build if you proceed",
+        output: "System Blueprint + ROI Forecast",
     },
     {
         id: "02",
-        phase: "Architecture",
-        title: "Design & Prototype",
+        phase: "BUILD & VALIDATE",
+        title: "We Build It, Then Stress-Test It",
         description:
-            "Process mapping, role definition, data modeling, and tool selection.",
-        output: "System Blueprint",
+            "We connect your tools, automate the repetitive tasks, and test everything until it runs flawlessly. No surprises when it goes live.\n\nCustom pricing quoted after Audit\nTimeline: 2-6 weeks",
+        output: "Production-Ready System",
     },
     {
         id: "03",
-        phase: "Implementation",
-        title: "Build",
+        phase: "DEPLOY & LAUNCH",
+        title: "Go Live With Safety Net",
         description:
-            "Connecting integrations, building logic, and setting up a system.",
-        output: "Working System",
+            "We launch your system to production and monitor everything in real-time for 30 days. If something breaks, we catch it before you do and fix it immediately.\n\nIncluded in Build price\nTimeline: 1 week + 30-day monitoring",
+        output: "Live System + Performance Dashboard",
     },
     {
         id: "04",
-        phase: "Quality",
-        title: "Test & Learn",
-        description: "Edge cases, error handling, onboard a team.",
-        output: "Validation Report",
+        phase: "EVOLVE",
+        title: "Keep It Running, Make It Better",
+        description: "Monthly maintenance, issue resolution, and feature enhancements based on how your team actually uses the system. Quarterly reviews to identify new optimization opportunities.\n\nPricing discussed after Deploy",
+        output: "Monthly Performance Reports",
     },
 ];
 
@@ -110,7 +110,7 @@ const ProtocolStep = React.memo<{
                 </h4>
 
                 {/* Description */}
-                <p className="text-ink-500 text-base leading-relaxed max-w-lg">
+                <p className="text-ink-500 text-base leading-relaxed max-w-lg whitespace-pre-line">
                     {step.description}
                 </p>
 

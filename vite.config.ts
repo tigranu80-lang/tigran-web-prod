@@ -51,11 +51,14 @@ export default defineConfig(({ mode }) => {
             'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge'],
             // AI and analytics
             'external-services': ['@google/genai', '@vercel/analytics'],
+            // Heavy illustration library - lazy loaded
+            'react-peeps': ['react-peeps'],
           },
         },
       },
       // Chunk size warning threshold
-      chunkSizeWarningLimit: 600,
+      // react-peeps is ~2MB but lazy-loaded, so we accept larger chunks
+      chunkSizeWarningLimit: 2100,
     },
   };
 });

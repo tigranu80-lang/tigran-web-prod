@@ -4,7 +4,7 @@ import { Services } from '../features/services/Services';
 import { About } from '../features/team/Team';
 import { Pricing } from '../features/pricing/Pricing';
 import { Footer } from '../features/layout/Footer';
-import { AIConsultant } from '../features/hero/AIConsultant';
+// import { AIConsultant } from '../features/hero/AIConsultant';
 import { HeroNew } from '../features/hero/HeroNew';
 import { TechTicker } from '../features/ui/TechTicker';
 import { Contact } from '../features/contact/Contact';
@@ -37,7 +37,7 @@ export function Home() {
             </main>
 
             <Footer />
-            <AIConsultant />
+            {/* <AIConsultant /> */}
         </div>
     );
 }

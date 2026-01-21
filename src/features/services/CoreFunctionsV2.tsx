@@ -15,8 +15,10 @@
  * Test URL: http://localhost:3000/test
  */
 
-import { useState } from "react";
-import Peep from 'react-peeps';
+import { useState, lazy, Suspense } from "react";
+
+// Lazy load the heavy react-peeps library (~2MB)
+const PeepCharacter = lazy(() => import('./PeepCharacter').then(m => ({ default: m.PeepCharacter })));
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Zap, Database, Workflow,
@@ -347,16 +349,18 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                         >
                             <foreignObject x={centerX - 270} y={yTrigger - 40} width="140" height="140">
                                 <div className="w-full h-full" style={{ transform: "scaleX(-1)" }}>
-                                    <Peep
-                                        style={{ width: 120, height: 120 }}
-                                        accessory='None'
-                                        body='MediumBW'
-                                        face='Hectic'
-                                        hair='ShortVolumed'
-                                        facialHair='None'
-                                        strokeColor='#262626'
-                                        viewBox={{ x: '0', y: '0', width: '1050', height: '1200' }}
-                                    />
+                                    <Suspense fallback={null}>
+                                        <PeepCharacter
+                                            style={{ width: 120, height: 120 }}
+                                            accessory='None'
+                                            body='MediumBW'
+                                            face='Hectic'
+                                            hair='ShortVolumed'
+                                            facialHair='None'
+                                            strokeColor='#262626'
+                                            viewBox={{ x: '0', y: '0', width: '1050', height: '1200' }}
+                                        />
+                                    </Suspense>
                                 </div>
                             </foreignObject>
                         </motion.g>
@@ -480,15 +484,17 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                     >
                         <foreignObject x={centerX + 200} y={yResult - 100} width="180" height="200">
                             <div style={{ transform: 'scaleX(-1)', width: '100%', height: '100%' }}>
-                                <Peep
-                                    style={{ width: 160, height: 180 }}
-                                    accessory='None'
-                                    body='CrossedArmsWB'
-                                    face='SmileTeeth'
-                                    hair='CornRows'
-                                    facialHair='None'
-                                    strokeColor='#262626'
-                                />
+                                <Suspense fallback={null}>
+                                    <PeepCharacter
+                                        style={{ width: 160, height: 180 }}
+                                        accessory='None'
+                                        body='CrossedArmsWB'
+                                        face='SmileTeeth'
+                                        hair='CornRows'
+                                        facialHair='None'
+                                        strokeColor='#262626'
+                                    />
+                                </Suspense>
                             </div>
                         </foreignObject>
                     </motion.g>

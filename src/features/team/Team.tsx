@@ -65,7 +65,7 @@ export function About() {
 
               <div className="relative w-full h-full bg-ink-950/5 overflow-hidden group-hover:bg-transparent transition-colors duration-700">
                 <img
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1000&auto=format&fit=crop"
+                  src="/team-photo.jpg"
                   alt="Working"
                   loading="lazy"
                   className="w-full h-full object-cover grayscale contrast-125 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 mix-blend-multiply"

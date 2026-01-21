@@ -69,9 +69,8 @@ export function GlobeSection() {
                             </div>
                             <div className="font-serif text-2xl md:text-3xl font-medium text-ink-950 mb-2 leading-tight">Who We Serve</div>
                             <div className="font-sans text-xs text-ink-600 leading-relaxed font-light">
-                                E-commerce · SaaS · FMCG<br />
-                                Marketing Agencies · Healthcare<br />
-                                Startups to Mid-Market
+                                Small and medium businesses ready to scale operations without scaling headcount. E-commerce stores, SaaS companies, marketing agencies, consulting firms, healthcare providers.<br /><br />
+                                Companies with 5-50 employees looking to automate repetitive work and grow efficiently.
                             </div>
                         </div>
 
@@ -79,13 +78,13 @@ export function GlobeSection() {
                         <div className="group relative p-5 md:p-6 hover:bg-ink-50 transition-colors duration-200">
                             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div className="flex justify-between items-start mb-3">
-                                <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400">/// CLIENT_PROJECT</span>
+                                <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400">/// SECURITY</span>
                                 <span className="font-mono text-[10px] text-ink-300">FIG. 02</span>
                             </div>
-                            <div className="font-serif text-2xl md:text-3xl font-medium text-ink-950 mb-2 leading-tight">London Content Agency</div>
+                            <div className="font-serif text-2xl md:text-3xl font-medium text-ink-950 mb-2 leading-tight">Built for Trust</div>
                             <div className="font-sans text-xs text-ink-600 leading-relaxed font-light">
-                                AI content pipeline.<br />
-                                25+ assets per day.
+                                GDPR-compliant infrastructure. SOC 2 security standards. Data encryption at rest and in transit.<br /><br />
+                                Your customer data stays secure. We build systems that meet regulatory requirements across industries and regions.
                             </div>
                         </div>
 
@@ -98,8 +97,9 @@ export function GlobeSection() {
                             </div>
                             <div className="font-serif text-2xl md:text-3xl font-medium text-ink-950 mb-2 leading-tight">15+ Countries</div>
                             <div className="font-sans text-xs text-ink-600 leading-relaxed font-light">
-                                6 languages supported.<br />
-                                Multi-region compliance.
+                                English • Spanish • Russian • Ukrainian<br />
+                                Multi-language automation workflows. Multi-region compliance. 24/7 system monitoring across time zones.<br /><br />
+                                Build once, deploy globally.
                             </div>
                         </div>
 

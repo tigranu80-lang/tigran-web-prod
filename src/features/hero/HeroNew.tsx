@@ -81,7 +81,7 @@ export function HeroNew() {
 
                     {/* Subheadline */}
                     <p className="text-base md:text-lg lg:text-xl text-ink-500 max-w-lg mb-4 md:mb-5 lg:mb-6 font-sans font-light leading-[1.7] md:leading-[1.6] lg:leading-relaxed">
-                        We design and ship AI systems that save time, cut costs, and scale operations.
+                        We design and ship systems that save time, cut costs, and scale operations.
                     </p>
                     <p className="text-sm md:text-base lg:text-lg text-ink-500 max-w-lg mb-8 md:mb-10 lg:mb-12 font-sans font-light leading-[1.7] md:leading-[1.6] lg:leading-relaxed">
                         Start with a free call. Get a clear <b className="text-ink-950 font-medium italic">brief in 72 hours.</b>
@@ -93,7 +93,7 @@ export function HeroNew() {
                             onClick={scrollToPricing}
                             className="px-8 py-4 bg-white text-ink-950 border-2 border-ink-950 rounded-none font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center gap-3 group"
                         >
-                            Start Building
+                            Book a FREE Call
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </button>
 
