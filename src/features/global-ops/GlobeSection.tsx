@@ -18,7 +18,7 @@ export function GlobeSection() {
             {/* Header Content */}
             <div className="container mx-auto px-6 max-w-7xl relative z-20 mb-12 mt-6 text-center">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-medium text-ink-950 tracking-tight">
-                    Building automation systems for clients across <span className="text-orange-600">15+ countries</span>
+                    Building automation systems for clients across <span className="text-orange-600">multiple countries</span>
                 </h2>
             </div>
 
@@ -35,7 +35,7 @@ export function GlobeSection() {
                             <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm" />
                         </div>
                         <div className="font-mono text-xs font-bold tracking-[0.2em] uppercase text-white shadow-black drop-shadow-md">
-                            Working with clients across 8+ countries
+                            Working with clients across multiple countries
                         </div>
                         <div className="w-16"></div> {/* Spacer for balance */}
                     </div>
@@ -69,8 +69,7 @@ export function GlobeSection() {
                             </div>
                             <div className="font-serif text-2xl md:text-3xl font-medium text-ink-950 mb-2 leading-tight">Who We Serve</div>
                             <div className="font-sans text-xs text-ink-600 leading-relaxed font-light">
-                                Small and medium businesses ready to scale operations without scaling headcount. E-commerce stores, SaaS companies, marketing agencies, consulting firms, healthcare providers.<br /><br />
-                                Companies with 5-50 employees looking to automate repetitive work and grow efficiently.
+                                Small and medium businesses ready to scale operations without scaling headcount. E-commerce stores, SaaS companies, marketing agencies, consulting firms, healthcare providers.
                             </div>
                         </div>
 

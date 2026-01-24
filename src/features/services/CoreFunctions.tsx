@@ -100,21 +100,16 @@ export function CoreFunctions() {
                                         {content.title}
                                     </h2>
 
-                                    <p className="text-ink-950/80 text-base leading-relaxed font-sans font-light mb-8 max-w-md">
+                                    <p className="text-ink-950/80 text-base leading-relaxed font-sans font-light mb-24 max-w-md">
                                         {content.description}
                                     </p>
 
-                                    <div className="mb-8 p-4 bg-white border-2 border-ink-950 shadow-[4px_4px_0px_0px_#ea580c] max-w-sm">
+                                    <div className="mb-0 p-4 bg-white border-2 border-ink-950 shadow-[4px_4px_0px_0px_#ea580c] max-w-sm">
                                         <p className="font-mono text-xs font-bold text-ink-950">
                                             <span className="text-orange-600 mr-2">///</span>
                                             RESULT: {content.benefit}
                                         </p>
                                     </div>
-
-                                    <button className="w-fit group flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest text-white bg-ink-950 px-6 py-3 hover:bg-orange-600 transition-colors shadow-[4px_4px_0px_0px_#e5e5e5]">
-                                        Explore Details
-                                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                                    </button>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -124,15 +119,7 @@ export function CoreFunctions() {
 
                     {/* RIGHT COLUMN: ORGANIC DIAGRAM (7 cols) */}
                     {/* NO CONTAINER, NO BORDERS, NO SHADOWS - JUST FLOATING */}
-                    <div className="lg:col-span-7 flex items-start justify-center relative pt-16 translate-x-16">
-                        {/* Background Dot Grid - Subtle & Integrated */}
-                        <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
-                            style={{
-                                backgroundImage: 'radial-gradient(circle, #000 1.5px, transparent 1.5px)',
-                                backgroundSize: '24px 24px'
-                            }}
-                        ></div>
-
+                    <div className="lg:col-span-7 flex items-start justify-center relative pt-0 translate-x-16">
                         {/* Dynamic Diagram */}
                         <AnimatePresence mode="wait">
                             <motion.div

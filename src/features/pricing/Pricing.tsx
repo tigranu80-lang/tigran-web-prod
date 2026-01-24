@@ -1,6 +1,16 @@
+import { FirecrawlAscii } from '../../components/ui/FirecrawlAscii';
 import { useState } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { DecryptedText } from '../ui/DecryptedText';
+
+// ... (inside component)
+
+{/* ASCII Art Effect - Firecrawl Style (Float Animation) */ }
+<div className="absolute bottom-0 left-0 right-0 h-[220px] overflow-hidden pointer-events-none z-0 mix-blend-multiply opacity-50">
+  <FirecrawlAscii className="text-[#ff4500]/80 text-[8px] leading-[10px] bottom-[-20px] left-[-20px] scale-110" />
+</div>
+
+{/* Decorative corner accents - Technical */ }
 
 interface ServiceTier {
   name: string;
@@ -88,20 +98,32 @@ export function Pricing() {
           <div className="w-full lg:w-[45%] flex flex-col">
             <div className="relative flex-1 bg-white border border-orange-500/50 p-8 md:p-12 shadow-[0px_4px_24px_-12px_rgba(234,88,12,0.15)] flex flex-col justify-between group overflow-hidden">
 
+              {/* ASCII Art Effect - Firecrawl Style Animation */}
+              {/* ASCII Art Effect - Firecrawl Style (Float Animation) */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-[60%] overflow-hidden pointer-events-none z-0 mix-blend-multiply opacity-50"
+                style={{
+                  maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
+                }}
+              >
+                <FirecrawlAscii className="text-[#ff4500]/80 text-[8px] leading-[10px] bottom-0 left-1/2 -translate-x-1/2" />
+              </div>
+
               {/* Decorative corner accents - Technical */}
               <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-orange-500"></div>
               <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-orange-500"></div>
               <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-orange-500"></div>
               <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-orange-500"></div>
 
-              <div className="absolute top-8 right-8">
+              <div className="absolute top-8 right-8 z-10">
                 <span className="font-mono text-[10px] text-orange-600 uppercase tracking-widest flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-orange-600 animate-pulse rounded-full"></span>
                   FREE
                 </span>
               </div>
 
-              <div>
+              <div className="relative z-10">
                 <span className="font-mono text-xs text-ink-400 uppercase tracking-widest mb-6 block">/// STEP 01</span>
 
                 <h3 className="text-3xl md:text-4xl font-serif font-medium leading-tight mb-6 text-ink-950">

@@ -14,7 +14,7 @@ export function Footer() {
               EsperaStudio
             </div>
             <p className="text-ink-400 text-sm font-sans leading-relaxed max-w-xs">
-              Automation infrastructure for growth teams. We replace manual work with intelligent systems.
+              Better than yesterday.
             </p>
           </div>
 
@@ -43,11 +43,11 @@ export function Footer() {
                 <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
-                href="mailto:hello@esperastudio.agency"
+                href="mailto:helllo@esperastudio.com"
                 className="flex items-center gap-2 text-ink-300 hover:text-white transition-colors text-sm font-mono uppercase tracking-wider group"
               >
                 <Mail size={16} strokeWidth={1.5} />
-                <span>hello@esperastudio.agency</span>
+                <span>helllo@esperastudio.com</span>
               </a>
             </div>
           </div>

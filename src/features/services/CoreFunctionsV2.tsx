@@ -124,8 +124,15 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
     const yResult = 420;
 
     return (
-        <div className="relative w-full max-w-[600px] aspect-[6/5] mx-auto flex items-center justify-center select-none">
-            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+        <div className="relative w-full mx-auto flex items-center justify-center select-none bg-white border-2 border-ink-950 p-12 lg:p-16">
+            {/* Background Dot Grid inside Card - 75% Transparency */}
+            <div className="absolute inset-0 opacity-25 pointer-events-none"
+                style={{
+                    backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
+                    backgroundSize: '24px 24px'
+                }}
+            />
+            <svg viewBox={`0 0 ${width} ${height}`} className="relative z-10 w-full h-auto overflow-visible" style={{ maxHeight: '70vh' }} preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <marker id="arrowhead-sketch" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
                         <path d="M0,0 L6,2 L0,4" fill="none" stroke="#262626" strokeWidth="1" strokeLinecap="round" />
@@ -150,16 +157,14 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                         const xStart = centerX + (config[0] ?? 0);
                         const yStart = yTrigger + (config[1] ?? 0) + 15; // Start from bottom of text
 
-                        // Control points for organic curve
-                        const cp1x = xStart;
-                        const cp1y = yStart + 80; // Deeper curve down
-                        const cp2x = centerX;
-                        const cp2y = yHero - 60; // Up from hero
+                        // Stepped path (Right angles)
+                        // Path: Start -> Down -> Horizontal to Center -> Down to Hero
+                        const pathD = `M ${xStart} ${yStart} L ${xStart} ${yHero - 40} L ${centerX} ${yHero - 40} L ${centerX} ${yHero - 22}`;
 
                         return (
                             <motion.path
                                 key={`conn-${index}`}
-                                d={`M ${xStart} ${yStart} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${centerX} ${yHero - 22}`}
+                                d={pathD}
                                 stroke="#ea580c" strokeWidth="1.5" strokeDasharray="6 4" fill="none"
                                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
                             />
@@ -281,6 +286,10 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                         const xPos = centerX + (config[0] ?? 0);
                         const yPos = yTrigger + (config[1] ?? 0);
 
+                        // Dimensions for the box
+                        const boxWidth = 140; // Approx based on content
+                        const boxHeight = 50;
+
                         return (
                             <motion.g
                                 key={`trigger-${index}`}
@@ -288,22 +297,34 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                             >
-                                {/* Icon ABOVE text, centered */}
+                                {/* Box background - centered on xPos, yPos - same styling as single mode */}
+                                <rect
+                                    x={xPos - boxWidth / 2}
+                                    y={yPos - boxHeight / 2}
+                                    width={boxWidth}
+                                    height={boxHeight}
+                                    rx="0"
+                                    fill="white"
+                                    stroke="#262626"
+                                    strokeWidth="1"
+                                />
+
+                                {/* Icon LEFT of text, centered vertically */}
                                 <g transform={`translate(${xPos}, ${yPos})`}>
-                                    <foreignObject x={-7} y={-30} width="14" height="14">
+                                    <foreignObject x={-65} y={-7} width="14" height="14">
                                         <div className="flex items-center justify-center text-orange-600">
                                             {content.triggerIcon}
                                         </div>
                                     </foreignObject>
                                     {/* Multi-line text support */}
                                     {trigger.includes('\n') ? (
-                                        <text textAnchor="middle" className="text-[12px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
+                                        <text y={-5} textAnchor="middle" className="text-[10px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
                                             {trigger.split('\n').map((line, i) => (
-                                                <tspan key={i} x={0} dy={i === 0 ? 0 : 14}>{line}</tspan>
+                                                <tspan key={i} x={5} dy={i === 0 ? 0 : 12}>{line}</tspan>
                                             ))}
                                         </text>
                                     ) : (
-                                        <text x={0} y={4} textAnchor="middle" className="text-[12px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
+                                        <text x={5} y={4} textAnchor="middle" className="text-[10px] font-bold fill-ink-950 font-mono uppercase tracking-wide">
                                             {trigger}
                                         </text>
                                     )}
@@ -622,13 +643,6 @@ export function CoreFunctionsV2() {
                     {/* RIGHT COLUMN: ORGANIC DIAGRAM (7 cols) */}
                     {/* NO CONTAINER, NO BORDERS, NO SHADOWS - JUST FLOATING */}
                     <div className="lg:col-span-7 flex items-start justify-center relative pt-16">
-                        {/* Background Dot Grid - Subtle & Integrated */}
-                        <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
-                            style={{
-                                backgroundImage: 'radial-gradient(circle, #000 1.5px, transparent 1.5px)',
-                                backgroundSize: '24px 24px'
-                            }}
-                        ></div>
 
                         {/* Dynamic Diagram */}
                         <AnimatePresence mode="wait">

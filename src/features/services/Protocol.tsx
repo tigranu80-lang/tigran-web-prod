@@ -17,7 +17,7 @@ const STEPS: Step[] = [
         phase: "AUDIT & DESIGN",
         title: "Find What's Broken, Plan The Fix",
         description:
-            "We map your current workflows, identify where time and money leak, and design a system that plugs the gaps. You get a detailed roadmap with projected savings before spending another dollar.\n\nFixed Price for audit!\nTimeline: 3-5 days\nCredits toward Build if you proceed",
+            "We map your current workflows, identify where time and money leak, and design a system that plugs the gaps. You get a detailed roadmap with projected savings before spending another dollar.\n\nFixed price for audit\nTimeline: 3-5 days\nCredits toward build if you proceed",
         output: "System Blueprint + ROI Forecast",
     },
     {
@@ -193,7 +193,7 @@ export const Protocol: React.FC = () => {
                                 className="hidden lg:flex flex-col items-start gap-4"
                             >
                                 <button className="group relative px-8 py-4 bg-white text-ink-950 border-2 border-ink-950 font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center gap-3">
-                                    START WITH AUDIT
+                                    BOOK FREE CALL
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </motion.div>
@@ -243,7 +243,7 @@ export const Protocol: React.FC = () => {
                                 className="lg:hidden pl-12 md:pl-20 pt-4"
                             >
                                 <button className="group w-full px-6 py-4 bg-white text-ink-950 border-2 border-ink-950 font-mono text-xs uppercase tracking-widest shadow-[4px_4px_0px_0px_#0A0A0A] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_#0A0A0A] transition-all flex items-center justify-center gap-3">
-                                    START WITH AUDIT
+                                    BOOK FREE CALL
                                     <ArrowRight className="w-4 h-4 group-active:translate-x-1 transition-transform" />
                                 </button>
                             </motion.div>
