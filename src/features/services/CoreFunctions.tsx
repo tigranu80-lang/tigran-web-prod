@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { OrganicSketchFlowchart, tabsV2, tabContentV2 } from "./CoreFunctionsV2";
 
