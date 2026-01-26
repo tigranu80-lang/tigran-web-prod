@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-import { InlineWidget } from 'react-calendly';
 import { Background } from '../features/layout/Background';
 
 const CALENDLY_URL = 'https://calendly.com/hello-esperastudio/30min';
@@ -16,8 +15,9 @@ export function ThankYou() {
     const state = location.state as LocationState | null;
     const { name = '', email = '' } = state || {};
 
-    // Inject CSS to make Calendly background transparent
+    // Inject Calendly script and transparency styles
     useEffect(() => {
+        // 1. Inject Styles
         const style = document.createElement('style');
         style.textContent = `
             .calendly-inline-widget iframe {
@@ -25,8 +25,18 @@ export function ThankYou() {
             }
         `;
         document.head.appendChild(style);
+
+        // 2. Inject Script
+        const script = document.createElement('script');
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
+
         return () => {
             document.head.removeChild(style);
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
         };
     }, []);
 
@@ -47,33 +57,31 @@ export function ThankYou() {
                     </p>
                 </div>
 
-                {/* Calendly Embed */}
-                <div className="max-w-[1100px] mx-auto mb-6">
-                    <InlineWidget
-                        url={CALENDLY_URL}
-                        prefill={{
-                            name: name,
-                            email: email,
-                        }}
-                        styles={{
-                            height: '700px',
-                            width: '100%',
-                        }}
-                        pageSettings={{
-                            backgroundColor: 'f5f5f0',
-                            primaryColor: '0a0a0a',
-                            textColor: '0a0a0a',
-                            hideEventTypeDetails: false,
-                            hideLandingPageDetails: false,
-                            hideGdprBanner: true,
-                        }}
+                {/* Calendly Embed - Native Implementation */}
+                <div className="max-w-[1100px] mx-auto mb-6 relative min-h-[700px]">
+                    <div
+                        className="calendly-inline-widget w-full h-[700px]"
+                        data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=f5f5f0&primary_color=0a0a0a&text_color=0a0a0a&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`}
                     />
+
+                    {/* Fallback Link (Visible if iframe is blocked/fails) */}
+                    <div className="text-center mt-4 text-xs text-ink-400 font-mono">
+                        <p>Calendar not loading?</p>
+                        <a
+                            href={`${CALENDLY_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-ink-600"
+                        >
+                            Open scheduling page directly
+                        </a>
+                    </div>
                 </div>
 
                 {/* Return Link */}
                 <div className="text-center">
-                    <Link 
-                        to="/" 
+                    <Link
+                        to="/"
                         className="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest hover:text-ink-500 transition-colors"
                     >
                         <ArrowLeft size={16} />
