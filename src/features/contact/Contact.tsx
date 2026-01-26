@@ -9,7 +9,7 @@ type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function Contact() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', system: 'Lead handling', impact: 'Save time', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', system: 'Manual data entry between systems', impact: 'Save time', message: '' });
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +29,12 @@ export function Contact() {
         throw new Error('Failed to send message');
       }
 
-      navigate('/thank-you');
+      navigate('/thank-you', {
+        state: {
+          name: formData.name,
+          email: formData.email
+        }
+      });
     } catch {
       // eslint-disable-next-line no-console
       console.error('Contact form error');
@@ -62,9 +67,9 @@ export function Contact() {
   return (
     <section id="contact" className="relative border-t border-ink-950/10 bg-transparent backdrop-blur-sm">
       {/* Technical Cut - Section Label */}
-      <div className="absolute top-0 w-full z-10 pointer-events-none">
+      <div className="absolute top-6 w-full z-10 pointer-events-none">
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+          <div className="bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
             <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
             <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
               SYS.08 /// CONTACT_RELAY
@@ -144,15 +149,14 @@ export function Contact() {
                 <CustomSelect
                   id="system"
                   label="/// TARGET_SYSTEM"
-                  sublabel="What do you need?"
+                  sublabel="Which best describes your biggest challenge?"
                   value={formData.system}
                   onChange={(val) => setFormData({ ...formData, system: val })}
                   options={[
-                    "Lead handling",
-                    "Onboarding",
-                    "Support",
-                    "Finance ops",
-                    "Reporting",
+                    "Manual data entry between systems",
+                    "Email and document overload",
+                    "Approval bottlenecks and delays",
+                    "Scaling operations without more staff",
                     "Other"
                   ]}
                 />

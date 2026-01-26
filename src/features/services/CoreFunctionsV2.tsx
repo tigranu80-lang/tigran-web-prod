@@ -15,102 +15,26 @@
  * Test URL: http://localhost:3000/test
  */
 
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, memo } from "react";
+import { usePerformanceMode } from "../../hooks/usePerformanceMode";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+
+// --- Data Constants (extracted for better HMR) ---
+// Import from constants file - do NOT re-export to fix HMR
+import { tabsV2, tabContentV2 } from "./constants/coreFunctionsData";
 
 // Lazy load the heavy react-peeps library (~2MB)
 const PeepCharacter = lazy(() => import('./PeepCharacter').then(m => ({ default: m.PeepCharacter })));
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    Zap, Database, Workflow,
-    MessageSquare, Bot, Users,
-    Layers,
-    CheckCircle2, ArrowRight,
-    LayoutTemplate
-} from "lucide-react";
 
-// --- Types & Data ---
-// Exported for use in CoreFunctions.tsx
-
-export const tabsV2 = [
-    { id: "workflow", label: "Workflow", icon: <LayoutTemplate className="w-4 h-4" /> },
-    { id: "ai-workflow", label: "AI Workflow", icon: <Workflow className="w-4 h-4" /> },
-    { id: "agentic-ai", label: "Agentic AI", icon: <Bot className="w-4 h-4" /> },
-];
-
-// Keep internal reference
+// Internal references
 const tabs = tabsV2;
-
-export const tabContentV2 = {
-    workflow: {
-        title: "Workflow",
-        subtitle: "Module 01",
-        description:
-            "Tired of copying data between systems? Orders stuck in email, approvals waiting in someone's inbox? Our workflows connect your apps—CRM, calendar, warehouse, accounting, you name it—and keep everything in sync. Setup takes 30 minutes, not 3 weeks.",
-        benefit: "Save 75% of manual work time.",
-        triggers: [
-            "Messy\nSpreadsheets",
-            "Endless Emails",
-            "Paper Forms",
-            "Monkey Job"
-        ],
-        triggerIcon: <Zap className="w-3.5 h-3.5" />,
-        heroAction: "EsperaStudio",
-        features: [
-            { label: "Connect Apps", icon: <Database className="w-3 h-3" /> },
-            { label: "Sync Data", icon: <Workflow className="w-3 h-3" /> },
-            { label: "Run Tasks", icon: <Layers className="w-3 h-3" /> }
-        ],
-        result: "Unified Ecosystem",
-        handwrittenTop: "This takes forever...",
-        handwrittenBottom: "Now takes 20 seconds!",
-        sideLoop: "Sync Check"
-    },
-    "ai-workflow": {
-        title: "AI Workflow",
-        subtitle: "Module 02",
-        description:
-            "Invoices in 5 languages? Customer emails piling up? AI reads them, understands what's needed, and takes action. Extracts data, answers questions, qualifies leads—automatically. Your team handles what matters, not data entry.",
-        benefit: "Process 10x more with the same team.",
-        triggers: ["Processes are slow..."],
-        triggerIcon: <Users className="w-3.5 h-3.5" />,
-        heroAction: "EsperaStudio",
-        features: [
-            { label: "Sorts Data", icon: <Workflow className="w-3 h-3" /> },
-            { label: "Takes Action", icon: <Bot className="w-3 h-3" /> },
-            { label: "Fixes Issues", icon: <CheckCircle2 className="w-3 h-3" /> }
-        ],
-        result: "Max Efficiency",
-        handwrittenTop: "So busy!",
-        handwrittenBottom: "Done!",
-        sideLoop: "Learning"
-    },
-    "agentic-ai": {
-        title: "Agentic AI",
-        subtitle: "Module 03",
-        description:
-            "Complex tasks need more than triggers—they need thinking. Our AI agents manage the whole process: check inventory, adjust orders, handle complaints, escalate when needed. They work 24/7, so you don't have to.",
-        benefit: "90% of multi-step tasks run on autopilot.",
-        triggers: ["Need more staff..."],
-        triggerIcon: <Bot className="w-3.5 h-3.5" />,
-        heroAction: "EsperaStudio",
-        features: [
-            { label: "Works Alone", icon: <Bot className="w-3 h-3" /> },
-            { label: "Understands You", icon: <MessageSquare className="w-3 h-3" /> },
-            { label: "Never Sleeps", icon: <Zap className="w-3 h-3" /> }
-        ],
-        result: "Digital Workforce",
-        handwrittenTop: "Overwhelmed...",
-        handwrittenBottom: "Easy!",
-        sideLoop: "Feedback"
-    },
-};
-
-// Keep internal reference for this file
 const tabContent = tabContentV2;
 
 // --- Organic Sketch Flowchart (No Container) ---
 // Exported for use in CoreFunctions.tsx
-export function OrganicSketchFlowchart({ content }: { content: typeof tabContent.workflow }) {
+export const OrganicSketchFlowchart = memo(function OrganicSketchFlowchart({ content }: { content: typeof tabContent.workflow }) {
+    const isLowPower = usePerformanceMode();
 
     // Dimensions - scaled up 1.2x
     const width = 600; // Wider to fit 3 features with spacing
@@ -122,6 +46,29 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
     const yHero = 170;
     const yFeatures = 300; // Horizontal Features Row - more space
     const yResult = 420;
+
+    // --- LOW POWER MODE FALLBACK ---
+    if (isLowPower) {
+        return (
+            <div className="relative w-full aspect-[6/5] flex items-center justify-center bg-white border border-ink-950/10 p-8 rounded-sm">
+                <div className="text-center space-y-4">
+                    <div className="flex justify-center gap-4 text-ink-400">
+                        {content.triggerIcon}
+                        <ArrowRight className="w-4 h-4" />
+                        <span className="font-bold text-orange-600">Espera</span>
+                        <ArrowRight className="w-4 h-4" />
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    </div>
+                    <p className="font-mono text-xs uppercase tracking-widest text-ink-950">
+                        {content.result}
+                    </p>
+                    <p className="font-serif text-sm text-ink-500 italic">
+                        {content.handwrittenBottom}
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="relative w-full mx-auto flex items-center justify-center select-none bg-white border-2 border-ink-950 p-12 lg:p-16">
@@ -534,7 +481,7 @@ export function OrganicSketchFlowchart({ content }: { content: typeof tabContent
             </svg>
         </div >
     );
-}
+});
 
 // --- Main Layout ---
 
@@ -548,9 +495,9 @@ export function CoreFunctionsV2() {
             className="relative py-24 bg-alabaster select-none overflow-hidden min-h-screen"
         >
             {/* Technical Cut - Section Label */}
-            <div className="absolute top-0 w-full z-10 pointer-events-none">
+            <div className="absolute top-6 w-full z-10 pointer-events-none">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto shadow-xl">
+                    <div className="bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto shadow-xl">
                         <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
                         <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
                             SYS.02 /// Core_Functions
@@ -652,7 +599,7 @@ export function CoreFunctionsV2() {
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 1.05 }}
                                 transition={{ duration: 0.4 }}
-                                className="w-full h-full flex items-center justify-center p-4"
+                                className="w-full h-full flex items-center justify-center p-4 will-change-transform"
                             >
                                 <OrganicSketchFlowchart content={content} />
                             </motion.div>

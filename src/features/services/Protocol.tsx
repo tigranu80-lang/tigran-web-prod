@@ -161,9 +161,9 @@ export const Protocol: React.FC = () => {
             className="relative w-full py-24 md:py-32 bg-[#F5F5F0]/60 backdrop-blur-[2px] border-t border-ink-950"
         >
             {/* Technical Cut - Section Label */}
-            <div className="absolute top-0 w-full z-10 pointer-events-none">
+            <div className="absolute top-6 w-full z-10 pointer-events-none">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+                    <div className="bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
                         <span className="w-2 h-2 bg-orange-600 rounded-sm animate-pulse"></span>
                         <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
                             SYS.01 /// PROTOCOL
@@ -209,7 +209,7 @@ export const Protocol: React.FC = () => {
                                         Risk Reversal
                                     </p>
                                     <p className="text-sm text-ink-950 font-serif leading-relaxed">
-                                        “If we don’t find ROI potential, we credit the audit toward Build.”
+                                        "If we don't find ROI potential, we credit the audit toward Build."
                                     </p>
                                 </div>
                             </motion.div>

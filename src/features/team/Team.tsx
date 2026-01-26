@@ -9,9 +9,9 @@ export function About() {
   return (
     <section id="about" className="relative border-t border-ink-950/10 bg-[#F5F5F0]/60 backdrop-blur-[2px]">
       {/* Technical Cut - Section Label */}
-      <div className="absolute top-0 w-full z-10 pointer-events-none">
+      <div className="absolute top-6 w-full z-10 pointer-events-none">
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
+          <div className="bg-ink-950 text-white px-8 py-3 shadow-md inline-flex items-center gap-4 pointer-events-auto">
             <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
             <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
               SYS.05 /// THE_ARCHITECTS

@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 
 interface UseRadarScanProps {
     locations: Array<{ city: string; x: number }>;
     cycleDuration?: number; // ms, default 10000
     tolerance?: number; // percentage width, default 3
     holdDuration?: number; // ms, default 2500
+    /** Ref to the container element for visibility detection */
+    containerRef?: React.RefObject<HTMLElement | null>;
 }
 
 interface UseRadarScanResult {
@@ -14,14 +16,21 @@ interface UseRadarScanResult {
     currentCity: string | null; // City currently being scanned (in tolerance window)
 }
 
+/**
+ * useRadarScan - Animated radar sweep for map visualization
+ * PERFORMANCE: Now supports visibility detection to pause when off-screen
+ * Pass containerRef to enable automatic pause when the map scrolls out of view
+ */
 export function useRadarScan({
     locations,
     cycleDuration = 10000,
     tolerance = 3,
-    holdDuration = 2500
+    holdDuration = 2500,
+    containerRef
 }: UseRadarScanProps): UseRadarScanResult {
     const [scanProgress, setScanProgress] = useState(0);
     const [currentCity, setCurrentCity] = useState<string | null>(null);
+    const [isVisible, setIsVisible] = useState(true); // Default to visible
     // Use a Map to track WHEN each city was revealed: City -> Timestamp
     const [revealedMap, setRevealedMap] = useState<Map<string, number>>(new Map());
 
@@ -37,6 +46,22 @@ export function useRadarScan({
     const prefersReducedMotion = typeof window !== 'undefined'
         ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
         : false;
+
+    // PERFORMANCE: IntersectionObserver for visibility detection
+    useEffect(() => {
+        const element = containerRef?.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry?.isIntersecting ?? false);
+            },
+            { rootMargin: '200px' } // Start slightly before visible
+        );
+
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, [containerRef]);
 
     // Define animation function (updated on every render)
     const animate = (timestamp: number) => {
@@ -114,20 +139,21 @@ export function useRadarScan({
     });
 
     useEffect(() => {
-        if (prefersReducedMotion) return;
+        // PERFORMANCE: Skip animation if reduced motion OR not visible
+        if (prefersReducedMotion || !isVisible) return;
 
         requestRef.current = requestAnimationFrame(animateFnRef.current);
 
         return () => {
             cancelAnimationFrame(requestRef.current);
         };
-    }, [prefersReducedMotion]); // Minimal dependencies — ref always has latest function
+    }, [prefersReducedMotion, isVisible]); // Re-run when visibility changes
 
-    // Convert Map keys to Set for consumption
-    const revealedCities = new Set(revealedMap.keys());
+    // PERFORMANCE: Memoize Set creation to avoid GC pressure
+    const revealedCities = useMemo(() => new Set(revealedMap.keys()), [revealedMap]);
 
     return {
-        isScanning: !prefersReducedMotion,
+        isScanning: !prefersReducedMotion && isVisible,
         scanProgress,
         revealedCities,
         currentCity

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight, Zap } from "lucide-react";
 import { useCases } from "./constants/useCasesData";
@@ -10,17 +10,34 @@ const springTransition = { type: "spring" as const, stiffness: 300, damping: 30 
 /** Content fade transition - spring for consistency */
 const contentTransition = { type: "spring" as const, stiffness: 400, damping: 30, mass: 0.5 };
 
+/**
+ * Custom hook for responsive media query with resize listener
+ * PERFORMANCE: Properly handles window resize instead of stale useMemo value
+ */
+function useIsDesktop() {
+    const [isDesktop, setIsDesktop] = useState(() => {
+        if (typeof window === 'undefined') return true;
+        return window.matchMedia('(min-width: 1024px)').matches;
+    });
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(min-width: 1024px)');
+        const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+        
+        mediaQuery.addEventListener('change', handler);
+        return () => mediaQuery.removeEventListener('change', handler);
+    }, []);
+
+    return isDesktop;
+}
 
 export function UseCases() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [pendingIndex, setPendingIndex] = useState<number | null>(null);
     const [isContentVisible, setIsContentVisible] = useState(true);
 
-    // Memoize media query check to avoid re-evaluation on every render
-    const isDesktop = useMemo(() => {
-        if (typeof window === 'undefined') return true;
-        return window.matchMedia('(min-width: 1024px)').matches;
-    }, []);
+    // PERFORMANCE: Proper responsive hook with resize listener
+    const isDesktop = useIsDesktop();
 
     const { animState } = useTypewriter({
         activeIndex,
@@ -48,9 +65,9 @@ export function UseCases() {
     return (
         <section id="use-cases" className="relative py-24 bg-[#F5F5F0]/60 backdrop-blur-[2px] border-b border-ink-950/5">
             {/* Technical Cut - Section Label */}
-            <div className="absolute top-0 w-full z-10 pointer-events-none">
+            <div className="absolute top-6 w-full z-10 pointer-events-none">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto">
+                    <div className="bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto">
                         <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
                         <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
                             SYS.03 /// Operational Use Cases

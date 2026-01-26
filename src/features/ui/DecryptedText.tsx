@@ -1,136 +1,107 @@
-import { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { usePerformanceMode } from '../../hooks/usePerformanceMode';
+import { useInView } from '../../hooks/useInView';
 
 interface DecryptedTextProps {
   text: string;
   className?: string;
+  animateOnView?: boolean;
 }
 
-// Note: Animation timing is fixed (50-2000ms random delay per character)
-// based on the original CodePen implementation
+// Fixed character set for "decryption" effect
+const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
 
-// Utility: Fisher-Yates shuffle
-const shuffle = (array: number[]): number[] => {
-  const arr = [...array];
-  let currentIndex = arr.length;
+/**
+ * DecryptedText - Animated text reveal with "decryption" effect
+ * Uses native IntersectionObserver instead of framer-motion for zero bundle impact on Hero
+ */
+export const DecryptedText = React.memo(({ text, className = '', animateOnView = true }: DecryptedTextProps) => {
+  const isLowPower = usePerformanceMode();
+  // Native IntersectionObserver hook - removes framer-motion from Hero critical path
+  const { ref: containerRef, inView } = useInView<HTMLDivElement>({ once: true, margin: "-10%" });
 
-  while (currentIndex !== 0) {
-    const randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    const tmp1 = arr[currentIndex];
-    const tmp2 = arr[randomIndex];
-    if (tmp1 !== undefined && tmp2 !== undefined) {
-      arr[currentIndex] = tmp2;
-      arr[randomIndex] = tmp1;
-    }
+  // If low power, just render static text (accessibility & perf)
+  if (isLowPower) {
+    return <span className={className}>{text}</span>;
   }
 
-  return arr;
-};
+  return (
+    <div ref={containerRef} className="inline-block">
+      <DecryptedTextAnim
+        text={text}
+        className={className}
+        start={animateOnView ? inView : true}
+      />
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  return prevProps.text === nextProps.text &&
+    prevProps.className === nextProps.className &&
+    prevProps.animateOnView === nextProps.animateOnView;
+});
 
-export function DecryptedText({ text, className = '' }: DecryptedTextProps) {
-  const containerRef = useRef<HTMLSpanElement>(null);
-  const hasAnimatedRef = useRef(false);
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
-
-  // Clear timeouts on unmount
-  useEffect(() => {
-    return () => {
-      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    };
-  }, []);
-
-  const decodeText = useCallback(() => {
-    if (!containerRef.current) return;
-
-    const children = containerRef.current.children;
-
-    // Clear previous timeouts
-    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    timeoutsRef.current = [];
-
-    // Reset all states
-    const state: number[] = [];
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      if (child) {
-        child.classList.remove('state-1', 'state-2', 'state-3');
-      }
-      state[i] = i;
-    }
-
-    // Shuffle for random order
-    const shuffled = shuffle(state);
-
-    // Batch animations using requestAnimationFrame for better Chrome performance
-    const animateChar = (child: HTMLElement, delay: number) => {
-      const timeout = setTimeout(() => {
-        // Use requestAnimationFrame to batch DOM updates
-        requestAnimationFrame(() => {
-          child.classList.add('state-1');
-
-          requestAnimationFrame(() => {
-            setTimeout(() => {
-              child.classList.add('state-2');
-
-              setTimeout(() => {
-                child.classList.add('state-3');
-              }, 100);
-            }, 100);
-          });
-        });
-      }, delay);
-      timeoutsRef.current.push(timeout);
-    };
-
-    // Animate each letter with staggered timing
-    for (let i = 0; i < shuffled.length; i++) {
-      const index = shuffled[i];
-      if (index === undefined) continue;
-      const child = children[index] as HTMLElement | undefined;
-
-      if (child?.classList.contains('text-animation')) {
-        // Random delay between 50ms and 2000ms
-        const delay = Math.round(Math.random() * (2000 - 300)) + 50;
-        animateChar(child, delay);
-      }
-    }
-  }, []);
+function DecryptedTextAnim({ text, className, start }: { text: string, className: string, start: boolean }) {
+  const outputRef = useRef<HTMLSpanElement>(null);
+  const frameRef = useRef<number>(0);
+  const startTimeRef = useRef<number>(0);
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const firstEntry = entries[0];
-        if (firstEntry?.isIntersecting && !hasAnimatedRef.current) {
-          decodeText();
-          hasAnimatedRef.current = true;
+    if (!start || hasRunRef.current) return;
+
+    const length = text.length;
+    let iteration = 0;
+
+    const animate = (time: number) => {
+      if (!startTimeRef.current) startTimeRef.current = time;
+      // Slow down animation: update every 3rd frame (approx 20fps feel) instead of 60fps
+      // This is a stylistic choice for "digital" feel + performance
+      if (time - startTimeRef.current < 50) {
+        frameRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      startTimeRef.current = time;
+
+      // Logic: reveal letters one by one, 
+      // but keep scrambling the rest
+
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        if (i < iteration) {
+          result += text[i];
+        } else {
+          result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
         }
-      },
-      { threshold: 0.1 }
-    );
+      }
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+      if (outputRef.current) {
+        outputRef.current.innerText = result;
+      }
 
-    return () => observer.disconnect();
-  }, [decodeText]);
+      // Increment iteration
+      // "1/3" letter per frame for slower decrypt, or "1" for fast.
+      iteration += 1 / 3;
 
-  // Parse text into characters and spaces
-  const elements = text.split('').map((char, index) => {
-    if (char === ' ') {
-      return <span key={index} className="decode-space"></span>;
-    }
-    return (
-      <span key={index} className="text-animation">
-        {char}
-      </span>
-    );
-  });
+      if (iteration < length) {
+        frameRef.current = requestAnimationFrame(animate);
+      } else {
+        // Final state
+        if (outputRef.current) outputRef.current.innerText = text;
+        hasRunRef.current = true;
+      }
+    };
+
+    frameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(frameRef.current);
+    };
+  }, [start, text]);
 
   return (
-    <span ref={containerRef} className={`decode-text ${className}`}>
-      {elements}
+    <span ref={outputRef} className={`inline-block whitespace-pre ${className}`}>
+      {/* Initial placeholder typically spaces or scrambled */}
+      {hasRunRef.current ? text : text.split('').map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]).join('')}
     </span>
   );
 }

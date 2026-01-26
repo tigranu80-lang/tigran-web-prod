@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { OrganicSketchFlowchart, tabsV2, tabContentV2 } from "./CoreFunctionsV2";
+import { OrganicSketchFlowchart } from "./CoreFunctionsV2";
+import { tabsV2, tabContentV2 } from "./constants/coreFunctionsData";
 
 const tabs = tabsV2;
 const tabContent = tabContentV2;
@@ -13,12 +14,12 @@ export function CoreFunctions() {
     return (
         <section
             id="core-functions"
-            className="relative py-24 bg-transparent"
+            className="relative py-24 bg-transparent content-visibility-auto contain-intrinsic-size-[800px]"
         >
             {/* Technical Cut - Section Label */}
-            <div className="absolute top-0 w-full z-10 pointer-events-none">
+            <div className="absolute top-6 w-full z-10 pointer-events-none">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="-translate-y-1/2 bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto">
+                    <div className="bg-ink-950 text-white px-8 py-3 inline-flex items-center gap-4 pointer-events-auto">
                         <span className="w-2 h-2 bg-orange-600 rounded-sm"></span>
                         <span className="font-mono text-xs font-bold tracking-[0.2em] uppercase">
                             SYS.02 /// Core_Functions

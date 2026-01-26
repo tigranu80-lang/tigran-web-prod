@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface FirecrawlAsciiProps {
     className?: string;
@@ -63,8 +63,15 @@ function noise(x: number, y: number, z: number) {
                 grad(P(BB + 1), x - 1, y - 1, z - 1))));
 }
 
+/**
+ * FirecrawlAscii - Animated ASCII art effect
+ * PERFORMANCE: Uses IntersectionObserver to PAUSE animation when off-screen
+ * This prevents continuous 60fps RAF loop from running when not visible
+ */
 export function FirecrawlAscii({ className }: FirecrawlAsciiProps) {
     const preRef = useRef<HTMLPreElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     // Configuration
     const rows = 40;
@@ -74,7 +81,27 @@ export function FirecrawlAscii({ className }: FirecrawlAsciiProps) {
     const speed = 0.2;
     const noiseScale = 0.1;
 
+    // PERFORMANCE: IntersectionObserver to detect visibility
     useEffect(() => {
+        const element = containerRef.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry?.isIntersecting ?? false);
+            },
+            { rootMargin: '200px' } // Start animation slightly before visible
+        );
+
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
+
+    // Animation loop - ONLY runs when visible
+    useEffect(() => {
+        // CRITICAL: Skip animation entirely when not visible
+        if (!isVisible) return;
+
         let frameId: number;
         let t = 0;
 
@@ -125,17 +152,19 @@ export function FirecrawlAscii({ className }: FirecrawlAsciiProps) {
         render();
 
         return () => cancelAnimationFrame(frameId);
-    }, []);
+    }, [isVisible]); // Re-run when visibility changes
 
     return (
-        <pre
-            ref={preRef}
-            className={`pointer-events-none absolute select-none font-mono text-[10px] leading-[10px] whitespace-pre overflow-hidden text-brand-accent ${className || ''}`}
-            style={{
-                maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 100%)'
-            }}
-            aria-hidden="true"
-        />
+        <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+            <pre
+                ref={preRef}
+                className={`pointer-events-none absolute select-none font-mono text-[10px] leading-[10px] whitespace-pre overflow-hidden text-brand-accent ${className || ''}`}
+                style={{
+                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 100%)'
+                }}
+                aria-hidden="true"
+            />
+        </div>
     );
 }

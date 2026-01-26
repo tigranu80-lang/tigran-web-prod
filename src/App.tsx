@@ -2,8 +2,11 @@ import React, { Suspense, lazy } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { Preloader } from './features/ui/Preloader';
 
 // Lazy load route components for code splitting
+// Home is CRITICAL path, so we might want to load it eagerly or at least start it early.
+// But mostly we want to split the *heavy* parts of Home.
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const BlueprintsArchive = lazy(() => import('./pages/BlueprintsArchive').then(m => ({ default: m.BlueprintsArchive })));
 const ThankYou = lazy(() => import('./pages/ThankYou').then(m => ({ default: m.ThankYou })));
@@ -21,20 +24,20 @@ function PageLoader() {
   );
 }
 
-import { Preloader } from './features/ui/Preloader';
-import { AnimatePresence } from 'framer-motion';
-
+/**
+ * App - Main application component
+ * PERFORMANCE: No framer-motion imports in critical path
+ * Preloader uses pure CSS animations for zero bundle impact
+ */
 export function App() {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isHeroReady, setIsHeroReady] = React.useState(false);
 
-  React.useEffect(() => {
-    // Artificial delay for the cinematic preloader
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const handlePreloaderComplete = () => {
+    setIsLoading(false);
+    // Allow a micro-task for React to commit the removal of Preloader
+    setTimeout(() => setIsHeroReady(true), 100);
+  };
 
   return (
     <>
@@ -46,17 +49,15 @@ export function App() {
       {/* Main App loads in background */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home isHeroReady={isHeroReady} />} />
           <Route path="/blueprints" element={<BlueprintsArchive />} />
           <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/test" element={<Test />} />
         </Routes>
       </Suspense>
 
-      {/* Cinematic Preloader Overlay */}
-      <AnimatePresence mode="wait">
-        {isLoading && <Preloader key="preloader" />}
-      </AnimatePresence>
+      {/* Cinematic Preloader Overlay - Pure CSS animations, no framer-motion */}
+      {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
 
       <Analytics />
     </>

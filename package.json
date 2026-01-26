@@ -24,6 +24,7 @@
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
+    "react-calendly": "^4.4.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^2.0.5",
     "react-peeps": "^0.1.10",

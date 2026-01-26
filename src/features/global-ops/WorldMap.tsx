@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { WORLD_MAP_PATH_TECH, WORLD_MAP_VIEWBOX } from '../../utils/worldMapData';
 import { projectPoint } from '../../utils/mapProjection';
 import { useRadarScan } from './useRadarScan';
@@ -16,26 +16,33 @@ const CLIENT_LOCATIONS = [
     ...projectPoint(loc.lat, loc.lng)
 }));
 
+/**
+ * WorldMap - Interactive map with radar scan animation
+ * PERFORMANCE: Uses containerRef for visibility detection to pause animation when off-screen
+ */
 export function WorldMap() {
     const [hoveredCity, setHoveredCity] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Map Locations for collision detection hook
     const mapLocations = useMemo(() =>
         CLIENT_LOCATIONS.map(loc => ({ city: loc.city, x: loc.x })),
         []);
 
+    // Pass containerRef for visibility-based pause optimization
     const { revealedCities, isScanning } = useRadarScan({
         locations: mapLocations,
         cycleDuration: 20000, // 20s cycle (slower scan)
         tolerance: 1.5, // 1.5% tolerance window (tighter sync with line)
-        holdDuration: 5000 // 5s hold time for pulsing dots
+        holdDuration: 5000, // 5s hold time for pulsing dots
+        containerRef // PERFORMANCE: Pauses animation when off-screen
     });
 
     // Tooltip shows ONLY on hover - no auto-reveal to avoid chaos
     const tooltipCity = hoveredCity;
 
     return (
-        <div className="relative w-full h-full bg-transparent select-none isolate">
+        <div ref={containerRef} className="relative w-full h-full bg-transparent select-none isolate">
 
             {/* CLIPPED LAYER: Grid, Map, Radar */}
             <div className="absolute inset-0 overflow-hidden z-0">

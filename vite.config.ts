@@ -43,16 +43,16 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         output: {
-          // Manual chunk splitting for better caching
           manualChunks: {
-            // Vendor chunks
+            // Critical Vendor (React Core) to start app
             'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            // Critical Animation Engine (Used in Preloader & Hero)
             'framer-motion': ['framer-motion'],
             'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge'],
             // AI and analytics
             'external-services': ['@google/genai', '@vercel/analytics'],
-            // Heavy illustration library - lazy loaded
-            'react-peeps': ['react-peeps'],
+            // Heavy illustration library (2MB+) - MUST be lazy loaded
+            'vendor-heavy': ['react-peeps'],
           },
         },
       },

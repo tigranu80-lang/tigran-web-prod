@@ -1,30 +1,81 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { InlineWidget } from 'react-calendly';
 import { Background } from '../features/layout/Background';
 
+const CALENDLY_URL = 'https://calendly.com/hello-esperastudio/30min';
+
+interface LocationState {
+    name?: string;
+    email?: string;
+}
+
 export function ThankYou() {
+    const location = useLocation();
+    const state = location.state as LocationState | null;
+    const { name = '', email = '' } = state || {};
+
+    // Inject CSS to make Calendly background transparent
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            .calendly-inline-widget iframe {
+                background: transparent !important;
+            }
+        `;
+        document.head.appendChild(style);
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
     return (
-        <div className="min-h-screen font-sans bg-alabaster text-ink-950 selection:bg-ink-950 selection:text-alabaster relative flex items-center justify-center">
+        <div className="min-h-screen font-sans bg-alabaster text-ink-950 selection:bg-ink-950 selection:text-alabaster relative">
             <Background />
 
-            <div className="relative z-10 max-w-md w-full px-6 text-center">
-                <div className="w-16 h-16 bg-ink-950 rounded-full flex items-center justify-center mx-auto mb-8 text-alabaster">
-                    <CheckCircle size={32} />
-                </div>
-
-                <h1 className="text-4xl font-serif font-medium mb-4">Request Received</h1>
-                <p className="text-ink-500 font-light mb-8 font-sans">
-                    We have received your configuration inquiry. Our team will analyze your requirements and reach out within 24 hours.
-                </p>
-
-                <div className="space-y-4">
-                    {/* Placeholder for Calendly or other next steps */}
-                    <div className="p-4 border border-dashed border-ink-950/20 bg-white/50">
-                        <p className="text-xs font-mono uppercase tracking-widest text-ink-400 mb-2">Next Step</p>
-                        <p className="text-sm">Check your email for the confirmation dossier.</p>
+            <div className="relative z-10 w-full px-4 py-8">
+                {/* Header Section */}
+                <div className="text-center mb-6">
+                    <div className="w-14 h-14 bg-ink-950 rounded-full flex items-center justify-center mx-auto mb-4 text-alabaster">
+                        <CheckCircle size={28} />
                     </div>
 
-                    <Link to="/" className="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest hover:text-ink-500 transition-colors mt-8">
+                    <h1 className="text-3xl font-serif font-medium mb-2">Request Received</h1>
+                    <p className="text-ink-500 font-light text-sm font-sans max-w-md mx-auto">
+                        Book a 30-minute strategy call to discuss your requirements.
+                    </p>
+                </div>
+
+                {/* Calendly Embed */}
+                <div className="max-w-[1100px] mx-auto mb-6">
+                    <InlineWidget
+                        url={CALENDLY_URL}
+                        prefill={{
+                            name: name,
+                            email: email,
+                        }}
+                        styles={{
+                            height: '700px',
+                            width: '100%',
+                        }}
+                        pageSettings={{
+                            backgroundColor: 'f5f5f0',
+                            primaryColor: '0a0a0a',
+                            textColor: '0a0a0a',
+                            hideEventTypeDetails: false,
+                            hideLandingPageDetails: false,
+                            hideGdprBanner: true,
+                        }}
+                    />
+                </div>
+
+                {/* Return Link */}
+                <div className="text-center">
+                    <Link 
+                        to="/" 
+                        className="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest hover:text-ink-500 transition-colors"
+                    >
                         <ArrowLeft size={16} />
                         Return to System
                     </Link>

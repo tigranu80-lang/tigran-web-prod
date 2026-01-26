@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
+/**
+ * Header - Main navigation header
+ * PERFORMANCE: Uses pure CSS transitions instead of framer-motion
+ * This removes ~50KB from the critical bundle path
+ */
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -75,45 +79,39 @@ export function Header() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden p-2 text-white hover:text-neutral-300 transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {/* Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden bg-ink-950 border-t border-white/10 overflow-hidden"
-          >
-            <div className="container mx-auto px-4 py-6">
-              <nav className="flex flex-col gap-4">
-                {navItems.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.id)}
-                    className="text-left text-sm font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors py-2"
-                  >
-                    {item.name}
-                  </button>
-                ))}
-                <button
-                  onClick={() => scrollToSection("contact")}
-                  className="mt-4 w-full px-6 py-4 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
-                >
-                  Get Started
-                </button>
-              </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Menu Dropdown - Pure CSS Transitions (no framer-motion) */}
+      <div
+        className={`lg:hidden bg-ink-950 border-t border-white/10 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="container mx-auto px-4 py-6">
+          <nav className="flex flex-col gap-4">
+            {navItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => scrollToSection(item.id)}
+                className="text-left text-sm font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors py-2"
+              >
+                {item.name}
+              </button>
+            ))}
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="mt-4 w-full px-6 py-4 bg-white text-neutral-900 text-xs font-mono uppercase tracking-widest hover:bg-neutral-200 transition-colors"
+            >
+              Get Started
+            </button>
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }
