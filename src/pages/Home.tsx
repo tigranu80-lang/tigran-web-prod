@@ -1,4 +1,5 @@
 import { lazy, useMemo } from 'react';
+import { SEO } from '../components/ui/SEO';
 import { Header } from '../features/layout/Header';
 import { HeroNew } from '../features/hero/HeroNew';
 import { Background } from '../features/layout/Background';
@@ -31,12 +32,17 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
         () => import('../features/team/Team'),
     ], []);
 
-    usePrefetch(prefetchImports, { 
+    usePrefetch(prefetchImports, {
         delay: 1500,  // Start 1.5s after page load (after Hero animations)
         respectConnection: true  // Skip on slow connections
     });
     return (
         <div className="min-h-screen font-sans bg-alabaster text-ink-950 selection:bg-ink-950 selection:text-alabaster relative">
+            <SEO
+                title="EsperaStudio | Workflow Automation Agency"
+                description="EsperaStudio is a premier automation agency building autonomous digital infrastructure. We replace manual workflows with AI systems to save time and scale operations."
+                googleSiteVerification="YOUR_GSC_VERIFICATION_TOKEN_HERE"
+            />
             {/* Global Effects */}
             <Background />
 
@@ -57,9 +63,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     5. content-visibility-auto for off-screen paint optimization
                     ═══════════════════════════════════════════════════════════════ */}
 
-                <LazySection 
+                <LazySection
                     id="protocol"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2500px 0px"
                     minHeight="600px"
                     skeletonVariant="default"
@@ -69,9 +75,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
 
                 {/* Services Wrapper */}
                 <div className="w-full relative bg-transparent content-visibility-auto">
-                    <LazySection 
+                    <LazySection
                         id="services"
-                        className="w-full" 
+                        className="w-full"
                         margin="0px 0px 2500px 0px"
                         minHeight="800px"
                         skeletonVariant="mixed"
@@ -80,9 +86,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     </LazySection>
                 </div>
 
-                <LazySection 
+                <LazySection
                     id="about"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2500px 0px"
                     minHeight="500px"
                     skeletonVariant="default"
@@ -90,9 +96,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     <About />
                 </LazySection>
 
-                <LazySection 
+                <LazySection
                     id="globe"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2500px 0px"
                     minHeight="700px"
                     skeletonVariant="mixed"
@@ -100,9 +106,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     <GlobeSection />
                 </LazySection>
 
-                <LazySection 
+                <LazySection
                     id="ticker"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2000px 0px"
                     minHeight="150px"
                     skeletonVariant="text"
@@ -110,9 +116,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     <TechTicker />
                 </LazySection>
 
-                <LazySection 
+                <LazySection
                     id="pricing"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2500px 0px"
                     minHeight="700px"
                     skeletonVariant="cards"
@@ -120,9 +126,9 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
                     <Pricing />
                 </LazySection>
 
-                <LazySection 
+                <LazySection
                     id="contact"
-                    className="content-visibility-auto" 
+                    className="content-visibility-auto"
                     margin="0px 0px 2000px 0px"
                     minHeight="600px"
                     skeletonVariant="default"
@@ -132,7 +138,7 @@ export function Home({ isHeroReady: _isHeroReady }: HomeProps) {
 
             </main>
 
-            <LazySection 
+            <LazySection
                 id="footer"
                 className="content-visibility-auto"
                 margin="0px 0px 1000px 0px"

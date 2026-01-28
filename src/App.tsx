@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { Routes, Route } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { Preloader } from './features/ui/Preloader';
 
 // Lazy load route components for code splitting
@@ -41,11 +40,6 @@ export function App() {
 
   return (
     <>
-      <Helmet>
-        <title>EsperaStudio | Agency Automation Infrastructure</title>
-        <meta name="description" content="Stop trading time for money. We build autonomous digital infrastructure that handles outreach, onboarding, and fulfillment." />
-      </Helmet>
-
       {/* Main App loads in background */}
       <Suspense fallback={<PageLoader />}>
         <Routes>

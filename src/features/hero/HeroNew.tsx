@@ -72,9 +72,9 @@ export function HeroNew() {
 
                     {/* Headline */}
                     <h1 className="text-[3.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-semibold md:font-medium text-ink-950 tracking-tight leading-[0.95] md:leading-[1.05] lg:leading-[0.95] mb-6 md:mb-8 lg:mb-10">
-                        <DecryptedText text="Agency" /><br />
+                        <DecryptedText text="Workflow" /><br />
                         <span className="italic relative inline-block z-10">
-                            <DecryptedText text="Automation." className="italic" />
+                            <DecryptedText text="Automation Agency." className="italic" />
                             <span className="absolute bottom-1 md:bottom-2 left-0 w-full h-[4px] md:h-[6px] bg-[#e5e5e5]/50 -z-10"></span>
                         </span>
                     </h1>
