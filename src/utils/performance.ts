@@ -42,7 +42,9 @@ function sendToAnalytics(metric: PerformanceMetric) {
       });
     }
 
-    // Example: Send to custom analytics endpoint
+    // Manual reporting to /api/analytics is disabled because we use @vercel/analytics
+    // which automatically captures Web Vitals without needing a custom endpoint.
+    /*
     const body = JSON.stringify({
       name: metric.name,
       value: metric.value,
@@ -54,7 +56,6 @@ function sendToAnalytics(metric: PerformanceMetric) {
       userAgent: navigator.userAgent,
     });
 
-    // Use sendBeacon if available, fallback to fetch
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/api/analytics', body);
     } else {
@@ -62,9 +63,9 @@ function sendToAnalytics(metric: PerformanceMetric) {
         method: 'POST',
         body,
         keepalive: true,
-        // eslint-disable-next-line no-console
       }).catch(console.error);
     }
+    */
   }
 }
 
