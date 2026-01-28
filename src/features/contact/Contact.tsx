@@ -8,8 +8,24 @@ import { CustomSelect } from './CustomSelect';
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function Contact() {
+  // Define explicit type for state
+  interface ContactFormState {
+    name: string;
+    email: string;
+    system: string[]; // Multi-select
+    impact: string;   // Single-select
+    message: string;
+  }
+
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', system: 'Manual data entry between systems', impact: 'Save time', message: '' });
+  // Initialize system as empty array for multi-select
+  const [formData, setFormData] = useState<ContactFormState>({
+    name: '',
+    email: '',
+    system: [],
+    impact: 'Save time',
+    message: ''
+  });
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,10 +35,16 @@ export function Contact() {
     setErrorMessage('');
 
     try {
+      // Prepare payload - convert array to string for API compatibility
+      const payload = {
+        ...formData,
+        system: formData.system.join(', ') || 'No challenge selected'
+      };
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -117,8 +139,7 @@ export function Contact() {
               {/* Row 1 */}
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="name" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// IDENTITY_NAME</label>
-                  <div className="text-ink-600 font-sans text-sm mb-3">Your Name</div>
+                  <label htmlFor="name" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// Your Name</label>
                   <input
                     type="text"
                     id="name"
@@ -130,8 +151,7 @@ export function Contact() {
                   />
                 </div>
                 <div className="p-8 group focus-within:bg-white/40 transition-colors">
-                  <label htmlFor="email" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// CONTACT_RELAY</label>
-                  <div className="text-ink-600 font-sans text-sm mb-3">Email Address</div>
+                  <label htmlFor="email" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2">/// Email Address</label>
                   <input
                     type="email"
                     id="email"
@@ -148,10 +168,14 @@ export function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink-950/5 border-b border-ink-950/5">
                 <CustomSelect
                   id="system"
-                  label="/// TARGET_SYSTEM"
-                  sublabel="Which best describes your biggest challenge?"
+                  label="/// Biggest Challenge"
                   value={formData.system}
-                  onChange={(val) => setFormData({ ...formData, system: val })}
+                  onChange={(val) => {
+                    // Ensure val is array for multi-select
+                    const newVal = Array.isArray(val) ? val : [val];
+                    setFormData({ ...formData, system: newVal });
+                  }}
+                  multiple={true}
                   options={[
                     "Manual data entry between systems",
                     "Email and document overload",
@@ -163,10 +187,13 @@ export function Contact() {
 
                 <CustomSelect
                   id="impact"
-                  label="/// DESIRED_IMPACT"
-                  sublabel="Expected outcome?"
+                  label="/// Expected Outcome"
                   value={formData.impact}
-                  onChange={(val) => setFormData({ ...formData, impact: val })}
+                  onChange={(val) => {
+                    // Ensure val is string for single-select
+                    const newVal = Array.isArray(val) ? (val[0] || '') : val;
+                    setFormData({ ...formData, impact: newVal });
+                  }}
                   options={[
                     "Save time",
                     "Reduce costs",
@@ -178,8 +205,7 @@ export function Contact() {
 
               {/* Row 3: Message */}
               <div className="p-8 flex-1 border-b border-ink-950/5 min-h-[160px] group focus-within:bg-white/40 transition-colors flex flex-col">
-                <label htmlFor="message" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2 w-fit">/// ADDITIONAL_CONTEXT</label>
-                <div className="text-ink-600 font-sans text-sm mb-3">Tell us more about your challenge...</div>
+                <label htmlFor="message" className="inline-block bg-ink-950 text-white px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-2 w-fit">/// Message</label>
                 <textarea
                   id="message"
                   required

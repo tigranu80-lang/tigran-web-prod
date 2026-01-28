@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { InlineWidget } from "react-calendly";
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { Background } from '../features/layout/Background';
@@ -15,31 +15,6 @@ export function ThankYou() {
     const state = location.state as LocationState | null;
     const { name = '', email = '' } = state || {};
 
-    // Inject Calendly script and transparency styles
-    useEffect(() => {
-        // 1. Inject Styles
-        const style = document.createElement('style');
-        style.textContent = `
-            .calendly-inline-widget iframe {
-                background: transparent !important;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // 2. Inject Script
-        const script = document.createElement('script');
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        return () => {
-            document.head.removeChild(style);
-            if (document.body.contains(script)) {
-                document.body.removeChild(script);
-            }
-        };
-    }, []);
-
     return (
         <div className="min-h-screen font-sans bg-alabaster text-ink-950 selection:bg-ink-950 selection:text-alabaster relative">
             <Background />
@@ -50,21 +25,35 @@ export function ThankYou() {
                     <div className="w-14 h-14 bg-ink-950 rounded-full flex items-center justify-center mx-auto mb-4 text-alabaster">
                         <CheckCircle size={28} />
                     </div>
-
                     <h1 className="text-3xl font-serif font-medium mb-2">Request Received</h1>
                     <p className="text-ink-500 font-light text-sm font-sans max-w-md mx-auto">
                         Book a 30-minute strategy call to discuss your requirements.
                     </p>
                 </div>
 
-                {/* Calendly Embed - Native Implementation */}
+                {/* React Calendly Implementation */}
                 <div className="max-w-[1100px] mx-auto mb-6 relative min-h-[700px]">
-                    <div
-                        className="calendly-inline-widget w-full h-[700px]"
-                        data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=f5f5f0&primary_color=0a0a0a&text_color=0a0a0a&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`}
+                    <InlineWidget
+                        url={CALENDLY_URL}
+                        styles={{
+                            height: '700px',
+                            width: '100%'
+                        }}
+                        prefill={{
+                            email: email,
+                            name: name
+                        }}
+                        pageSettings={{
+                            backgroundColor: 'f5f5f0',
+                            hideEventTypeDetails: false,
+                            hideLandingPageDetails: false,
+                            primaryColor: '0a0a0a',
+                            textColor: '0a0a0a',
+                            hideGdprBanner: true
+                        }}
                     />
 
-                    {/* Fallback Link (Visible if iframe is blocked/fails) */}
+                    {/* Fallback Link (Visible if widget fails to load or script blocked) */}
                     <div className="text-center mt-4 text-xs text-ink-400 font-mono">
                         <p>Calendar not loading?</p>
                         <a

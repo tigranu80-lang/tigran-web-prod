@@ -20,7 +20,7 @@ export function Header() {
     { name: "Protocol", id: "protocol" },
     { name: "Core Functions", id: "core-functions" },
     { name: "Use Cases", id: "use-cases" },
-    { name: "Blueprints", id: "services" },
+
     { name: "About", id: "about" },
     { name: "Contact", id: "contact" },
   ];
@@ -88,9 +88,8 @@ export function Header() {
 
       {/* Mobile Menu Dropdown - Pure CSS Transitions (no framer-motion) */}
       <div
-        className={`lg:hidden bg-ink-950 border-t border-white/10 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
+        className={`lg:hidden bg-ink-950 border-t border-white/10 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${isMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
       >
         <div className="container mx-auto px-4 py-6">
           <nav className="flex flex-col gap-4">

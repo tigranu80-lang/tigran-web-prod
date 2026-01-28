@@ -47,7 +47,7 @@ export function CoreFunctions() {
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pl-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pl-0 lg:pl-4">
 
                     {/* LEFT COLUMN: NAVIGATION & TEXT (5 cols) - LOCKED */}
                     <div className="lg:col-span-5 flex flex-col gap-8 pt-8">
@@ -120,7 +120,7 @@ export function CoreFunctions() {
 
                     {/* RIGHT COLUMN: ORGANIC DIAGRAM (7 cols) */}
                     {/* NO CONTAINER, NO BORDERS, NO SHADOWS - JUST FLOATING */}
-                    <div className="lg:col-span-7 flex items-start justify-center relative pt-0 translate-x-16">
+                    <div className="lg:col-span-7 flex items-start justify-center relative pt-0">
                         {/* Dynamic Diagram */}
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -129,7 +129,7 @@ export function CoreFunctions() {
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 1.05 }}
                                 transition={{ duration: 0.4 }}
-                                className="w-full h-full flex items-center justify-center p-4"
+                                className="w-full h-full flex items-center justify-center"
                             >
                                 <OrganicSketchFlowchart content={content} />
                             </motion.div>

@@ -49,7 +49,7 @@ export function LazySection({
 }: LazySectionProps) {
     // Native IntersectionObserver with aggressive bottom margin
     const { ref, inView } = useInView<HTMLDivElement>({ once: true, margin });
-    
+
     // Track when content has actually rendered (after Suspense resolves)
     const [hasRendered, setHasRendered] = useState(false);
 
@@ -65,25 +65,25 @@ export function LazySection({
 
     // Generate appropriate fallback
     const skeletonFallback = fallback ?? (
-        <SectionSkeleton 
-            minHeight={minHeight} 
+        <SectionSkeleton
+            minHeight={minHeight}
             variant={skeletonVariant}
         />
     );
 
     return (
-        <div 
-            ref={ref} 
+        <div
+            ref={ref}
             className={className}
+            id={id}
             data-section-id={id}
         >
             {inView ? (
-                <div 
-                    className={`transition-opacity duration-500 ease-out ${
-                        fadeIn 
-                            ? (hasRendered ? 'opacity-100' : 'opacity-0') 
+                <div
+                    className={`transition-opacity duration-500 ease-out ${fadeIn
+                            ? (hasRendered ? 'opacity-100' : 'opacity-0')
                             : 'opacity-100'
-                    }`}
+                        }`}
                 >
                     <Suspense fallback={skeletonFallback}>
                         <SectionContent onRender={() => setHasRendered(true)}>
@@ -93,8 +93,8 @@ export function LazySection({
                 </div>
             ) : (
                 // Pre-intersection placeholder - maintains layout space
-                <div 
-                    className="w-full" 
+                <div
+                    className="w-full"
                     style={{ minHeight }}
                     aria-hidden="true"
                 />
@@ -107,16 +107,16 @@ export function LazySection({
  * Wrapper that notifies parent when content has rendered
  * This enables the fade-in timing
  */
-function SectionContent({ 
-    children, 
-    onRender 
-}: { 
-    children: React.ReactNode; 
+function SectionContent({
+    children,
+    onRender
+}: {
+    children: React.ReactNode;
     onRender: () => void;
 }) {
     useEffect(() => {
         onRender();
     }, [onRender]);
-    
+
     return <>{children}</>;
 }
