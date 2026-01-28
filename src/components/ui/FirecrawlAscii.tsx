@@ -152,7 +152,7 @@ export function FirecrawlAscii({ className }: FirecrawlAsciiProps) {
         render();
 
         return () => cancelAnimationFrame(frameId);
-    }, [isVisible]); // Re-run when visibility changes
+    }, [isVisible, chars]); // Re-run when visibility changes
 
     return (
         <div ref={containerRef} className="absolute inset-0 overflow-hidden">
