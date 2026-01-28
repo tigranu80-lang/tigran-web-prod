@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { usePerformanceMode } from '../../hooks/usePerformanceMode';
 import { useInView } from '../../hooks/useInView';
 
@@ -10,6 +10,11 @@ interface DecryptedTextProps {
 
 // Fixed character set for "decryption" effect
 const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+
+// Generate scrambled text (stable function)
+function generateScrambledText(text: string): string {
+  return text.split('').map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]).join('');
+}
 
 /**
  * DecryptedText - Animated text reveal with "decryption" effect
@@ -44,10 +49,17 @@ function DecryptedTextAnim({ text, className, start }: { text: string, className
   const outputRef = useRef<HTMLSpanElement>(null);
   const frameRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
-  const hasRunRef = useRef(false);
+  // Use useState instead of useRef to allow reading during render
+  const [hasRun, setHasRun] = useState(false);
+  // Track if animation has started to prevent re-runs
+  const hasStartedRef = useRef(false);
+
+  // Use useMemo to generate initial scrambled text (stable across renders)
+  const initialScrambled = useMemo(() => generateScrambledText(text), [text]);
 
   useEffect(() => {
-    if (!start || hasRunRef.current) return;
+    if (!start || hasStartedRef.current) return;
+    hasStartedRef.current = true;
 
     const length = text.length;
     let iteration = 0;
@@ -87,7 +99,7 @@ function DecryptedTextAnim({ text, className, start }: { text: string, className
       } else {
         // Final state
         if (outputRef.current) outputRef.current.innerText = text;
-        hasRunRef.current = true;
+        setHasRun(true);
       }
     };
 
@@ -100,8 +112,8 @@ function DecryptedTextAnim({ text, className, start }: { text: string, className
 
   return (
     <span ref={outputRef} className={`inline-block whitespace-pre ${className}`}>
-      {/* Initial placeholder typically spaces or scrambled */}
-      {hasRunRef.current ? text : text.split('').map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]).join('')}
+      {/* Initial placeholder - use memoized scrambled text */}
+      {hasRun ? text : initialScrambled}
     </span>
   );
 }

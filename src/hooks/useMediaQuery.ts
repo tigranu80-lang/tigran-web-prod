@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
+
+// Server-safe initial state
+function getServerSnapshot() {
+    return false;
+}
 
 export function useMediaQuery(query: string): boolean {
-    const [matches, setMatches] = useState(false);
-
-    useEffect(() => {
+    // Use useSyncExternalStore for proper SSR support and no cascading renders
+    const subscribe = (callback: () => void) => {
         const media = window.matchMedia(query);
-        if (media.matches !== matches) {
-            setMatches(media.matches);
-        }
-        const listener = () => setMatches(media.matches);
-        media.addEventListener("change", listener);
-        return () => media.removeEventListener("change", listener);
-    }, [matches, query]);
+        media.addEventListener("change", callback);
+        return () => media.removeEventListener("change", callback);
+    };
 
-    return matches;
+    const getSnapshot = () => {
+        return window.matchMedia(query).matches;
+    };
+
+    return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

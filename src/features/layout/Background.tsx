@@ -1,4 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+
+// Detect device capabilities (runs once on module load for SSR safety)
+function getInitialDeviceState() {
+  if (typeof window === 'undefined') return { isLowEnd: false, prefersReducedMotion: false };
+
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cores = navigator.hardwareConcurrency ?? 8;
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  return {
+    isLowEnd: cores <= 4 || isMobile,
+    prefersReducedMotion: motionQuery.matches
+  };
+}
 
 /**
  * Background - Decorative background with animated blobs
@@ -6,23 +20,9 @@ import { useState, useEffect } from 'react';
  * blur-[100px] + mix-blend-multiply is CATASTROPHIC on mobile GPUs
  */
 export function Background() {
-  const [isLowEnd, setIsLowEnd] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    // Check for reduced motion preference
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(motionQuery.matches);
-
-    // Detect low-end device:
-    // - 4 or fewer CPU cores (budget phones, old laptops)
-    // - OR mobile device (blur is expensive on mobile GPUs)
-    const cores = navigator.hardwareConcurrency ?? 8;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isLowEndDevice = cores <= 4 || isMobile;
-    
-    setIsLowEnd(isLowEndDevice);
-  }, []);
+  // Use lazy initialization to avoid setState in useEffect
+  const [deviceState] = useState(getInitialDeviceState);
+  const { isLowEnd, prefersReducedMotion } = deviceState;
 
   // LOW-END FALLBACK: Simple solid background, no blurs
   if (isLowEnd || prefersReducedMotion) {
