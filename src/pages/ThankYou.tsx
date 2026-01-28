@@ -51,6 +51,8 @@ export function ThankYou() {
                             textColor: '0a0a0a',
                             hideGdprBanner: true
                         }}
+                        iframeTitle="Discovery Call Scheduling"
+                        {...{ sandbox: "allow-scripts allow-forms allow-same-origin allow-popups allow-modals allow-top-navigation-by-user-activation" }}
                     />
 
                     {/* Fallback Link (Visible if widget fails to load or script blocked) */}
